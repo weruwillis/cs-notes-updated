@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS Notes — Computer Studies</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e17;
+    --paper: #f5f0e8;
+    --ink: #0a0e17;
+    --gold: #d4a843;
+    --gold2: #f0c96e;
+    --teal: #2bbfb0;
+    --rust: #c44b2b;
+    --muted: #4a5568;
+    --grid: rgba(212,168,67,.06);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--paper);
+    font-family: 'Crimson Pro', Georgia, serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: .4;
+  }
+
+  .content { position: relative; z-index: 1; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6rem 5vw 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-orb {
+    position: absolute;
+    right: -180px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, rgba(212,168,67,.18), rgba(43,191,176,.08) 60%, transparent 80%);
+    border: 1px solid rgba(212,168,67,.12);
+    pointer-events: none;
+  }
+
+  .hero-orb::before {
+    content: '';
+    position: absolute;
+    inset: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(212,168,67,.08);
+  }
+
+  .hero-orb::after {
+    content: '';
+    position: absolute;
+    inset: 100px;
+    border-radius: 50%;
+    border: 1px solid rgba(212,168,67,.05);
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .72rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.8rem;
+    opacity: 0;
+    animation: fadeUp .8s .2s forwards;
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+  }
+
+  .eyebrow::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 14vw, 12rem);
+    line-height: .9;
+    letter-spacing: .02em;
+    color: var(--paper);
+    opacity: 0;
+    animation: fadeUp .9s .35s forwards;
+    max-width: 14ch;
+  }
+
+  .hero-title span {
+    display: block;
+    color: var(--gold);
+    font-size: .55em;
+    letter-spacing: .08em;
+  }
+
+  .hero-desc {
+    font-size: 1.25rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: rgba(245,240,232,.65);
+    max-width: 480px;
+    margin-top: 2rem;
+    opacity: 0;
+    animation: fadeUp .9s .5s forwards;
+    font-style: italic;
+  }
+
+  .hero-cta {
+    margin-top: 3rem;
+    opacity: 0;
+    animation: fadeUp .9s .65s forwards;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: .7rem;
+    background: var(--gold);
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .8rem;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: .9rem 2rem;
+    border-radius: 2px;
+    transition: background .2s, transform .2s;
+  }
+
+  .btn-primary:hover { background: var(--gold2); transform: translateY(-2px); }
+
+  .stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 5rem;
+    padding-top: 3rem;
+    border-top: 1px solid rgba(245,240,232,.1);
+    opacity: 0;
+    animation: fadeUp .9s .8s forwards;
+    flex-wrap: wrap;
+  }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .62rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,.4);
+    margin-top: .2rem;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 3rem;
+    left: 5vw;
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .62rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,.35);
+    opacity: 0;
+    animation: fadeUp .9s 1s forwards;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, rgba(212,168,67,.6), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  /* ── NOTES SECTION ── */
+  .forms-section {
+    padding: 6rem 5vw;
+    background: var(--paper);
+    color: var(--ink);
+    position: relative;
+  }
+
+  .forms-section::before {
+    content: 'NOTES';
+    position: absolute;
+    top: -1px;
+    left: 5vw;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 8rem;
+    color: rgba(10,14,23,.04);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 4rem;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .section-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .65rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: .6rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  .section-eyebrow::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--rust);
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1;
+    color: var(--ink);
+    letter-spacing: .03em;
+  }
+
+  .section-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    font-style: italic;
+    max-width: 300px;
+    text-align: right;
+    line-height: 1.6;
+  }
+
+  /* ── FORM GROUPS ── */
+  .form-group { margin-bottom: 4rem; }
+
+  .form-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: .08em;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .form-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .6rem;
+    color: var(--paper);
+    padding: .2rem .6rem;
+    border-radius: 2px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+
+  .f1 { background: #7b3f00; }
+  .f2 { background: #1a5276; }
+  .f3 { background: #1e6b40; }
+  .f4 { background: #5b2c8d; }
+
+  /* ── CARDS ── */
+  .notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .note-card {
+    display: block;
+    text-decoration: none;
+    background: #fff;
+    border: 1px solid rgba(10,14,23,.1);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform .25s, box-shadow .25s;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  .note-card.visible { animation: fadeUp .55s forwards; }
+
+  .note-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 48px rgba(10,14,23,.14);
+  }
+
+  .note-card-accent { height: 4px; }
+
+  /* accent colours */
+  .acc-brown  { background: #7b3f00; }
+  .acc-navy   { background: #1a5276; }
+  .acc-teal   { background: #2bbfb0; }
+  .acc-forest { background: #1e6b40; }
+  .acc-purple { background: #5b2c8d; }
+  .acc-rust   { background: #c44b2b; }
+  .acc-slate  { background: #2c3e50; }
+  .acc-gold   { background: #d4a843; }
+
+  .note-card-body { padding: 1.6rem 1.8rem 1.2rem; }
+
+  .note-card-chapter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .6rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: .6rem;
+  }
+
+  .note-card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.45rem;
+    letter-spacing: .04em;
+    color: var(--ink);
+    line-height: 1.1;
+    margin-bottom: .7rem;
+  }
+
+  .note-card-desc {
+    font-size: .9rem;
+    color: var(--muted);
+    line-height: 1.65;
+    font-style: italic;
+  }
+
+  .note-card-footer {
+    padding: 1rem 1.8rem;
+    border-top: 1px solid rgba(10,14,23,.07);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .8rem;
+  }
+
+  .note-card-topics { display: flex; gap: .4rem; flex-wrap: wrap; }
+
+  .topic-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .56rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    background: rgba(10,14,23,.06);
+    color: var(--muted);
+    padding: .15rem .5rem;
+    border-radius: 2px;
+  }
+
+  .note-card-arrow {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background .2s, transform .2s;
+    font-size: 1rem;
+  }
+
+  .note-card:hover .note-card-arrow {
+    background: var(--gold);
+    color: var(--ink);
+    transform: translate(2px, -2px);
+  }
+
+  /* ── DIVIDER ── */
+  .form-divider {
+    height: 1px;
+    background: linear-gradient(to right, rgba(10,14,23,.15), transparent);
+    margin: 3.5rem 0;
+  }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    background: var(--bg);
+    padding: 4rem 5vw;
+    border-top: 1px solid rgba(212,168,67,.15);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+
+  .footer-brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: .08em;
+    color: var(--paper);
+  }
+
+  .footer-brand span { color: var(--gold); }
+
+  .footer-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .62rem;
+    letter-spacing: .12em;
+    color: rgba(245,240,232,.3);
+    text-transform: uppercase;
+    text-align: right;
+    line-height: 1.8;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: .4; }
+    50%       { opacity: 1; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .hero { padding: 5rem 6vw 3rem; }
+    .hero-orb { display: none; }
+    .section-sub { display: none; }
+    .notes-grid { grid-template-columns: 1fr; }
+    .stats { gap: 1.5rem; }
+    .site-footer { flex-direction: column; }
+    .footer-meta { text-align: left; }
+  }
+</style>
+</head>
+<body>
+<div class="content">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-orb"></div>
+    <p class="eyebrow">Chinga High School · Computer Studies</p>
+    <h1 class="hero-title">CS<br>Notes<span>Digital Library</span></h1>
+    <p class="hero-desc">A complete collection of Computer Studies notes from Form 1 to Form 4 — beautifully formatted and ready to study.</p>
+    <div class="hero-cta">
+      <a href="#notes" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        Browse Notes
+      </a>
+    </div>
+    <div class="stats">
+      <div><div class="stat-num">4</div><div class="stat-label">Form Levels</div></div>
+      <div><div class="stat-num">10</div><div class="stat-label">Chapters Available</div></div>
+      <div><div class="stat-num">100+</div><div class="stat-label">Topics Covered</div></div>
+    </div>
+    <div class="scroll-hint"><div class="scroll-line"></div>Scroll to explore</div>
+  </section>
+
+  <!-- NOTES -->
+  <section class="forms-section" id="notes">
+    <div class="section-header">
+      <div>
+        <p class="section-eyebrow">All Notes</p>
+        <h2 class="section-title">Browse by<br>Form Level</h2>
+      </div>
+      <p class="section-sub">Click any card to open the full chapter in your browser.</p>
+    </div>
+
+    <!-- FORM 1 -->
+    <div class="form-group">
+      <div class="form-label"><span class="form-badge f1">Form 1</span> Introduction to Computing</div>
+      <div class="notes-grid">
+
+        <a href="computer-studies-form1.html" class="note-card">
+          <div class="note-card-accent acc-brown"></div>
+          <div class="note-card-body">
+            <div class="note-card-chapter">Chapter 1 · Form 1</div>
+            <div class="note-card-title">Introduction to Computer Studies</div>
+            <p class="note-card-desc">Computer definitions, characteristics, hardware components, history, generations (1st–5th), classification, lab safety, keyboard & mouse usage.</p>
+          </div>
+          <div class="note-card-footer">
+            <div class="note-card-topics">
+              <span class="topic-tag">Hardware</span><span class="topic-tag">Generations</span><span class="topic-tag">Classification</span><span class="topic-tag">Lab Safety</span>
+            </div>
+            <div class="note-card-arrow">→</div>
+          </div>
+        </a>
+
+        <a href="operating-systems-form1.html" class="note-card">
+          <div class="note-card-accent acc-teal"></div>
+          <div class="note-card-body">
+            <div class="note-card-chapter">Chapter 2 · Form 1</div>
+            <div class="note-card-title">Operating Systems</div>
+            <p class="note-card-desc">OS definition, platforms, why an OS is needed, processor & memory management, I/O device control, file management, job scheduling & sequencing.</p>
+          </div>
+          <div class="note-card-footer">
+            <div class="note-card-topics">
+              <span class="topic-tag">OS Functions</span><span class="topic-tag">Memory</span><span class="topic-tag">File Mgmt</span><span class="topic-tag">Scheduling</span>
+            </div>
+            <div class="note-card-arrow">→</div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <div class="form-divider"></div>
+
+    <!-- FORM 2 -->
+    <div class="form-group">
+      <div class="form-label"><span class="form-badge f2">Form 2</span> Software & Applications</div>
+      <div class="notes-grid">
+
+        <a href="spreadsheets-excel-form2.html" class="note-card">
+          <div class="note-card-accent acc-navy"></div>
+          <div class="note-card-body">
+            <div class="note-card-chapter">Chapter · Form 2</div>
+            <div class="note-card-title">Spreadsheets — MS Excel 2013</div>
+            <p class="note-card-desc">Worksheets, workbooks, cell data types, referencing, statistical/logical/mathematical functions, formatting, charts & printing.</p>
+          </div>
+          <div class="note-card-footer">
+            <div class="note-card-topics">
+              <span class="topic-tag">Excel</span><span class="topic-tag">Functions</span><span class="topic-tag">Charts</span><span class="topic-tag">Formatting</span>
+            </div>
+            <div class="note-card-arrow">→</div>
+          </div>
+        </a>
+
+        <a href="data_security_notes.html" class="note-card">
+          <div class="note-card-accent acc-rust"></div>
+          <div class="note-card-body">
+            <div class="note-card-chapter">Chapter · Form 2</div>
+            <div class="note-card-title">Data Security & Controls</div>
+            <p class="note-card-desc">Data & information security, privacy, security threats, control measures, computer crimes, detection & protection, and laws governing information protection.</p>
+          </div>
+          <div class="note-card-footer">
+            <div class="note-card-topics">
+              <span class="topic-tag">Security</span><span class="topic-tag">Privacy</span><span class="topic-tag">Crimes</span><span class="topic-tag">Laws</span>
+            </div>
+            <div class="note-card-arrow">→</div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <div class="form-divider"></div>
+
+    <!-- FORM 3 -->
+    <div class="form-group">
+      <div class="form-label"><span class="form-badge f3">Form 3</span> Systems & Representation</div>
+      <div class="notes-grid">
+
+        <a href="data-representation-form3.html" class="note-card">
+          <div class="note-card-accent acc-forest"></div>
+          <div class="note-card-body">
+            <div class="note-card-chapter">Chapter · Form 3</div>
+            <div class="note-card-title">Data Representation in a Computer</div>
+            <p class="note-card-desc">Binary, octal & hexadecimal systems, number conversions, coding schemes (BCD, EBCDIC, ASCII), binary arithmetic & signed numbers.</p>
+          </div>
+          <div class="note-card-footer">
+            <div class="note-card-topics">
+              <span class="topic-tag">Binary</span><span class="topic-tag">Number Systems</span><span class="topic-tag">ASCII</span><span class="topic-tag">Arithmetic</span>
+            </div>
+            <div class="note-card-arrow">→</div>
+          </div>
+        </a>
+
+        <a href="system_development.html" class="note-card">
+          <div class="note-card-accent acc-slate"></div>
+          <div class="note-card-body">
+            <div class="note-card-chapter">Chapter 4 · Form 3</div>
+            <div class="note-card-title">System Development</div>
+            <p class="note-card-desc">What is a system, system development life cycle (SDLC), feasibility study, analysis, design, implementation, testing & maintenance.</p>
+          </div>
+          <div class="note-card-footer">
+            <div class="note-card-topics">
+              <span class="topic-tag">SDLC</span><span class="topic-tag">Analysis</span><span class="topic-tag">Design</span><span class="topic-tag">Testing</span>
+            </div>
+            <div class="note-card-arrow">→</div>
+          </div>
+        </a>
+
+        <a href="elementary_programming_notes.html" class="note-card">
+          <div class="note-card-accent acc-gold"></div>
+          <div class="note-card-body">
+            <div class="note-card-chapter">Chapter · Form 3</div>
+            <div class="note-card-title">Elementary Programming Principles</div>
+            <p class="note-card-desc">Programming concepts, levels of languages (low & high-level), program development, algorithms, flowcharts & control structures.</p>
+          </div>
+          <div class="note-card-footer">
+            <div class="note-card-topics">
+              <span class="topic-tag">Languages</span><span class="topic-tag">Algorithms</span><span class="topic-tag">Flowcharts</span><span class="topic-tag">Structures</span>
+            </div>
+            <div class="note-card-arrow">→</div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <div class="form-divider"></div>
+
+    <!-- FORM 4 -->
+    <div class="form-group">
+      <div class="form-label"><span class="form-badge f4">Form 4</span> Networking, ICT & Society</div>
+      <div class="notes-grid">
+
+        <a href="networking-chapter1.html" class="note-card">
+          <div class="note-card-accent acc-teal"></div>
+          <div class="note-card-body">
+            <div class="note-card-chapter">Chapter 1 · Form 4</div>
+            <div class="note-card-title">Networking & Data Communication</div>
+            <p class="note-card-desc">Network types (LAN/WAN/MAN), transmission media, communication devices, protocols, OSI model, topologies, security & LAN setup practical.</p>
+          </div>
+          <div class="note-card-footer">
+            <div class="note-card-topics">
+              <span class="topic-tag">LAN/WAN</span><span class="topic-tag">Protocols</span><span class="topic-tag">Topologies</span><span class="topic-tag">OSI Model</span>
+            </div>
+            <div class="note-card-arrow">→</div>
+          </div>
+        </a>
+
+        <a href="ict_impact_notes-1.html" class="note-card">
+          <div class="note-card-accent acc-purple"></div>
+          <div class="note-card-body">
+            <div class="note-card-chapter">Chapter · Form 4</div>
+            <div class="note-card-title">Impact of ICT on Society</div>
+            <p class="note-card-desc">Effects on employment, automated production, workers' health, environment, cultural impacts, computer crimes & artificial intelligence trends.</p>
+          </div>
+          <div class="note-card-footer">
+            <div class="note-card-topics">
+              <span class="topic-tag">Employment</span><span class="topic-tag">Health</span><span class="topic-tag">AI</span><span class="topic-tag">Environment</span>
+            </div>
+            <div class="note-card-arrow">→</div>
+          </div>
+        </a>
+
+        <a href="Impact_of_ICT_on_Society_Form_4.html" class="note-card">
+          <div class="note-card-accent acc-rust"></div>
+          <div class="note-card-body">
+            <div class="note-card-chapter">Chapter · Form 4</div>
+            <div class="note-card-title">ICT & Society — Extended Notes</div>
+            <p class="note-card-desc">Supplementary coverage: automation advantages & disadvantages, health issues, environmental concerns, cultural effects & future AI trends.</p>
+          </div>
+          <div class="note-card-footer">
+            <div class="note-card-topics">
+              <span class="topic-tag">Automation</span><span class="topic-tag">Culture</span><span class="topic-tag">Future Trends</span>
+            </div>
+            <div class="note-card-arrow">→</div>
+          </div>
+        </a>
+
+        <a href="ict_career_opportunities.html" class="note-card">
+          <div class="note-card-accent acc-gold"></div>
+          <div class="note-card-body">
+            <div class="note-card-chapter">Chapter 4 · Form 4</div>
+            <div class="note-card-title">Career Opportunities in ICT</div>
+            <p class="note-card-desc">ICT career overview — system analyst, network engineer, software developer, database administrator, IT manager and other roles in the digital economy.</p>
+          </div>
+          <div class="note-card-footer">
+            <div class="note-card-topics">
+              <span class="topic-tag">Careers</span><span class="topic-tag">Roles</span><span class="topic-tag">Skills</span>
+            </div>
+            <div class="note-card-arrow">→</div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-brand">CS<span>Notes</span></div>
+    <div class="footer-meta">
+      Computer Studies Digital Library<br>
+      Chinga High School · Form 1 — Form 4<br>
+      10 Chapters Available
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  document.querySelector('.btn-primary').addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector('#notes').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  const cards = document.querySelectorAll('.note-card');
+  const allCards = Array.from(cards);
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const idx = allCards.indexOf(entry.target) % 4;
+        setTimeout(() => entry.target.classList.add('visible'), idx * 90);
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  cards.forEach(c => io.observe(c));
+</script>
+</body>
+</html>

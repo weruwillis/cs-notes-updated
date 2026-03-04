@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operating Systems – Form 1 Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Fraunces:ital,wght@0,300;0,600;1,300&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1f2733;
+    --ink: #e6edf3;
+    --muted: #7d8590;
+    --green: #3fb950;
+    --green-dim: rgba(63,185,80,.12);
+    --green-border: rgba(63,185,80,.25);
+    --amber: #d29922;
+    --amber-dim: rgba(210,153,34,.12);
+    --cyan: #58a6ff;
+    --cyan-dim: rgba(88,166,255,.1);
+    --red: #f85149;
+    --border: rgba(230,237,243,.08);
+    --sidebar: 270px;
+    --mono: 'Roboto Mono', 'Courier New', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Outfit', system-ui, sans-serif;
+    display: flex;
+    min-height: 100vh;
+    font-size: 16px;
+  }
+
+  /* scanline effect */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,.03) 2px,
+      rgba(0,0,0,.03) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar);
+    height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 0 0 3rem;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-top {
+    padding: 1.6rem 1.4rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    z-index: 2;
+  }
+
+  .sidebar-logo {
+    font-family: var(--mono);
+    font-size: .7rem;
+    color: var(--green);
+    letter-spacing: .08em;
+    margin-bottom: .3rem;
+  }
+
+  .sidebar-logo::before { content: '$ '; opacity: .5; }
+
+  .sidebar-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+
+  .sidebar-sub {
+    font-family: var(--mono);
+    font-size: .58rem;
+    color: var(--muted);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin-top: .25rem;
+  }
+
+  .nav-section {
+    padding: 1rem 1.4rem .2rem;
+    font-family: var(--mono);
+    font-size: .55rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--green);
+    opacity: .7;
+  }
+
+  #sidebar nav a {
+    display: block;
+    padding: .28rem 1.4rem;
+    font-size: .78rem;
+    font-weight: 400;
+    color: var(--muted);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: color .15s, border-color .15s, background .15s;
+    line-height: 1.5;
+  }
+
+  #sidebar nav a:hover { color: var(--ink); background: rgba(63,185,80,.06); }
+  #sidebar nav a.active { color: var(--green); border-left-color: var(--green); background: var(--green-dim); }
+
+  /* ── MAIN ── */
+  #main {
+    margin-left: var(--sidebar);
+    flex: 1;
+    max-width: 860px;
+    padding: 3.5rem 4rem 8rem;
+  }
+
+  /* ── DOC HEADER ── */
+  .doc-header {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .doc-header::before {
+    content: '// FORM 1 · COMPUTER STUDIES';
+    display: block;
+    font-family: var(--mono);
+    font-size: .62rem;
+    letter-spacing: .18em;
+    color: var(--green);
+    margin-bottom: 1rem;
+    opacity: .8;
+  }
+
+  .doc-header h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.15;
+    margin-bottom: .5rem;
+  }
+
+  .doc-header .sub {
+    font-size: .92rem;
+    color: var(--muted);
+    font-family: var(--mono);
+  }
+
+  /* ── SECTIONS ── */
+  .section { margin-bottom: 3.5rem; scroll-margin-top: 2rem; }
+
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.55rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+  }
+
+  h2 .sec-num {
+    font-family: var(--mono);
+    font-size: .65rem;
+    background: var(--green-dim);
+    color: var(--green);
+    border: 1px solid var(--green-border);
+    padding: .2rem .55rem;
+    border-radius: 4px;
+    flex-shrink: 0;
+    letter-spacing: .06em;
+  }
+
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--cyan);
+    margin: 2rem 0 .6rem;
+    letter-spacing: .01em;
+  }
+
+  h4 {
+    font-family: var(--mono);
+    font-size: .72rem;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin: 1.5rem 0 .5rem;
+  }
+
+  p {
+    font-size: .94rem;
+    line-height: 1.85;
+    color: rgba(230,237,243,.82);
+    margin-bottom: .9rem;
+    font-weight: 300;
+  }
+
+  strong { font-weight: 600; color: var(--ink); }
+  em { color: var(--amber); font-style: italic; }
+
+  ul, ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+  li {
+    font-size: .93rem;
+    line-height: 1.8;
+    color: rgba(230,237,243,.78);
+    margin-bottom: .15rem;
+    font-weight: 300;
+  }
+  li::marker { color: var(--green); }
+
+  /* ── DEFINITION BOX ── */
+  .def {
+    background: var(--green-dim);
+    border: 1px solid var(--green-border);
+    border-left: 3px solid var(--green);
+    padding: 1rem 1.4rem;
+    border-radius: 0 6px 6px 0;
+    margin: 1.2rem 0;
+  }
+
+  .def-label {
+    font-family: var(--mono);
+    font-size: .58rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: .4rem;
+  }
+
+  .def p { margin: 0; color: var(--ink); font-style: italic; font-size: .93rem; }
+
+  /* ── NOTE BOX ── */
+  .note {
+    background: var(--amber-dim);
+    border: 1px solid rgba(210,153,34,.25);
+    border-left: 3px solid var(--amber);
+    padding: .85rem 1.2rem;
+    border-radius: 0 6px 6px 0;
+    margin: 1rem 0;
+  }
+
+  .note-label {
+    font-family: var(--mono);
+    font-size: .58rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: .2rem;
+  }
+
+  .note p { margin: 0; font-size: .88rem; }
+
+  /* ── TERMINAL / DOS COMMAND ── */
+  .terminal {
+    background: #010409;
+    border: 1px solid var(--green-border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 1.2rem 0;
+  }
+
+  .terminal-bar {
+    background: var(--surface2);
+    padding: .5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .terminal-bar .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+
+  .dot-r { background: #f85149; }
+  .dot-y { background: #d29922; }
+  .dot-g { background: #3fb950; }
+
+  .terminal-bar .terminal-title {
+    font-family: var(--mono);
+    font-size: .62rem;
+    color: var(--muted);
+    letter-spacing: .08em;
+    margin-left: .4rem;
+  }
+
+  .terminal-body {
+    padding: 1.2rem 1.4rem;
+    font-family: var(--mono);
+    font-size: .84rem;
+    line-height: 1.9;
+    color: #c9d1d9;
+  }
+
+  .terminal-body .prompt { color: var(--green); }
+  .terminal-body .cmd { color: #fff; font-weight: 500; }
+  .terminal-body .arg { color: var(--cyan); }
+  .terminal-body .comment { color: var(--muted); font-style: italic; }
+  .terminal-body .output { color: #7d8590; }
+  .terminal-body .error { color: var(--red); }
+  .terminal-body .success { color: var(--green); }
+
+  /* ── CARDS ── */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--green);
+    padding: 1rem 1.1rem;
+    border-radius: 0 0 6px 6px;
+    transition: border-color .2s, background .2s;
+  }
+
+  .card:hover { background: var(--surface2); border-top-color: var(--cyan); }
+
+  .card-label {
+    font-family: var(--mono);
+    font-size: .58rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: .4rem;
+  }
+
+  .card h4 { margin: 0 0 .4rem; color: var(--ink); font-size: .9rem; text-transform: none; letter-spacing: 0; font-weight: 600; }
+  .card p { font-size: .84rem; margin: 0; }
+  .card ul { padding-left: 1rem; margin: 0; }
+  .card li { font-size: .82rem; }
+
+  /* ── TWO COL ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+
+  .col-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1rem 1.2rem;
+    border-radius: 6px;
+  }
+
+  .col-box.green { border-top: 2px solid var(--green); }
+  .col-box.cyan  { border-top: 2px solid var(--cyan); }
+  .col-box.amber { border-top: 2px solid var(--amber); }
+  .col-box.red   { border-top: 2px solid var(--red); }
+
+  .col-label {
+    font-family: var(--mono);
+    font-size: .58rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: .5rem;
+  }
+
+  .col-box.green .col-label { color: var(--green); }
+  .col-box.cyan  .col-label { color: var(--cyan); }
+  .col-box.amber .col-label { color: var(--amber); }
+  .col-box.red   .col-label { color: var(--red); }
+
+  /* ── COMPARISON TABLE ── */
+  .cmp-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.2rem 0;
+    font-size: .88rem;
+  }
+
+  .cmp-table th {
+    padding: .7rem 1rem;
+    font-family: var(--mono);
+    font-size: .7rem;
+    letter-spacing: .08em;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .cmp-table th:first-child { color: var(--green); }
+  .cmp-table th:last-child  { color: var(--cyan); }
+
+  .cmp-table td {
+    padding: .55rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: rgba(230,237,243,.78);
+    vertical-align: top;
+    line-height: 1.6;
+    background: var(--surface);
+  }
+
+  .cmp-table td:first-child { background: rgba(63,185,80,.04); }
+  .cmp-table td:last-child  { background: rgba(88,166,255,.04); }
+  .cmp-table tr:hover td { opacity: .85; }
+
+  /* ── COMMAND REF TABLE ── */
+  .cmd-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: .87rem;
+  }
+
+  .cmd-table th {
+    background: var(--surface2);
+    color: var(--green);
+    font-family: var(--mono);
+    font-size: .65rem;
+    letter-spacing: .1em;
+    padding: .6rem 1rem;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+
+  .cmd-table td {
+    padding: .55rem 1rem;
+    border: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.65;
+    background: var(--surface);
+  }
+
+  .cmd-table td:first-child {
+    font-family: var(--mono);
+    font-size: .82rem;
+    color: var(--cyan);
+    white-space: nowrap;
+    background: rgba(88,166,255,.05);
+    font-weight: 500;
+  }
+
+  .cmd-table tr:hover td { background: var(--surface2); }
+  .cmd-table tr:hover td:first-child { background: var(--cyan-dim); }
+
+  /* ── DATA TABLE ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.2rem 0;
+    font-size: .88rem;
+  }
+
+  .data-table th {
+    background: var(--surface2);
+    color: var(--green);
+    font-family: var(--mono);
+    font-size: .7rem;
+    letter-spacing: .07em;
+    padding: .6rem .9rem;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+
+  .data-table td {
+    padding: .5rem .9rem;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: rgba(230,237,243,.78);
+    line-height: 1.6;
+  }
+
+  .data-table tr:nth-child(even) td { background: var(--surface2); }
+  .data-table tr:hover td { background: rgba(63,185,80,.06); }
+
+  /* inline code */
+  code {
+    font-family: var(--mono);
+    font-size: .82em;
+    background: rgba(88,166,255,.1);
+    color: var(--cyan);
+    padding: .1rem .4rem;
+    border-radius: 3px;
+    border: 1px solid rgba(88,166,255,.2);
+  }
+
+  /* ── DIVIDER ── */
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2.5rem 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding-top: 1.2rem;
+    margin-top: 3rem;
+    font-family: var(--mono);
+    font-size: .62rem;
+    color: var(--muted);
+    letter-spacing: .1em;
+  }
+
+  footer::before { content: '// '; color: var(--green); opacity: .5; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 820px) {
+    #sidebar { display: none; }
+    #main { margin-left: 0; padding: 2rem 1.5rem 5rem; }
+    .two-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<aside id="sidebar">
+  <div class="sidebar-top">
+    <div class="sidebar-logo">operating_systems.notes</div>
+    <div class="sidebar-title">Operating Systems</div>
+    <div class="sidebar-sub">Form 1 · Computer Studies</div>
+  </div>
+  <nav>
+    <div class="nav-section">Foundations</div>
+    <a href="#definition">Definition</a>
+    <a href="#platform">OS Platform</a>
+    <a href="#why-needed">Why OS is Needed</a>
+    <a href="#resources">Resources Managed</a>
+
+    <div class="nav-section">OS Functions</div>
+    <a href="#functions">All 14 Functions</a>
+    <a href="#examples-os">Examples of OS</a>
+    <a href="#characteristics">Characteristics</a>
+
+    <div class="nav-section">Classification</div>
+    <a href="#classification">Overview</a>
+    <a href="#by-tasks">By Tasks (Single/Multi)</a>
+    <a href="#by-users">By Users</a>
+    <a href="#by-hci">By HCI</a>
+    <a href="#choosing">Choosing an OS</a>
+
+    <div class="nav-section">File Management</div>
+    <a href="#file-mgmt">Files & Directories</a>
+    <a href="#dir-hierarchy">Directory Hierarchy</a>
+    <a href="#volume-labels">Volume Labels</a>
+    <a href="#tab-control">Tab Control</a>
+
+    <div class="nav-section">MS-DOS Commands</div>
+    <a href="#dos-syntax">DOS Syntax</a>
+    <a href="#file-commands">File Commands</a>
+    <a href="#dir-commands">DIR Commands</a>
+    <a href="#disk-commands">Disk Commands</a>
+
+    <div class="nav-section">Windows OS</div>
+    <a href="#windows">Windows Overview</a>
+    <a href="#win-features">Features</a>
+    <a href="#win-vs-dos">Windows vs DOS</a>
+  </nav>
+</aside>
+
+<main id="main">
+
+  <header class="doc-header">
+    <h1>Operating Systems</h1>
+    <div class="sub">// definition · classification · file management · MS-DOS · Windows</div>
+  </header>
+
+  <!-- ══ DEFINITION ══ -->
+  <section class="section" id="definition">
+    <h2><span class="sec-num">01</span>Definition</h2>
+    <div class="def">
+      <div class="def-label">Definition</div>
+      <p>An Operating System is a set of programs used to manage the basic hardware resources of a computer.</p>
+    </div>
+    <ul>
+      <li>It is the main program that controls the execution of user applications.</li>
+      <li>It enables the user to access the hardware and software resources of the computer.</li>
+      <li>When the computer is switched on, the OS runs and checks that all parts of the computer are functioning properly.</li>
+    </ul>
+  </section>
+
+  <!-- ══ PLATFORM ══ -->
+  <section class="section" id="platform">
+    <h2><span class="sec-num">02</span>OS Platform</h2>
+    <p>Application programs do not use hardware devices directly. They send messages <em>through</em> the OS, which gives instructions to the hardware to perform tasks. The OS acts as a layer between the user and the bare hardware.</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">Layer 1</div>
+        <h4>User / Application</h4>
+        <p>User communicates intentions via <strong>commands</strong>. Applications run on top of the OS.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Layer 2</div>
+        <h4>Operating System</h4>
+        <p>Manages all hardware resources; acts as interface between user and hardware.</p>
+      </div>
+      <div class="card">
+        <div class="card-label">Layer 3</div>
+        <h4>Hardware</h4>
+        <p>The bare physical components — CPU, RAM, storage, I/O devices.</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <div class="note-label">Supervisor / Kernel</div>
+      <p>The OS contains a special program called the <strong>Supervisor (Kernel/Executive)</strong> stored in ROM. It contains essential commands and controls all other OS programs. OS programs are too large to fit in RAM at once — they are stored on the hard disk and loaded into RAM when needed.</p>
+    </div>
+  </section>
+
+  <!-- ══ WHY NEEDED ══ -->
+  <section class="section" id="why-needed">
+    <h2><span class="sec-num">03</span>Why an Operating System is Needed</h2>
+    <ol>
+      <li>Modern computer systems are complex and fast — they need internal control.</li>
+      <li>To ensure the full system software facilities are readily available.</li>
+      <li>To control jobs in what they are allowed to do, for <strong>security</strong>.</li>
+      <li>To increase <strong>throughput</strong> — the amount of data processed in a given time.</li>
+      <li>To improve communication between the user and the computer.</li>
+      <li>To make complex tasks simple for the user.</li>
+      <li>To help the computer correct errors — diagnostic messages are displayed when errors occur.</li>
+      <li>To <strong>reduce job setup time</strong> — while one job runs, others can be queued.</li>
+      <li>To allow many programs and users to share the system simultaneously.</li>
+    </ol>
+  </section>
+
+  <!-- ══ RESOURCES ══ -->
+  <section class="section" id="resources">
+    <h2><span class="sec-num">04</span>Resources Under OS Control</h2>
+    <p>As a <strong>resource manager</strong>, the OS manages the following:</p>
+    <div class="cards">
+      <div class="card"><div class="card-label">Resource 1</div><h4>Processor (CPU)</h4><p>Controls which programs execute and for how long.</p></div>
+      <div class="card"><div class="card-label">Resource 2</div><h4>Main Memory (RAM)</h4><p>Allocates and tracks memory usage by programs.</p></div>
+      <div class="card"><div class="card-label">Resource 3</div><h4>Secondary Storage</h4><p>Manages data storage and retrieval on disks.</p></div>
+      <div class="card"><div class="card-label">Resource 4</div><h4>I/O Devices & Ports</h4><p>Controls input/output devices and their ports.</p></div>
+      <div class="card"><div class="card-label">Resource 5</div><h4>Communication Devices</h4><p>Manages network and communication ports.</p></div>
+      <div class="card"><div class="card-label">Resource 6</div><h4>Files</h4><p>Organises, retrieves, shares and protects files.</p></div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ══ FUNCTIONS ══ -->
+  <section class="section" id="functions">
+    <h2><span class="sec-num">05</span>Functions of an Operating System</h2>
+
+    <h3>1. Processor Management</h3>
+    <p>The CPU can only execute one program at a time. The OS arranges tasks by <strong>priority</strong> and can pause one task to allow the CPU to service another, preventing conflicts in a multi-tasking environment.</p>
+
+    <h3>2. Memory Allocation & Loading</h3>
+    <p>Programs must be loaded into RAM before execution. The OS tracks which parts of memory are in use, which are free, and manages data files used by executing programs.</p>
+
+    <h3>3. I/O Device & Port Management</h3>
+    <p>The OS controls input from and output to all devices, monitors device state, signals faults, and resolves conflicts when multiple programs request the same device.</p>
+
+    <h3>4. Secondary Storage Management</h3>
+    <p>The OS manages storage and retrieval of data on secondary devices and uses free disk space to temporarily hold tasks that are waiting to be processed (virtual memory).</p>
+
+    <h3>5. Communication Device Management</h3>
+    <p>Controls the communication process between tasks and the computer — internally between programs and externally through communication ports via cables or wireless media.</p>
+
+    <h3>6. File Management</h3>
+    <p>Concerned with the logical organisation of the file system — provides means to sort, retrieve, share, and protect data files and programs against unauthorised access and corruption.</p>
+
+    <h3>7. Job Scheduling</h3>
+    <p>Arranges and loads programs to provide a continuous sequence of processing. Allocates priorities to jobs to ensure the CPU never remains idle.</p>
+
+    <h3>8. Job Sequencing</h3>
+    <p>Keeps a list of jobs currently running and monitors them as they move in and out of the processor. Arranges them in order for efficient execution.</p>
+
+    <h3>9. Resource Control & Allocation</h3>
+    <p>Gives each resource a unique <strong>Interrupt Request Number (IRQ)</strong>. When two tasks request the same resource, the one with a higher priority IRQ is granted access, preventing <em>deadlock</em>.</p>
+
+    <h3>10. Error Reporting & Correction</h3>
+    <p>Monitors the system and performs error checks on hardware and software. Prints <strong>diagnostic messages</strong> suggesting correction routines. Fatal errors (e.g., dividing by zero) cause the program to terminate.</p>
+
+    <h3>11. Interrupt Handling</h3>
+    <div class="def">
+      <div class="def-label">Definition</div>
+      <p>An <strong>interrupt</strong> is a break from the normal sequential processing of instructions. When an interrupt occurs, control passes to the Kernel, which determines the cause and coordinates recovery.</p>
+    </div>
+    <p>Common causes of interrupts:</p>
+    <ul>
+      <li><strong>Power failure</strong> — Kernel saves vital information using dying power supply.</li>
+      <li><strong>Arithmetic/logic errors</strong> — ALU detects errors and signals an interrupt.</li>
+      <li><strong>Hardware malfunction</strong> — parity errors trigger the Kernel via interrupt.</li>
+    </ul>
+    <p>A <strong>device driver</strong> is software the OS uses to control a specific piece of hardware.</p>
+
+    <h3>12. User–Hardware Interface</h3>
+    <p>Provides quick communication between the user and the computer. The user issues commands; the OS responds via screen or printer — establishing a "conversation".</p>
+
+    <h3>13. Logging & Accounting</h3>
+    <p>Keeps internal records of how resources (CPU time, memory, peripherals) are used and maintains a complete log of all processing activity.</p>
+
+    <h3>14. Protection</h3>
+    <p>Protects hardware, software and data from improper use and ensures application programs use hardware efficiently.</p>
+  </section>
+
+  <!-- ══ EXAMPLES ══ -->
+  <section class="section" id="examples-os">
+    <h2><span class="sec-num">06</span>Examples of Operating Systems</h2>
+    <div class="cards">
+      <div class="card"><div class="card-label">CLI</div><h4>MS-DOS</h4><p>Disk Operating System — single-user, single-tasking, command-line interface.</p></div>
+      <div class="card"><div class="card-label">GUI</div><h4>Windows</h4><p>Graphical User Interface — multi-tasking, multi-user, easy to use.</p></div>
+      <div class="card"><div class="card-label">GUI</div><h4>macOS</h4><p>Apple's proprietary OS for Mac computers.</p></div>
+      <div class="card"><div class="card-label">Multi-user</div><h4>UNIX</h4><p>Powerful multi-user, multi-tasking OS. Foundation for Linux and macOS.</p></div>
+      <div class="card"><div class="card-label">Open Source</div><h4>Linux</h4><p>Free, open-source OS widely used on servers and developer machines.</p></div>
+    </div>
+  </section>
+
+  <!-- ══ CHARACTERISTICS ══ -->
+  <section class="section" id="characteristics">
+    <h2><span class="sec-num">07</span>Characteristics of an Operating System</h2>
+    <div class="cards">
+      <div class="card"><div class="card-label">Trait A</div><h4>Reliable</h4><p>At least as reliable as the hardware; detects errors and minimises damage.</p></div>
+      <div class="card"><div class="card-label">Trait B</div><h4>Protected</h4><p>Protects users from each other's errors and malicious tampering.</p></div>
+      <div class="card"><div class="card-label">Trait C</div><h4>Efficient</h4><p>Minimises idle time of user resources; uses as little overhead as possible.</p></div>
+      <div class="card"><div class="card-label">Trait D</div><h4>Convenient</h4><p>Flexible and easy to use; designed with the user in mind.</p></div>
+      <div class="card"><div class="card-label">Trait E</div><h4>Predictable</h4><p>Service quality should not vary widely over time; users should get estimates of when tasks complete.</p></div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ══ CLASSIFICATION ══ -->
+  <section class="section" id="classification">
+    <h2><span class="sec-num">08</span>Classification of Operating Systems</h2>
+    <p>Operating systems can be classified by three criteria:</p>
+    <div class="cards">
+      <div class="card"><div class="card-label">Criterion 1</div><h4>Tasks Handled</h4><ul><li>Single-tasking</li><li>Multi-tasking</li></ul></div>
+      <div class="card"><div class="card-label">Criterion 2</div><h4>Number of Users</h4><ul><li>Single-user</li><li>Multi-user</li></ul></div>
+      <div class="card"><div class="card-label">Criterion 3</div><h4>Human-Computer Interface</h4><ul><li>Command line</li><li>Menu-driven</li><li>GUI</li></ul></div>
+    </div>
+  </section>
+
+  <!-- ══ BY TASKS ══ -->
+  <section class="section" id="by-tasks">
+    <h2><span class="sec-num">09</span>Classification by Tasks</h2>
+    <div class="two-col">
+      <div class="col-box green">
+        <div class="col-label">Single-tasking OS</div>
+        <ul>
+          <li>Only one user-program in memory at a time</li>
+          <li>User must exit a program before loading another</li>
+          <li>Example: <strong>MS-DOS</strong></li>
+        </ul>
+      </div>
+      <div class="col-box cyan">
+        <div class="col-label">Multi-tasking (Multiprogramming) OS</div>
+        <ul>
+          <li>Multiple programs in memory simultaneously</li>
+          <li>Each program gets a <strong>time-slice</strong></li>
+          <li>CPU switches rapidly between programs</li>
+          <li>Appears to run programs simultaneously</li>
+          <li>Examples: <strong>Windows, Linux, UNIX</strong></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ BY USERS ══ -->
+  <section class="section" id="by-users">
+    <h2><span class="sec-num">10</span>Classification by Number of Users</h2>
+    <div class="two-col">
+      <div class="col-box amber">
+        <div class="col-label">Single-user OS</div>
+        <ul>
+          <li>Only one person can use the computer at a time</li>
+          <li>Runs one user program at a time</li>
+          <li>Example: <strong>MS-DOS</strong></li>
+        </ul>
+      </div>
+      <div class="col-box cyan">
+        <div class="col-label">Multi-user OS</div>
+        <ul>
+          <li>Many users can access the computer simultaneously</li>
+          <li>Examples: <strong>UNIX, Novell Netware, Windows 2000/NT, Linux</strong></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ BY HCI ══ -->
+  <section class="section" id="by-hci">
+    <h2><span class="sec-num">11</span>Classification by Human-Computer Interface (HCI)</h2>
+    <p>HCI refers to the method of interaction between the user and the computer. A good HCI should be <strong>user-friendly</strong>: easy to learn, self-contained, robust, and logical.</p>
+
+    <h3>1. Command-Driven Interface</h3>
+    <p>The user types commands at a prompt. The computer reads and executes them. More flexible but harder to learn — preferred by experienced users.</p>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="terminal-title">MS-DOS Command Line</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">C:\&gt; </span><span class="cmd">COPY</span> <span class="arg">Fruits.Dat A:\</span><br>
+        <span class="comment">// Copies Fruits.Dat from drive C to floppy drive A</span><br><br>
+        <span class="prompt">C:\&gt; </span><span class="cmd">PRINT</span> <span class="arg">Report1 Report2 Report3</span><br>
+        <span class="comment">// Prints three documents on the default printer</span>
+      </div>
+    </div>
+
+    <h4>Disadvantages of Command-Driven Interfaces</h4>
+    <ul>
+      <li>More difficult to learn — user must know the exact command and syntax</li>
+      <li>Less user-friendly</li>
+      <li>Not suitable for beginners</li>
+    </ul>
+    <p>Examples: MS-DOS, early PC-DOS, OS/2, UNIX</p>
+
+    <h3>2. Menu-Driven Interface</h3>
+    <p>Provides a list of commands on screen for the user to choose from. Suitable for beginners and infrequent users.</p>
+    <div class="two-col">
+      <div class="col-box green">
+        <div class="col-label">Types of Menus</div>
+        <ul>
+          <li><strong>Pull-down menus</strong> — common in Windows</li>
+          <li><strong>Pop-up / Pop-down menus</strong> — appear above or below an item</li>
+        </ul>
+      </div>
+      <div class="col-box cyan">
+        <div class="col-label">Advantages</div>
+        <ul>
+          <li>Many options to select from</li>
+          <li>No need to memorise commands</li>
+          <li>Easier to use than command-driven</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>3. Graphical User Interface (GUI)</h3>
+    <p>Commands are issued by clicking on <strong>icons</strong> (small graphic images) using a pointing device like a mouse. Found on workstations and PCs with graphic adapters.</p>
+    <div class="cards">
+      <div class="card"><div class="card-label">GUI Feature</div><h4>Icons</h4><p>Programs represented graphically as small images</p></div>
+      <div class="card"><div class="card-label">GUI Feature</div><h4>Pointing Device</h4><p>Mouse or trackball used to select and issue commands</p></div>
+      <div class="card"><div class="card-label">GUI Feature</div><h4>Pull-down Menus</h4><p>Menus that appear when you click a menu item</p></div>
+      <div class="card"><div class="card-label">GUI Feature</div><h4>Windows</h4><p>Programs open by displaying rectangular windows on screen</p></div>
+    </div>
+    <h4>Advantages of GUI</h4>
+    <ul><li>User-friendly</li><li>Easy to learn and use</li></ul>
+    <p>Examples: Windows, Linux (with desktop), Apple Macintosh, OS/2 Presentation Manager</p>
+  </section>
+
+  <!-- ══ CHOOSING ══ -->
+  <section class="section" id="choosing">
+    <h2><span class="sec-num">12</span>Factors for Choosing an Operating System</h2>
+    <ol>
+      <li><strong>Hardware configuration</strong> — RAM size, hard disk capacity, processor type</li>
+      <li><strong>Basic computer design</strong> — IBM-compatible or Apple?</li>
+      <li><strong>Hardware compatibility</strong></li>
+      <li><strong>User needs</strong> — the intended applications</li>
+      <li><strong>User-friendliness / HCI</strong> — command line, menu-driven, or GUI?</li>
+      <li><strong>Availability</strong> — e.g., Windows-based OS are very common</li>
+      <li><strong>Portability</strong></li>
+      <li><strong>Cost</strong></li>
+      <li><strong>Reliability</strong> — does it crash or hang?</li>
+      <li><strong>Communication method</strong> — number of peripherals supported</li>
+      <li><strong>Method of operating</strong> the computer</li>
+    </ol>
+  </section>
+
+  <hr>
+
+  <!-- ══ FILE MANAGEMENT ══ -->
+  <section class="section" id="file-mgmt">
+    <h2><span class="sec-num">13</span>File Management — Files & Directories</h2>
+    <p>Most microcomputers store data on disks in <strong>files</strong> — groups of related records. The OS maintains a <strong>directory</strong> — a list of filenames and their disk addresses.</p>
+
+    <h4>MS-DOS Filename Rules</h4>
+    <ul>
+      <li>Filename must not exceed <strong>8 characters</strong></li>
+      <li>Extension is <strong>3 characters</strong> after a period (e.g., <code>COMMAND.COM</code>)</li>
+      <li>Common extensions: <code>.COM</code> and <code>.EXE</code> for program files, <code>.TXT</code> for text files</li>
+    </ul>
+
+    <h4>Example Directory Listing (Drive A:)</h4>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="terminal-title">DIR A:</span>
+      </div>
+      <div class="terminal-body">
+        <span class="output">Volume in drive A: has no label</span><br>
+        <span class="output">Directory of A:</span><br><br>
+        <span class="cmd">COMMAND</span>  <span class="arg">COM</span>  <span class="output">18107  13-12-97  13:00PM</span><br>
+        <span class="cmd">SYS    </span>  <span class="arg">COM</span>  <span class="output"> 7407  13-12-97  13:00PM</span><br>
+        <span class="cmd">FIND   </span>  <span class="arg">EXE</span>  <span class="output"> 1278  13-12-97  13:00PM</span><br><br>
+        <span class="output">4 FILE(S)    142890 BYTES FREE</span>
+      </div>
+    </div>
+
+    <p>The directory listing shows: filename, extension, size in bytes, date and time last saved, and bytes remaining on disk.</p>
+  </section>
+
+  <!-- ══ DIR HIERARCHY ══ -->
+  <section class="section" id="dir-hierarchy">
+    <h2><span class="sec-num">14</span>Directory Hierarchy</h2>
+    <p>Files on a disk can be organised into <strong>subdirectories</strong> forming a tree-like structure: <em>root directory → subdirectories → files</em>.</p>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="terminal-title">Directory Tree Example</span>
+      </div>
+      <div class="terminal-body">
+        <span class="success">KENYA\</span>  <span class="comment">← root directory</span><br>
+        <span class="output">├── </span><span class="arg">NAIROBI\</span><br>
+        <span class="output">│   └── </span><span class="cmd">HURLINGHAM</span><br>
+        <span class="output">├── </span><span class="arg">MOMBASA\</span><br>
+        <span class="output">│   └── </span><span class="cmd">NYALI</span><br>
+        <span class="output">└── </span><span class="arg">NAKURU\</span><br>
+        <span class="output">    └── </span><span class="cmd">MILIMANI</span><br><br>
+        <span class="comment">// Path to Milimani: KENYA\NAKURU\MILIMANI</span>
+      </div>
+    </div>
+
+    <p>A <strong>path</strong> is a logical, sequential list of directories leading to a filename. Directory names and subdirectory names are separated by a backslash <code>\</code> (or hyphen/slash in some DOS versions). The topmost directory is called the <strong>root directory</strong>.</p>
+  </section>
+
+  <!-- ══ VOLUME LABELS ══ -->
+  <section class="section" id="volume-labels">
+    <h2><span class="sec-num">15</span>Volume Labels and Directories</h2>
+    <p>A <strong>volume label</strong> is a name given to a disk to identify its contents when it is not mounted on a drive. It is recorded on the disk itself and checked by the OS to confirm the correct disk is installed.</p>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="terminal-title">Volume Label Example</span>
+      </div>
+      <div class="terminal-body">
+        <span class="comment">// If volume label is COUNTRY, the full path to Milimani is:</span><br>
+        <span class="success">COUNTRY\KENYA\NAKURU\MILIMANI</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ TAB CONTROL ══ -->
+  <section class="section" id="tab-control">
+    <h2><span class="sec-num">16</span>Tab Control Language (TCL)</h2>
+    <p>The user communicates with the OS through <strong>Tab Control Language (TCL)</strong> — a set of OS commands (system commands) that control the operating system.</p>
+    <p>When the OS is ready for commands, it displays a <strong>prompt</strong>. In MS-DOS this is:</p>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="terminal-title">MS-DOS Prompt</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">C:\&gt; </span><span class="comment">← "C" = logged drive (active drive)</span><br>
+        <span class="prompt">A:\&gt; </span><span class="comment">← drive A is now the active/logged drive</span>
+      </div>
+    </div>
+    <p>The drive identifier (e.g., <code>C:</code>, <code>A:</code>, <code>B:</code>) must always include the colon.</p>
+  </section>
+
+  <hr>
+
+  <!-- ══ DOS SYNTAX ══ -->
+  <section class="section" id="dos-syntax">
+    <h2><span class="sec-num">17</span>MS-DOS Command Syntax</h2>
+    <p>A DOS command has a <strong>command name</strong> and <strong>arguments</strong> separated by spaces.</p>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="terminal-title">Syntax</span>
+      </div>
+      <div class="terminal-body">
+        <span class="comment">// Format: COMMAND  argument1  argument2</span><br><br>
+        <span class="prompt">C:\&gt; </span><span class="cmd">COPY</span> <span class="arg">ANN1 ANN2</span><br>
+        <span class="comment">// COPY = command name | ANN1, ANN2 = arguments</span><br>
+        <span class="comment">// Copies file ANN1 and saves the copy as ANN2</span><br><br>
+        <span class="comment">// To run a program (e.g., BASIC.COM):</span><br>
+        <span class="prompt">C:\&gt; </span><span class="cmd">BASIC</span>  <span class="comment">← type filename without extension</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FILE COMMANDS ══ -->
+  <section class="section" id="file-commands">
+    <h2><span class="sec-num">18</span>File Management Commands</h2>
+
+    <table class="cmd-table">
+      <thead><tr><th>Command</th><th>Description</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td>A: or B:</td><td>Change logged (active) drive</td><td><code>C:\&gt; A:</code> → switches to drive A</td></tr>
+        <tr><td>DIR</td><td>Display contents of a disk</td><td><code>DIR</code> or <code>DIR/P</code> (pause) or <code>DIR/W</code> (wide)</td></tr>
+        <tr><td>CD</td><td>Change directory</td><td><code>CD C:\NAIROBI\HURLINGHAM</code></td></tr>
+        <tr><td>CD..</td><td>Move up one directory level</td><td><code>CD..</code></td></tr>
+        <tr><td>CD\</td><td>Go straight to root directory</td><td><code>CD\</code></td></tr>
+        <tr><td>MD</td><td>Make (create) a new directory</td><td><code>MD LANGA</code></td></tr>
+        <tr><td>RD</td><td>Remove (delete) an empty directory</td><td><code>RD NYALI</code></td></tr>
+        <tr><td>COPY</td><td>Copy a file</td><td><code>COPY SAME1.DBF ZAME2.DBF</code></td></tr>
+        <tr><td>COPY A:*.* B:</td><td>Copy all files from A to B</td><td><code>COPY A:*.* B:</code></td></tr>
+        <tr><td>RENAME / REN</td><td>Rename a file</td><td><code>RENAME OLDNAME.TXT NEWNAME.TXT</code></td></tr>
+        <tr><td>DEL / ERASE</td><td>Delete a file</td><td><code>DEL ZAME.DBF</code> or <code>DEL *.*</code></td></tr>
+        <tr><td>TYPE</td><td>Display file contents on screen</td><td><code>TYPE Filename.EXT</code></td></tr>
+        <tr><td>TYPE &gt;PRN</td><td>Print file contents</td><td><code>TYPE Filename.EXT&gt;PRN</code></td></tr>
+      </tbody>
+    </table>
+
+    <h3>DIR Command Switches</h3>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="terminal-title">DIR Examples</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">C:\&gt; </span><span class="cmd">DIR</span>               <span class="comment">← list all files</span><br>
+        <span class="prompt">C:\&gt; </span><span class="cmd">DIR/P</span>             <span class="comment">← pause after each screen</span><br>
+        <span class="prompt">C:\&gt; </span><span class="cmd">DIR/W</span>             <span class="comment">← wide (5 columns, names only)</span><br>
+        <span class="prompt">C:\&gt; </span><span class="cmd">DIR</span> <span class="arg">B:FILENAME.TXT</span>  <span class="comment">← show specific file</span><br>
+        <span class="prompt">C:\&gt; </span><span class="cmd">DIR *.BAS</span>          <span class="comment">← all files with .BAS extension</span><br>
+        <span class="prompt">C:\&gt; </span><span class="cmd">DIR SAME*.*</span>        <span class="comment">← all files starting with SAME</span><br>
+        <span class="prompt">C:\&gt; </span><span class="cmd">DIR Same*.DBF</span>      <span class="comment">← SAME files with .DBF extension</span>
+      </div>
+    </div>
+
+    <div class="note">
+      <div class="note-label">Wildcards</div>
+      <p><code>*</code> (asterisk) — substitutes any number of characters (e.g., <code>*.BAS</code> matches all .BAS files).<br>
+      <code>?</code> (question mark) — substitutes exactly one character (e.g., <code>?AME</code> matches NAME, SAME, etc.).</p>
+    </div>
+  </section>
+
+  <!-- ══ DIR COMMANDS (CD/MD/RD) ══ -->
+  <section class="section" id="dir-commands">
+    <h2><span class="sec-num">19</span>Directory Navigation Commands</h2>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="terminal-title">Directory Commands</span>
+      </div>
+      <div class="terminal-body">
+        <span class="comment">// Change to Hurlingham directory</span><br>
+        <span class="prompt">C:\&gt; </span><span class="cmd">CD</span> <span class="arg">C:\NAIROBI\HURLINGHAM</span><br><br>
+        <span class="comment">// Move up one level to Nairobi</span><br>
+        <span class="prompt">C:\NAIROBI\HURLINGHAM&gt; </span><span class="cmd">CD..</span><br><br>
+        <span class="comment">// Go to root directory</span><br>
+        <span class="prompt">C:\NAIROBI&gt; </span><span class="cmd">CD\</span><br><br>
+        <span class="comment">// Create new subdirectory LANGA inside Nakuru</span><br>
+        <span class="prompt">C:\NAKURU&gt; </span><span class="cmd">MD</span> <span class="arg">LANGA</span><br><br>
+        <span class="comment">// Remove empty directory NYALI (must be in MOMBASA first)</span><br>
+        <span class="prompt">C:\&gt; </span><span class="cmd">CD</span> <span class="arg">MOMBASA</span><br>
+        <span class="prompt">C:\MOMBASA&gt; </span><span class="cmd">RD</span> <span class="arg">NYALI</span><br><br>
+        <span class="comment">// Copy examples</span><br>
+        <span class="prompt">C:\&gt; </span><span class="cmd">COPY</span> <span class="arg">SAME1.DBF ZAME2.DBF</span>    <span class="comment">← same drive, new name</span><br>
+        <span class="prompt">C:\&gt; </span><span class="cmd">COPY</span> <span class="arg">SAME1.DBF B:</span>           <span class="comment">← to drive B, same name</span><br>
+        <span class="prompt">C:\&gt; </span><span class="cmd">COPY</span> <span class="arg">same*.* B:</span>           <span class="comment">← copy all SAME* files to B</span><br><br>
+        <span class="comment">// Rename a file</span><br>
+        <span class="prompt">C:\&gt; </span><span class="cmd">RENAME</span> <span class="arg">OLDNAME.TXT NEWNAME.TXT</span><br>
+        <span class="prompt">C:\&gt; </span><span class="cmd">RENAME</span> <span class="arg">SAME*.DBF SAME*.WPF</span>   <span class="comment">← rename extension for all SAME files</span><br><br>
+        <span class="comment">// Delete files</span><br>
+        <span class="prompt">C:\&gt; </span><span class="cmd">DEL</span> <span class="arg">ZAME.DBF</span>              <span class="comment">← delete one file</span><br>
+        <span class="prompt">C:\ZAME&gt; </span><span class="cmd">DEL</span> <span class="arg">*.*</span>              <span class="comment">← delete entire directory contents</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ DISK COMMANDS ══ -->
+  <section class="section" id="disk-commands">
+    <h2><span class="sec-num">20</span>Disk Management Commands</h2>
+
+    <h3>Formatting a Diskette</h3>
+    <p>Formatting prepares a new diskette for data storage — organises the disk, keeps track of files, and marks any defective areas.</p>
+
+    <table class="cmd-table">
+      <thead><tr><th>Command</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>FORMAT</td><td>Format a data disk (no OS)</td></tr>
+        <tr><td>FORMAT B:</td><td>Format the disk in drive B</td></tr>
+        <tr><td>FORMAT /S</td><td>Format and include the OS (creates a boot/system disk)</td></tr>
+        <tr><td>FORMAT /S B:</td><td>Format drive B with OS</td></tr>
+        <tr><td>SYS B:</td><td>Copy OS hidden files to a formatted disk in B</td></tr>
+        <tr><td>COPY COMMAND.COM B:</td><td>Copy COMMAND.COM to the disk in B (step 2 of adding DOS)</td></tr>
+        <tr><td>LABEL</td><td>Assign a volume label (up to 11 characters) to a disk</td></tr>
+        <tr><td>DISKCOPY A: B:</td><td>Copy entire contents of drive A to drive B (includes OS and formatting)</td></tr>
+      </tbody>
+    </table>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="terminal-title">FORMAT output</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">C:\&gt; </span><span class="cmd">FORMAT B:</span><br>
+        <span class="output">INSERT NEW DISKETTE FOR DRIVE B: and strike any key when ready.</span><br>
+        <span class="output">Formatting...</span><br>
+        <span class="success">Format Complete</span><br>
+        <span class="output">362496 bytes total disk space</span><br>
+        <span class="output">362496 bytes available on disk</span><br>
+        <span class="output">Format another (Y/N)?</span>
+      </div>
+    </div>
+
+    <div class="note">
+      <div class="note-label">DISKCOPY vs COPY</div>
+      <p><strong>DISKCOPY A: B:</strong> copies everything including OS and formats the destination — but does NOT check for errors on the destination disk.<br>
+      <strong>COPY A:*.* B:</strong> copies only files, checks for faulty areas on the destination and marks them — safer for non-full disks.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ══ WINDOWS ══ -->
+  <section class="section" id="windows">
+    <h2><span class="sec-num">21</span>Windows Operating Systems</h2>
+    <p>Windows was developed as a <strong>GUI for PCs running MS-DOS</strong>. It allows users to enter commands by pointing and clicking on objects using a mouse. Takes its name from on-screen "windows" — rectangular areas set aside for specific tasks.</p>
+
+    <h4>Examples of Windows Operating Systems</h4>
+    <div class="cards">
+      <div class="card"><div class="card-label">Legacy</div><h4>Windows 95/98/ME</h4><p>Early consumer versions with GUI and plug-and-play support.</p></div>
+      <div class="card"><div class="card-label">Enterprise</div><h4>Windows 2000/NT</h4><p>Business-oriented, multi-user versions with networking support.</p></div>
+      <div class="card"><div class="card-label">Modern</div><h4>Windows XP/Vista</h4><p>Improved stability, long filename support (up to 255 characters).</p></div>
+      <div class="card"><div class="card-label">Open Source</div><h4>Linux / UNIX / macOS</h4><p>Also classified as Windows-like GUI operating systems.</p></div>
+    </div>
+  </section>
+
+  <!-- ══ WIN FEATURES ══ -->
+  <section class="section" id="win-features">
+    <h2><span class="sec-num">22</span>Common Features & Advantages of Windows</h2>
+
+    <h4>Common Features</h4>
+    <div class="cards">
+      <div class="card"><div class="card-label">Element</div><h4>Icons</h4><p>Small pictures representing commands, files, or apps</p></div>
+      <div class="card"><div class="card-label">Element</div><h4>Pointer</h4><p>Arrow symbol moved with the mouse to select objects</p></div>
+      <div class="card"><div class="card-label">Element</div><h4>Buttons</h4><p>Items used to initiate processes</p></div>
+      <div class="card"><div class="card-label">Element</div><h4>Menus</h4><p>Choices for executing commands</p></div>
+      <div class="card"><div class="card-label">Element</div><h4>Desktop</h4><p>The display area where icons are grouped</p></div>
+      <div class="card"><div class="card-label">Element</div><h4>Windows</h4><p>Rectangular areas on screen for each running program</p></div>
+    </div>
+
+    <h4>Advantages of Windows OS</h4>
+    <ul>
+      <li>Easy to open programs, find documents, and switch between programs</li>
+      <li>Windows Explorer for easy file, folder, and drive management</li>
+      <li>Supports <strong>long file names</strong> (up to 255 characters including spaces)</li>
+      <li>Improved video, CD and sound capabilities</li>
+      <li><strong>Plug and Play (PnP)</strong> — automatically recognises and sets up new hardware</li>
+      <li>True <strong>multi-tasking</strong> — run multiple programs simultaneously, each in its own window</li>
+      <li>User-friendly — menu driven with options shown as icons</li>
+      <li>Supports a wide choice of networks and transmission protocols</li>
+      <li>Electronic communications support — messages, file transfer, video calls</li>
+      <li>My Briefcase for file synchronisation and file transfers via cable/dial-up</li>
+      <li>All Windows applications share common commands: Open, Save, Print, etc.</li>
+      <li>Easy information exchange between Windows applications (cut/copy/paste)</li>
+      <li>Power-saving features — standby and hibernation</li>
+      <li>Built-in Help system with access to technical support via WWW</li>
+    </ul>
+  </section>
+
+  <!-- ══ WINDOWS VS DOS ══ -->
+  <section class="section" id="win-vs-dos">
+    <h2><span class="sec-num">23</span>Windows vs MS-DOS — Comparison</h2>
+
+    <table class="cmp-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>MS-Windows</th>
+          <th>MS-DOS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Has <strong>icons</strong></td><td>No icons</td></tr>
+        <tr><td>2</td><td>Uses <strong>both Mouse and Keyboard</strong></td><td>Only Keyboard as input device</td></tr>
+        <tr><td>3</td><td>Uses <strong>menus</strong></td><td>Command-based only</td></tr>
+        <tr><td>4</td><td><strong>User-friendly</strong></td><td>Not user-friendly</td></tr>
+        <tr><td>5</td><td>Fully supports <strong>networking</strong></td><td>Cannot support networking</td></tr>
+        <tr><td>6</td><td>Requires <strong>high memory</strong></td><td>Uses less memory</td></tr>
+        <tr><td>7</td><td>Can run DOS-based programs</td><td>Cannot run Windows programs</td></tr>
+        <tr><td>8</td><td><strong>Multi-coloured</strong> screen</td><td>Monochrome (1 colour) screen</td></tr>
+        <tr><td>9</td><td><strong>Multi-user</strong> OS</td><td>Single-user OS</td></tr>
+        <tr><td>10</td><td><strong>Multi-tasking</strong> — many programs at once</td><td>Single-tasking — one program at a time</td></tr>
+        <tr><td>11</td><td>Comes in different versions</td><td>MS-DOS is an OS by itself</td></tr>
+        <tr><td>12</td><td>Uses <strong>folders</strong> to organise files</td><td>Uses <strong>directories</strong> to organise files</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer>
+    Operating Systems — Computer Studies Form 1 &nbsp;|&nbsp; © EasyElimu Learning Innovations
+  </footer>
+
+</main>
+
+<script>
+  const sections = document.querySelectorAll('.section');
+  const links = document.querySelectorAll('#sidebar nav a');
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(a => a.classList.remove('active'));
+        const match = document.querySelector(`#sidebar nav a[href="#${e.target.id}"]`);
+        if (match) match.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-15% 0px -70% 0px' });
+
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>

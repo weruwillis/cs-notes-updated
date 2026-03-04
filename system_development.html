@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 4 — System Development</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0f0e0c;
+      --paper: #f5f0e8;
+      --accent: #c0392b;
+      --accent2: #1a6b4a;
+      --blue: #1a3a6b;
+      --muted: #7a7265;
+      --rule: #d4cfc4;
+      --highlight: #fdf3d0;
+      --card: #fffdf8;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.75;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--accent2);
+      color: var(--paper);
+      padding: 60px 48px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50px; right: -50px;
+      width: 340px; height: 340px;
+      border: 3px solid rgba(255,255,255,0.1);
+      border-radius: 50%;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: 300px;
+      width: 240px; height: 240px;
+      border: 2px solid rgba(192,57,43,0.25);
+      border-radius: 50%;
+    }
+    .header-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #a8e6cf;
+      margin-bottom: 14px;
+    }
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 5vw, 52px);
+      font-weight: 900;
+      line-height: 1.1;
+      max-width: 720px;
+      position: relative;
+      z-index: 1;
+    }
+    header h1 span { color: #a8e6cf; }
+    .header-sub {
+      margin-top: 18px;
+      font-size: 14px;
+      color: rgba(245,240,232,0.5);
+      font-style: italic;
+    }
+
+    /* ── Layout ── */
+    .wrapper { max-width: 900px; margin: 0 auto; padding: 0 28px 80px; }
+
+    /* ── TOC ── */
+    .toc {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-left: 4px solid var(--accent2);
+      padding: 32px 36px;
+      margin: 48px 0 56px;
+    }
+    .toc-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--accent2);
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 24px;
+    }
+    @media (max-width: 580px) { .toc-grid { grid-template-columns: 1fr; } }
+    .toc-grid a {
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 14.5px;
+      padding: 5px 0;
+      border-bottom: 1px dashed var(--rule);
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      transition: color 0.2s;
+    }
+    .toc-grid a:hover { color: var(--accent2); }
+    .toc-grid a::before {
+      content: attr(data-n);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      min-width: 20px;
+    }
+
+    /* ── Sections ── */
+    section { margin-bottom: 64px; }
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 8px;
+    }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22px, 3.5vw, 36px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 28px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid var(--rule);
+    }
+    h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      margin: 36px 0 12px;
+      color: var(--accent2);
+    }
+    h4 {
+      font-family: 'Source Serif 4', serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 20px 0 8px;
+    }
+    p { margin-bottom: 14px; }
+    ul, ol { padding-left: 22px; margin-bottom: 16px; }
+    li { margin-bottom: 5px; }
+
+    /* ── Cards ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 20px 0;
+    }
+    @media (max-width: 580px) { .card-grid { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      padding: 22px 24px;
+    }
+    .card.green { border-top: 3px solid var(--accent2); }
+    .card.red   { border-top: 3px solid var(--accent); }
+    .card-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .card.green .card-label { color: var(--accent2); }
+    .card.red   .card-label { color: var(--accent); }
+    .card ul { padding-left: 18px; }
+    .card li  { font-size: 14.5px; margin-bottom: 4px; }
+
+    /* ── Highlight Box ── */
+    .highlight-box {
+      background: var(--highlight);
+      border: 1px solid #e8d99a;
+      border-left: 4px solid #d4a017;
+      padding: 18px 22px;
+      margin: 20px 0;
+      font-size: 15px;
+    }
+    .highlight-box strong { color: #8a6000; }
+
+    /* ── SDLC Steps ── */
+    .sdlc-steps {
+      counter-reset: sdlc;
+      list-style: none;
+      padding: 0;
+      margin: 24px 0;
+    }
+    .sdlc-steps li {
+      counter-increment: sdlc;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--rule);
+    }
+    .sdlc-steps li::before {
+      content: counter(sdlc);
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--accent2);
+      min-width: 36px;
+      line-height: 1.2;
+    }
+    .sdlc-step-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 17px;
+      color: var(--ink);
+    }
+    .sdlc-step-desc { font-size: 14.5px; color: #4a4540; margin-top: 3px; }
+
+    /* ── Feasibility Grid ── */
+    .feasibility-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .feas-card {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .feas-card::after {
+      content: '';
+      position: absolute;
+      bottom: -20px; right: -20px;
+      width: 70px; height: 70px;
+      border: 2px solid rgba(168,230,207,0.2);
+      border-radius: 50%;
+    }
+    .feas-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: #a8e6cf;
+      margin-bottom: 8px;
+    }
+    .feas-card p { font-size: 13.5px; color: rgba(245,240,232,0.75); margin: 0; }
+
+    /* ── Methods of Gathering ── */
+    .method-block {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-left: 4px solid var(--blue);
+      padding: 24px 28px;
+      margin-bottom: 24px;
+    }
+    .method-block h3 { margin-top: 0; color: var(--blue); font-size: 19px; }
+    .method-def { font-style: italic; color: #4a4540; font-size: 15.5px; margin-bottom: 16px; }
+
+    /* ── Changeover ── */
+    .changeover-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+      margin: 24px 0;
+    }
+    .changeover-card {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      padding: 24px;
+    }
+    .changeover-card h3 { margin-top: 0; font-size: 18px; color: var(--accent2); margin-bottom: 10px; }
+    .changeover-card .def { font-style: italic; font-size: 14px; color: #4a4540; margin-bottom: 14px; }
+
+    /* ── Char Tags ── */
+    .char-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .char-tag {
+      background: var(--accent2);
+      color: var(--paper);
+      padding: 7px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Classification Table ── */
+    .class-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14.5px;
+      margin: 20px 0;
+    }
+    .class-table th {
+      background: var(--accent2);
+      color: var(--paper);
+      padding: 10px 14px;
+      text-align: left;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .class-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--rule);
+      vertical-align: top;
+    }
+    .class-table tr:nth-child(even) td { background: rgba(0,0,0,0.025); }
+
+    /* ── Documentation list ── */
+    .doc-list {
+      list-style: none;
+      padding: 0;
+      counter-reset: doc;
+    }
+    .doc-list li {
+      counter-increment: doc;
+      display: flex;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--rule);
+      font-size: 15px;
+    }
+    .doc-list li::before {
+      content: counter(doc, upper-alpha);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--accent2);
+      min-width: 22px;
+      padding-top: 2px;
+      font-weight: 600;
+    }
+
+    /* ── Q&A ── */
+    .qa-block {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      padding: 22px 26px;
+      margin-bottom: 18px;
+    }
+    .qa-q {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 10px;
+      color: var(--blue);
+    }
+    .qa-a { font-size: 15px; }
+    .qa-a ul { padding-left: 20px; margin-top: 6px; }
+    .qa-a li { margin-bottom: 4px; font-size: 14.5px; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--accent2);
+      color: rgba(245,240,232,0.45);
+      text-align: center;
+      padding: 32px;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.08em;
+    }
+    footer span { color: #a8e6cf; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-label">Computer Studies — Form 3 · Chapter 4</div>
+  <h1><span>System</span> Development</h1>
+  <p class="header-sub">Systems Theory · SDLC · Information Gathering · Implementation &amp; Maintenance</p>
+</header>
+
+<div class="wrapper">
+
+  <!-- TOC -->
+  <nav class="toc">
+    <div class="toc-title">Table of Contents</div>
+    <div class="toc-grid">
+      <a href="#system" data-n="01">What is a System?</a>
+      <a href="#characteristics" data-n="02">Characteristics of Systems</a>
+      <a href="#classification" data-n="03">System Classification</a>
+      <a href="#information-system" data-n="04">Information Systems</a>
+      <a href="#why-develop" data-n="05">Why Develop a New System?</a>
+      <a href="#analyst" data-n="06">Role of System Analyst</a>
+      <a href="#methodologies" data-n="07">Development Methodologies</a>
+      <a href="#sdlc" data-n="08">Stages of the SDLC</a>
+      <a href="#feasibility" data-n="09">Feasibility Study</a>
+      <a href="#gathering" data-n="10">Information Gathering Methods</a>
+      <a href="#requirements" data-n="11">Requirements Specification</a>
+      <a href="#design" data-n="12">System Design &amp; Construction</a>
+      <a href="#implementation" data-n="13">Implementation &amp; Changeover</a>
+      <a href="#maintenance" data-n="14">Review, Maintenance &amp; Documentation</a>
+      <a href="#review" data-n="15">Review &amp; Revision Q&amp;A</a>
+    </div>
+  </nav>
+
+  <!-- 1. System -->
+  <section id="system">
+    <span class="section-label">01 — Foundations</span>
+    <h2>What is a System?</h2>
+    <p>A system is a set of organised items/components that interact in a given environment and within specific boundaries in order to achieve a desired goal or objective. A system is described as being either <strong>soft</strong> or <strong>hard</strong>.</p>
+
+    <div class="card-grid">
+      <div class="card green">
+        <div class="card-label">Soft Systems</div>
+        <p style="font-size:14.5px; margin-bottom:10px;">Human activity systems — their boundaries may be fluid or keep changing, their goals and objectives often conflict, and it is difficult to precisely define exact measures of performance.</p>
+        <p style="font-size:13px; color:var(--muted); font-style:italic;">Example: Political system</p>
+      </div>
+      <div class="card red">
+        <div class="card-label">Hard Systems</div>
+        <p style="font-size:14.5px; margin-bottom:10px;">Systems whose goals and objectives are clearly defined and whose outcomes are predictable and can be modelled accurately.</p>
+        <p style="font-size:13px; color:var(--muted); font-style:italic;">Example: Stock management system</p>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <strong>Open vs Closed Systems:</strong> An open system receives input from and gives output to the environment. A closed system does not interact with the environment at all.
+    </div>
+  </section>
+
+  <!-- 2. Characteristics -->
+  <section id="characteristics">
+    <span class="section-label">02 — Characteristics</span>
+    <h2>Characteristics of Systems</h2>
+
+    <div class="char-tags">
+      <span class="char-tag">Holistic Thinking</span>
+      <span class="char-tag">Sub-systems</span>
+      <span class="char-tag">Process</span>
+      <span class="char-tag">Objectives / Purpose</span>
+      <span class="char-tag">Environment</span>
+      <span class="char-tag">Boundaries</span>
+      <span class="char-tag">Interdependence</span>
+      <span class="char-tag">Feedback</span>
+      <span class="char-tag">Control</span>
+      <span class="char-tag">Inputs &amp; Outputs</span>
+      <span class="char-tag">System Entropy</span>
+    </div>
+
+    <table class="class-table">
+      <thead>
+        <tr><th>Characteristic</th><th>Explanation</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Holistic Thinking</strong></td>
+          <td>A system is considered as a whole. The combination of various components creates a complex whole whose overall goals are more sophisticated than those of individual components.</td>
+        </tr>
+        <tr>
+          <td><strong>Sub-systems</strong></td>
+          <td>A system is made up of different components (sub-systems). A system does not exist in isolation — it may itself be a component of a larger system.</td>
+        </tr>
+        <tr>
+          <td><strong>Process</strong></td>
+          <td>The element of a system that does the actual transformation of input into output, changing the system from one state to another.</td>
+        </tr>
+        <tr>
+          <td><strong>Objectives / Purpose</strong></td>
+          <td>Objectives may be real or stated. An organisation must state its objectives and operate to achieve them. e.g. a school system's objective is to enable students excel academically.</td>
+        </tr>
+        <tr>
+          <td><strong>Environment</strong></td>
+          <td>The surrounding within which an organisation operates, providing a reason for the system's existence.</td>
+        </tr>
+        <tr>
+          <td><strong>Boundaries</strong></td>
+          <td>The external elements whose changes in attitude, behaviour and property affect the system's state — it defines the limit of the system.</td>
+        </tr>
+        <tr>
+          <td><strong>Interdependence</strong></td>
+          <td>For a system to be effective and efficient, its components or sub-systems must be co-ordinated and linked together.</td>
+        </tr>
+        <tr>
+          <td><strong>Feedback &amp; Control</strong></td>
+          <td>Control is the method by which a system adapts to environmental changes to produce expected output. Feedback is a check to see whether predetermined goals are being met and to detect deviation.</td>
+        </tr>
+        <tr>
+          <td><strong>Inputs &amp; Outputs</strong></td>
+          <td>A system communicates with its environment by receiving inputs and giving outputs.</td>
+        </tr>
+        <tr>
+          <td><strong>System Entropy</strong></td>
+          <td>Entropy means decay. Systems naturally decay over time — becoming useless due to improvements in technology, new management directives, or changing user requirements. They must be reviewed and improved periodically.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 3. Classification -->
+  <section id="classification">
+    <span class="section-label">03 — Classification</span>
+    <h2>System Classification</h2>
+    <table class="class-table">
+      <thead>
+        <tr><th>Type</th><th>Description</th><th>Example</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Deterministic</strong></td>
+          <td>Systems whose outputs are known precisely by their inputs.</td>
+          <td>Computer system</td>
+        </tr>
+        <tr>
+          <td><strong>Probabilistic</strong></td>
+          <td>Systems whose outputs can only be predicted but not known precisely.</td>
+          <td>Business and economic systems</td>
+        </tr>
+        <tr>
+          <td><strong>Cybernetic</strong></td>
+          <td>Self-controlling systems that adapt to the environment and regulate their own behaviour by accessing feedback. They assess output and adjust input accordingly.</td>
+          <td>Human beings, plant systems</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 4. Information System -->
+  <section id="information-system">
+    <span class="section-label">04 — Information Systems</span>
+    <h2>Information Systems</h2>
+    <p>An information system is a set of persons, procedures, technologies and other resources that collects, transforms and disseminates information in an organisation. It can also be defined as an arrangement of people, data, processes and information that work together to support and improve day-to-day operations and decision making.</p>
+
+    <h3>Purposes of an Information System</h3>
+    <ul>
+      <li>To provide people within an organisation with information to assist in decision making.</li>
+      <li>To provide responsive service to meet user needs.</li>
+      <li>To enable sharing of information.</li>
+      <li>To facilitate interaction and dissemination of data throughout the various levels of an organisation.</li>
+      <li>To support information processing by enhancing data collection, processing and communication.</li>
+    </ul>
+  </section>
+
+  <!-- 5. Why Develop -->
+  <section id="why-develop">
+    <span class="section-label">05 — Need for New Systems</span>
+    <h2>Why Develop a New Information System?</h2>
+    <p>Three main circumstances necessitate the development of a new information system:</p>
+    <div class="feasibility-grid">
+      <div class="feas-card">
+        <div class="feas-title">Directives</div>
+        <p>New requirements imposed by government or management that introduce changes the organisation must implement to meet its needs, e.g. improving quality of service.</p>
+      </div>
+      <div class="feas-card">
+        <div class="feas-title">Problems in the Current System</div>
+        <p>Undesirable circumstances in the existing system that prevent the organisation from meeting its goals, e.g. slow or poor service delivery.</p>
+      </div>
+      <div class="feas-card">
+        <div class="feas-title">New Opportunities</div>
+        <p>When an opportunity arises that could enable the organisation to improve its services, e.g. the availability of new technology.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Analyst -->
+  <section id="analyst">
+    <span class="section-label">06 — System Analyst</span>
+    <h2>Role of the System Analyst</h2>
+    <p>A system analyst is a person responsible for identifying an organisation's needs and problems, then designing and developing an information system to solve them.</p>
+    <ul>
+      <li>Reviewing the existing system and making recommendations on how to improve or implement an alternative.</li>
+      <li>Working hand in hand with programmers to construct a computerised system.</li>
+      <li>Co-ordinating training for new system users and owners.</li>
+    </ul>
+  </section>
+
+  <!-- 7. Methodologies -->
+  <section id="methodologies">
+    <span class="section-label">07 — Methodologies</span>
+    <h2>System Development Methodologies</h2>
+    <p>System development methodologies refer to a combination of theories and techniques used to develop information systems. These theories form the basis for the techniques used to undertake the System Development Life Cycle (SDLC).</p>
+
+    <div class="method-block">
+      <h3>Traditional Approach</h3>
+      <p>Relies mostly on the skills and experience of individual staff members carrying out the project. The manual system is replaced with a computerised one without changing the overall structure of the former system. As a result, weaknesses of the former system are not addressed — they are forwarded into the new system.</p>
+    </div>
+
+    <div class="method-block">
+      <h3>Rapid Application Development (RAD)</h3>
+      <p>Evolved from the theory that businesses today heavily rely on IT, so development must be quick enough to maintain a competitive advantage. RAD relies on <strong>prototyping</strong> — a design model presented to the user for selection. Other approaches include <strong>SWAT</strong> (Small team With Advanced Tools) and <strong>JAD</strong> (Joint Application Development).</p>
+      <div class="highlight-box" style="margin-top:14px;">
+        <strong>Main Problem with RAD:</strong> The system may have oversights and weaknesses due to the speed of development.
+      </div>
+    </div>
+
+    <div class="method-block">
+      <h3>Structured Approach</h3>
+      <p>Defines a set of clearly documented stages to be followed when developing a system. Each stage specifies the activities to be carried out by the system analyst and their team. This is the most thorough and widely recommended approach.</p>
+    </div>
+  </section>
+
+  <!-- 8. SDLC -->
+  <section id="sdlc">
+    <span class="section-label">08 — SDLC</span>
+    <h2>Stages of System Development (SDLC)</h2>
+    <ol class="sdlc-steps">
+      <li>
+        <div>
+          <div class="sdlc-step-title">Problem Recognition &amp; Definition</div>
+          <div class="sdlc-step-desc">The analyst decides if the project is necessary and thoroughly defines the problem, identifying any constraints. Ends with a feasibility study.</div>
+        </div>
+      </li>
+      <li>
+        <div>
+          <div class="sdlc-step-title">Information Gathering</div>
+          <div class="sdlc-step-desc">The analyst gathers data about the current system and user needs using record inspection, interviews, questionnaires, observation, or automated methods.</div>
+        </div>
+      </li>
+      <li>
+        <div>
+          <div class="sdlc-step-title">Requirements Specification</div>
+          <div class="sdlc-step-desc">Detailed requirements for the new system are defined: output, input, files/data stores, and hardware/software requirements.</div>
+        </div>
+      </li>
+      <li>
+        <div>
+          <div class="sdlc-step-title">System Design</div>
+          <div class="sdlc-step-desc">The physical design of the system is detailed. Tools used include flowcharts, data flow diagrams, entity-relationship models, structured charts, pseudo-codes, decision tables and trees.</div>
+        </div>
+      </li>
+      <li>
+        <div>
+          <div class="sdlc-step-title">System Construction</div>
+          <div class="sdlc-step-desc">Coding, installation and testing of modules. Done by programmers using 3GL languages (Pascal, COBOL), 4GL languages (Visual Basic, Delphi), or customised ready-made packages.</div>
+        </div>
+      </li>
+      <li>
+        <div>
+          <div class="sdlc-step-title">System Implementation</div>
+          <div class="sdlc-step-desc">Installing the system, testing it, converting from the old system, and training users. Involves file creation/conversion, changeover, and staff training.</div>
+        </div>
+      </li>
+      <li>
+        <div>
+          <div class="sdlc-step-title">System Review &amp; Maintenance</div>
+          <div class="sdlc-step-desc">Adjustment, enhancement or correction of errors after implementation. Review checks whether the system still meets original specifications. If not, development may start again.</div>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- 9. Feasibility -->
+  <section id="feasibility">
+    <span class="section-label">09 — Feasibility Study</span>
+    <h2>Feasibility Study</h2>
+    <p>A special study carried out at the end of problem definition to establish the costs and benefits of the proposed project. Feasibility is assessed in four ways:</p>
+    <div class="feasibility-grid">
+      <div class="feas-card">
+        <div class="feas-title">Operational Feasibility</div>
+        <p>Establishes the extent to which users are comfortable and happy with the proposed or new system.</p>
+      </div>
+      <div class="feas-card">
+        <div class="feas-title">Technical Feasibility</div>
+        <p>Establishes whether available technology is sufficient or can be upgraded, and whether staff have the relevant technical skills.</p>
+      </div>
+      <div class="feas-card">
+        <div class="feas-title">Economic Feasibility</div>
+        <p>Establishes whether the new system is cost-effective by analysing all costs and benefits of the proposed system.</p>
+      </div>
+      <div class="feas-card">
+        <div class="feas-title">Schedule Feasibility</div>
+        <p>Establishes whether development of the proposed system can be accomplished within the available time frame.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Gathering -->
+  <section id="gathering">
+    <span class="section-label">10 — Information Gathering</span>
+    <h2>Methods of Information Gathering</h2>
+
+    <!-- Record Inspection -->
+    <div class="method-block">
+      <h3>Record Inspection</h3>
+      <p class="method-def">Documents maintained in connection to the system are referenced. Forms a good starting point for the analyst to gain an overall insight of the existing system.</p>
+      <div class="card-grid">
+        <div class="card green">
+          <div class="card-label">✓ Advantages</div>
+          <ul>
+            <li>Provides basic background information about the system</li>
+            <li>Helps design interview questions and questionnaires</li>
+            <li>Helps decide who to interview</li>
+          </ul>
+        </div>
+        <div class="card red">
+          <div class="card-label">✗ Disadvantages</div>
+          <ul>
+            <li>Documents may be obsolete and not reflect current status</li>
+            <li>Human systems change — documents may give a false picture</li>
+            <li>Documents are often bulky and time-consuming to read</li>
+            <li>Documentation may be poor or incomplete</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interview -->
+    <div class="method-block">
+      <h3>Interview</h3>
+      <p class="method-def">A face-to-face communication between the analyst (as interviewer) and affected personnel (as interviewee), with questions geared to getting the information needed.</p>
+      <div class="card-grid">
+        <div class="card green">
+          <div class="card-label">✓ Advantages</div>
+          <ul>
+            <li>Analyst has access to first-class information</li>
+            <li>Makes interviewee feel part of the system</li>
+            <li>Gives adequate opportunity for opinions to be put forward</li>
+            <li>Non-verbal communication (facial expressions) can be observed</li>
+            <li>Questions can be rephrased instantly for clarification</li>
+          </ul>
+        </div>
+        <div class="card red">
+          <div class="card-label">✗ Disadvantages</div>
+          <ul>
+            <li>Difficult to organise and time-consuming</li>
+            <li>Interviewee may not fully open up on personal or sensitive issues</li>
+            <li>Many analysts are poor interviewers, risking failure</li>
+            <li>May not be practical due to location of interviewees</li>
+            <li>Interviewee may give opinions rather than proven facts</li>
+            <li>Interviewee may be suspicious of the proposed system's intentions</li>
+          </ul>
+        </div>
+      </div>
+      <div class="highlight-box">
+        <strong>Proxemics:</strong> Issues related to physical contact and sitting arrangements during an interview. Proximity between interviewer and interviewee can affect comfort and openness.
+      </div>
+    </div>
+
+    <!-- Questionnaires -->
+    <div class="method-block">
+      <h3>Questionnaires</h3>
+      <p class="method-def">A document containing standard questions distributed to a large number of people to gather information from those affected by the proposed system.</p>
+      <h4>When to Use Questionnaires</h4>
+      <ul>
+        <li>When limited information is required from a large number of people.</li>
+        <li>When there is a large number of people involved in the system project.</li>
+        <li>When the people are geographically dispersed.</li>
+      </ul>
+      <div class="card-grid">
+        <div class="card green">
+          <div class="card-label">✓ Advantages</div>
+          <ul>
+            <li>Answers filled in a less tense environment</li>
+            <li>Privacy leads to more sincere responses</li>
+            <li>Provides many people the opportunity to give input</li>
+            <li>Saves time — especially where respondents are geographically scattered</li>
+            <li>Respondents fill at their own convenience</li>
+          </ul>
+        </div>
+        <div class="card red">
+          <div class="card-label">✗ Disadvantages</div>
+          <ul>
+            <li>A slow way of gathering facts</li>
+            <li>Difficult to prepare — requires expertise</li>
+            <li>Questions can be easily misunderstood, leading to ambiguous replies</li>
+            <li>Analysis of results requires a lot of time</li>
+            <li>Respondents may not fill or return questionnaires</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Observation -->
+    <div class="method-block">
+      <h3>Observation</h3>
+      <p class="method-def">The observer participates or watches closely as a person performs activities in order to learn about the system. Gives the analyst first-hand experience of problems and exposes them to system requirements.</p>
+      <div class="card-grid">
+        <div class="card green">
+          <div class="card-label">✓ Advantages</div>
+          <ul>
+            <li>Concepts too difficult for non-technical staff to explain can simply be observed</li>
+            <li>Helps the analyst become acquainted with operational personnel</li>
+            <li>Provides "know how" needed to assist in recommended changes</li>
+            <li>Can correct hazy or erroneous impressions of the system</li>
+          </ul>
+        </div>
+        <div class="card red">
+          <div class="card-label">✗ Disadvantages</div>
+          <ul>
+            <li>Costly and time-consuming — requires the observer to be on-site</li>
+            <li>Staff are uncomfortable when being watched</li>
+            <li>The person observed might alter behaviour, leading to wrong requirements</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Automated -->
+    <div class="method-block">
+      <h3>Automated Methods</h3>
+      <p class="method-def">Used when actual data is required but difficult to obtain through interviews, observation or questionnaires. Data is collected using devices that automatically capture data from the source.</p>
+      <p>Examples include scanners, video cameras, and tape recorders. Particularly useful in areas that are not easily accessible.</p>
+    </div>
+  </section>
+
+  <!-- 11. Requirements -->
+  <section id="requirements">
+    <span class="section-label">11 — Requirements Specification</span>
+    <h2>Requirements Specification</h2>
+    <p>The system analyst must produce detailed requirements for the new system across four main areas:</p>
+
+    <h3>Output Specification</h3>
+    <p>Concerns the generation of reports to facilitate decision making (in hardcopy or softcopy). Factors to consider:</p>
+    <ul>
+      <li><strong>Target audience</strong> — users may need transaction reports; management needs overall performance summaries.</li>
+      <li><strong>Frequency</strong> — some reports are required daily, others weekly, monthly or annually.</li>
+      <li><strong>Quality and format</strong> — information must be clear and well-structured.</li>
+      <li><strong>Cost</strong> — output must be produced at a reasonable cost.</li>
+      <li><strong>Mode of output</strong> — e.g. softcopy via screen or hardcopy via printer.</li>
+    </ul>
+
+    <h3>Input Specification</h3>
+    <p>Factors to consider:</p>
+    <ul>
+      <li>The contents and volume of input.</li>
+      <li>The mode and devices of input selected.</li>
+      <li>Layout and sequence of input.</li>
+      <li>Nature of the system — batch processing uses periodical input; real-time systems use on-demand input.</li>
+      <li>User interface mock-ups or dummy forms can be used to identify system inputs.</li>
+    </ul>
+
+    <h3>File / Data Stores (Database)</h3>
+    <p>The analyst must identify the number of files needed, determine the structure of each file, and identify the attributes of records. An <strong>attribute</strong> is a unique characteristic of a record for which a data value can be stored — attributes become fields in database tables.</p>
+    <p>Factors to consider when designing files:</p>
+    <ul>
+      <li><strong>Record key field</strong> — a unique attribute for each record.</li>
+      <li><strong>Data type</strong> — e.g. Text for book titles, Date/Time for borrowing dates.</li>
+      <li><strong>Length of each field</strong> — e.g. 30 characters for names, 10 for numbers.</li>
+      <li><strong>Backup and recovery strategies</strong> — updated copies must be stored separately to enable reconstruction if the current file is corrupted.</li>
+    </ul>
+
+    <h3>Hardware &amp; Software Requirements</h3>
+    <p>The analyst must specify all hardware and software requirements, considering:</p>
+    <ul>
+      <li>Economic factors — e.g. price.</li>
+      <li>Operational factors — e.g. reliability, upgradability, and compatibility with existing resources.</li>
+      <li>User-friendliness.</li>
+    </ul>
+  </section>
+
+  <!-- 12. Design & Construction -->
+  <section id="design">
+    <span class="section-label">12 — Design &amp; Construction</span>
+    <h2>System Design &amp; Construction</h2>
+
+    <h3>System Design</h3>
+    <p>Involves detailing the physical design of the system — the <em>how</em> of the process. Once the logical design is outlined during system analysis, the analyst determines the physical design describing the hardware, software and operating procedures required. Tools used include:</p>
+    <div class="char-tags">
+      <span class="char-tag">Flowcharts</span>
+      <span class="char-tag">Data Flow Diagrams</span>
+      <span class="char-tag">Entity Relationship Models</span>
+      <span class="char-tag">Structured Charts</span>
+      <span class="char-tag">Pseudo-codes</span>
+      <span class="char-tag">Decision Tables</span>
+      <span class="char-tag">Decision Trees</span>
+    </div>
+
+    <h3>System Construction</h3>
+    <p>Refers to coding, installation and testing of modules and their components (outputs, inputs and files). Done by programmers. Programming techniques include:</p>
+    <ul>
+      <li>3GL high-level structured languages — e.g. Pascal, COBOL.</li>
+      <li>4th generation languages — e.g. Visual Basic, Visual COBOL, Delphi Pascal.</li>
+      <li>Customised ready-made standard packages — e.g. database software, financial packages, enterprise management systems.</li>
+    </ul>
+    <div class="highlight-box">
+      <strong>Note on System vs Program Flowcharts:</strong> A system flowchart covers the entire system while a program flowchart covers a single module or part. Several program flowcharts may be derived from one system flowchart.
+    </div>
+  </section>
+
+  <!-- 13. Implementation -->
+  <section id="implementation">
+    <span class="section-label">13 — Implementation</span>
+    <h2>System Implementation &amp; Changeover</h2>
+
+    <h3>Testing the System</h3>
+    <p>Test data is entered to verify outputs are as expected. The system is tested against both the requirements specification and the design specification to confirm all requirements are met.</p>
+
+    <h3>File Creation &amp; Conversion</h3>
+    <p>Setting up master files to support the new system — either from scratch or by converting files from the old system (e.g. manual files to electronic files). File conversion refers to changing files from one format to another.</p>
+
+    <h3>Staff Training</h3>
+    <p>Training aims to convince staff of the system's effectiveness, remove fear of change, and enable staff to cope with the new processing tasks. Methods of training include:</p>
+    <div class="char-tags">
+      <span class="char-tag">Demonstration</span>
+      <span class="char-tag">Film Show</span>
+      <span class="char-tag">Manual Reference</span>
+      <span class="char-tag">Group Discussion</span>
+      <span class="char-tag">Visits</span>
+    </div>
+
+    <h3>Changeover Strategies</h3>
+    <div class="changeover-grid">
+      <div class="changeover-card">
+        <h3>Direct / Straight Changeover</h3>
+        <div class="def">The new system commences live operation and the old system is immediately abandoned.</div>
+        <div class="card-label" style="color:var(--accent2); margin-bottom:4px;">✓ Advantage</div>
+        <p style="font-size:14px; margin-bottom:10px;">Cheap — no need to run two systems in parallel.</p>
+        <div class="card-label" style="color:var(--accent); margin-bottom:4px;">✗ Disadvantages</div>
+        <ul style="padding-left:18px; font-size:14px;">
+          <li>Extremely risky</li>
+          <li>Places the organisation in a do-or-die situation</li>
+        </ul>
+      </div>
+      <div class="changeover-card">
+        <h3>Parallel Changeover</h3>
+        <div class="def">Both the old and new systems run alongside each other simultaneously.</div>
+        <div class="card-label" style="color:var(--accent2); margin-bottom:4px;">✓ Advantages</div>
+        <ul style="padding-left:18px; font-size:14px; margin-bottom:10px;">
+          <li>Provides a method of training on the new system</li>
+          <li>Personnel become familiar prior to actual changeover</li>
+        </ul>
+        <div class="card-label" style="color:var(--accent); margin-bottom:4px;">✗ Disadvantages</div>
+        <ul style="padding-left:18px; font-size:14px;">
+          <li>Costly to run two systems</li>
+          <li>Cross-checking is difficult</li>
+          <li>Requires more staff and training</li>
+        </ul>
+      </div>
+      <div class="changeover-card">
+        <h3>Phased Changeover</h3>
+        <div class="def">Implementation is done one part/phase at a time. A trial phase (piloting) may run in one department before full roll-out.</div>
+        <div class="card-label" style="color:var(--accent2); margin-bottom:4px;">✓ Advantages</div>
+        <ul style="padding-left:18px; font-size:14px; margin-bottom:10px;">
+          <li>Allows quick implementation of phases</li>
+          <li>Less costly</li>
+          <li>Failures are limited in scope</li>
+          <li>Causes minimal disruption</li>
+        </ul>
+        <div class="card-label" style="color:var(--accent); margin-bottom:4px;">✗ Disadvantage</div>
+        <ul style="padding-left:18px; font-size:14px;">
+          <li>Danger of incompatibility between hardware or software elements of the same system</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14. Maintenance & Docs -->
+  <section id="maintenance">
+    <span class="section-label">14 — Maintenance &amp; Documentation</span>
+    <h2>System Review, Maintenance &amp; Documentation</h2>
+
+    <h3>Review &amp; Maintenance</h3>
+    <p>System maintenance is the adjustment, enhancement, or correction of errors after implementation. System review involves going through the specifications and testing the system to find out whether it still meets the original requirements. If not, system development may start over again.</p>
+
+    <h3>System Documentation</h3>
+    <ol class="doc-list">
+      <li><strong>Report of fact finding</strong> — outlines methods used to collect data, weaknesses of the current system, and recommendations.</li>
+      <li><strong>Requirements specification</strong> — details the output, input, hardware and software required for the new system.</li>
+      <li><strong>System flowchart</strong> — shows the overall functionality of the proposed information system.</li>
+      <li><strong>Tables / file structures</strong> — file and table structure definitions used in system construction.</li>
+      <li><strong>Sample test data</strong> — used to test whether the computerised information system works as expected.</li>
+      <li><strong>Output reports</strong> — sample outputs from various modules proving the system is delivering desired results.</li>
+      <li><strong>User manual</strong> — helps the user operate the system with minimal guidance, including: how to install and start the system, the interface, how to carry out various tasks, error correction and how to get help.</li>
+    </ol>
+  </section>
+
+  <!-- 15. Q&A -->
+  <section id="review">
+    <span class="section-label">15 — Revision</span>
+    <h2>Review &amp; Revision Questions with Answers</h2>
+
+    <div class="qa-block">
+      <div class="qa-q">Define the term "information system".</div>
+      <div class="qa-a">An information system is the arrangement of people, data, processes and information that work together to support and improve the day-to-day business operations of an organisation.</div>
+    </div>
+
+    <div class="qa-block">
+      <div class="qa-q">Differentiate between soft systems and hard systems.</div>
+      <div class="qa-a">In soft systems, goals and objectives are not clearly defined, boundaries are fluid, and performance is hard to measure precisely. In hard systems, goals and objectives are clearly defined and outcomes are predictable and can be modelled accurately.</div>
+    </div>
+
+    <div class="qa-block">
+      <div class="qa-q">What is system control? Why do we need feedback in a system?</div>
+      <div class="qa-a">System control is the method by which a system adapts to changes in the environment in order to give the expected output or perform at the expected level. Feedback is needed in order to adjust controls for better performance of the system — it checks whether predetermined goals are being met and detects deviation.</div>
+    </div>
+
+    <div class="qa-block">
+      <div class="qa-q">Explain the term "system boundary".</div>
+      <div class="qa-a">System boundary is the scope or limit within which a system's components operate — the external element whose changes in attitude, behaviour and property affect the state of the system.</div>
+    </div>
+
+    <div class="qa-block">
+      <div class="qa-q">Explain three system development theories/methods.</div>
+      <div class="qa-a">
+        <ul>
+          <li><strong>Traditional approach</strong> — relies on individual staff skills and experience; replaces the manual system with a computerised one without changing the overall structure, so weaknesses are carried forward.</li>
+          <li><strong>Rapid Application Development (RAD)</strong> — relies on prototyping to develop and implement systems quickly. Main disadvantage is that the system may have weaknesses due to speed of development.</li>
+          <li><strong>Structured approach</strong> — defines a set of clearly documented stages each with specific activities. The most thorough approach to system development.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-block">
+      <div class="qa-q">Define the term "feasibility study" as used in system development.</div>
+      <div class="qa-a">A feasibility study is a special study carried out to establish the costs and benefits of a new system. It assesses operational, technical, economic and schedule feasibility.</div>
+    </div>
+
+    <div class="qa-block">
+      <div class="qa-q">State two advantages of interview over questionnaires.</div>
+      <div class="qa-a">
+        <ul>
+          <li>Non-verbal communication (such as facial expressions) can be used and observed.</li>
+          <li>Questions can be rephrased instantly for clarification and to probe the interviewee further.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-block">
+      <div class="qa-q">Outline the four areas considered during the requirements specification stage.</div>
+      <div class="qa-a">
+        <ul>
+          <li>Output specification</li>
+          <li>Input specification</li>
+          <li>Files / data stores</li>
+          <li>Hardware and software requirements</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-block">
+      <div class="qa-q">State four factors to consider in order to design a good file.</div>
+      <div class="qa-a">
+        <ul>
+          <li>Record key field — a unique attribute for each record.</li>
+          <li>Data type for each field.</li>
+          <li>Length of each field.</li>
+          <li>Backup and recovery strategies — to enable reconstruction if the file is corrupted.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-block">
+      <div class="qa-q">Explain the three tasks carried out during system implementation.</div>
+      <div class="qa-a">
+        <ul>
+          <li><strong>File creation and conversion</strong> — setting up master files from scratch or converting existing files (e.g. manual to electronic).</li>
+          <li><strong>Staff training</strong> — training users to convince them of the system's effectiveness, remove fear of change, and enable them to cope with new tasks.</li>
+          <li><strong>Changeover</strong> — transitioning from the old system to the new one using direct, parallel, or phased strategies.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-block">
+      <div class="qa-q">Give an advantage of straight changeover over parallel changeover.</div>
+      <div class="qa-a">Straight changeover is cheaper to implement because you do not have to run two systems simultaneously.</div>
+    </div>
+
+    <div class="qa-block">
+      <div class="qa-q">Define the term "attribute" as used in system development.</div>
+      <div class="qa-a">An attribute refers to a unique characteristic of a particular entity or record for which a data value can be stored in the system database. Attributes become fields in database tables.</div>
+    </div>
+
+    <div class="qa-block">
+      <div class="qa-q">Outline the contents of a user manual that would help the user run the system with minimal guidance.</div>
+      <div class="qa-a">
+        <ul>
+          <li>How to install and start the system.</li>
+          <li>The interface of the system.</li>
+          <li>How to carry out various tasks.</li>
+          <li>Test data and expected output.</li>
+          <li>Error correction and troubleshooting guide.</li>
+        </ul>
+      </div>
+    </div>
+
+  </section>
+
+</div>
+
+<footer>
+  <span>Computer Studies</span> · Form 3 · Chapter 4 — System Development
+</footer>
+
+</body>
+</html>

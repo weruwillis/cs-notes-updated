@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Representation in a Computer – Form 3 Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --surface2: #f0ede6;
+    --ink: #1e1b16;
+    --muted: #7a7265;
+    --purple: #5c3d8f;
+    --purple-light: #ede8f7;
+    --purple-mid: #8b63c4;
+    --green: #2d7a4f;
+    --green-light: #e8f5ee;
+    --red: #9b2c2c;
+    --red-light: #fdf0f0;
+    --amber: #b45309;
+    --amber-light: #fef3c7;
+    --border: rgba(92,61,143,.15);
+    --sidebar: 260px;
+    --mono: 'Fira Code', 'Courier New', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    position: fixed; top: 0; left: 0;
+    width: var(--sidebar);
+    height: 100vh;
+    background: var(--ink);
+    overflow-y: auto;
+    padding: 2rem 1.4rem 3rem;
+    z-index: 100;
+  }
+
+  .brand {
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.4;
+    border-bottom: 1px solid rgba(255,255,255,.12);
+    padding-bottom: 1rem;
+    margin-bottom: 1.4rem;
+  }
+
+  .brand span {
+    display: block;
+    font-family: var(--mono);
+    font-size: .6rem;
+    color: var(--purple-mid);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-top: .3rem;
+    font-weight: 400;
+  }
+
+  .nav-group {
+    font-family: var(--mono);
+    font-size: .58rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--purple-mid);
+    margin: 1.1rem 0 .3rem .4rem;
+  }
+
+  #sidebar nav a {
+    display: block;
+    font-size: .78rem;
+    font-weight: 400;
+    color: rgba(255,255,255,.55);
+    text-decoration: none;
+    padding: .3rem .5rem;
+    border-radius: 4px;
+    border-left: 2px solid transparent;
+    transition: color .15s, border-color .15s, background .15s;
+    line-height: 1.5;
+  }
+
+  #sidebar nav a:hover { color: rgba(255,255,255,.9); background: rgba(139,99,196,.15); }
+  #sidebar nav a.active { color: #fff; border-left-color: var(--purple-mid); background: rgba(139,99,196,.2); }
+
+  /* ── MAIN ── */
+  #main {
+    margin-left: var(--sidebar);
+    flex: 1;
+    max-width: 880px;
+    padding: 4rem 4rem 7rem;
+  }
+
+  /* ── HEADER ── */
+  .doc-header {
+    margin-bottom: 3.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid var(--purple);
+  }
+
+  .doc-header .kicker {
+    font-family: var(--mono);
+    font-size: .62rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: .8rem;
+  }
+
+  .doc-header h1 {
+    font-family: 'Lora', serif;
+    font-size: clamp(1.9rem, 4vw, 2.9rem);
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: .5rem;
+  }
+
+  .doc-header .sub {
+    font-size: .9rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 3.5rem; scroll-margin-top: 2rem; }
+
+  h2 {
+    font-family: 'Lora', serif;
+    font-size: 1.55rem;
+    font-weight: 600;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    margin-bottom: 1.2rem;
+  }
+
+  h2 .h2-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px; height: 32px;
+    background: var(--purple);
+    color: #fff;
+    border-radius: 6px;
+    font-size: .8rem;
+    font-family: var(--mono);
+    flex-shrink: 0;
+  }
+
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--purple);
+    margin: 1.8rem 0 .6rem;
+  }
+
+  h4 {
+    font-family: var(--mono);
+    font-size: .82rem;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    margin: 1.3rem 0 .5rem;
+  }
+
+  p {
+    font-size: .94rem;
+    line-height: 1.85;
+    color: rgba(30,27,22,.85);
+    margin-bottom: .9rem;
+    font-weight: 400;
+  }
+
+  ul, ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+  li { font-size: .93rem; line-height: 1.75; margin-bottom: .2rem; color: rgba(30,27,22,.82); }
+  li::marker { color: var(--purple); }
+  strong { font-weight: 600; color: var(--ink); }
+  em { color: var(--purple); font-style: italic; }
+
+  /* ── DEFINITION BOX ── */
+  .def {
+    background: var(--purple-light);
+    border-left: 3px solid var(--purple);
+    padding: .9rem 1.3rem;
+    margin: 1.2rem 0;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .def .def-label {
+    font-family: var(--mono);
+    font-size: .6rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: .3rem;
+  }
+
+  .def p { margin: 0; font-style: italic; color: var(--ink); font-size: .92rem; }
+
+  /* ── NOTE ── */
+  .note {
+    background: var(--amber-light);
+    border-left: 3px solid var(--amber);
+    padding: .8rem 1.2rem;
+    margin: 1rem 0;
+    border-radius: 0 5px 5px 0;
+  }
+
+  .note .note-label {
+    font-family: var(--mono);
+    font-size: .6rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: .2rem;
+  }
+
+  .note p { margin: 0; font-size: .88rem; }
+
+  /* ── DATA TABLE ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.2rem 0;
+    font-size: .86rem;
+    font-family: var(--mono);
+  }
+
+  .data-table th {
+    background: var(--purple);
+    color: #fff;
+    padding: .6rem .9rem;
+    text-align: center;
+    font-size: .7rem;
+    letter-spacing: .06em;
+  }
+
+  .data-table td {
+    padding: .5rem .9rem;
+    text-align: center;
+    border: 1px solid rgba(92,61,143,.15);
+    color: var(--ink);
+    background: var(--surface);
+  }
+
+  .data-table tr:nth-child(even) td { background: var(--surface2); }
+  .data-table tr:hover td { background: var(--purple-light); }
+
+  /* ── MATH BLOCK ── */
+  .math-block {
+    background: var(--ink);
+    color: #e8e0ff;
+    font-family: var(--mono);
+    font-size: .88rem;
+    padding: 1.2rem 1.5rem;
+    border-radius: 8px;
+    margin: 1.2rem 0;
+    line-height: 2;
+    overflow-x: auto;
+  }
+
+  .math-block .comment { color: #7a6fa8; font-size: .8rem; }
+  .math-block .result { color: #a8ff78; font-weight: 500; }
+  .math-block .step { color: #fff; }
+  .math-block .carry { color: #ffd700; }
+
+  /* ── BIT DISPLAY ── */
+  .bit-row {
+    display: flex;
+    gap: .3rem;
+    margin: .8rem 0;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .bit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px; height: 38px;
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  .bit-1 { background: var(--purple); color: #fff; }
+  .bit-0 { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+  .bit-label { font-family: var(--mono); font-size: .7rem; color: var(--muted); margin-left: .5rem; }
+
+  /* ── CARDS ── */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: .9rem;
+    margin: 1rem 0;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--purple);
+    padding: 1rem 1.1rem;
+    border-radius: 0 0 6px 6px;
+  }
+
+  .card .card-label {
+    font-family: var(--mono);
+    font-size: .6rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--purple-mid);
+    margin-bottom: .4rem;
+  }
+
+  .card h4 { margin: 0 0 .5rem; color: var(--ink); font-size: .9rem; text-transform: none; letter-spacing: 0; }
+  .card ul { padding-left: 1rem; margin: 0; }
+  .card li { font-size: .82rem; color: var(--muted); }
+  .card li::marker { color: var(--purple-mid); }
+
+  /* ── TWO-COL ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+
+  .col-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1rem 1.2rem;
+    border-radius: 6px;
+  }
+
+  .col-box.green { border-top: 3px solid var(--green); }
+  .col-box.red { border-top: 3px solid var(--red); }
+
+  .col-box .col-label {
+    font-family: var(--mono);
+    font-size: .6rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: .5rem;
+  }
+
+  .col-box.green .col-label { color: var(--green); }
+  .col-box.red .col-label { color: var(--red); }
+  .col-box li { font-size: .85rem; }
+  .col-box.green li::marker { color: var(--green); }
+  .col-box.red li::marker { color: var(--red); }
+
+  /* ── CONVERSION STEP ── */
+  .step-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 1rem 0;
+  }
+
+  .step-box .step-header {
+    background: var(--purple);
+    color: #fff;
+    padding: .6rem 1.2rem;
+    font-size: .8rem;
+    font-family: var(--mono);
+    letter-spacing: .08em;
+  }
+
+  .step-box .step-body {
+    padding: 1rem 1.2rem;
+  }
+
+  .step-box ol { margin: 0; padding-left: 1.2rem; }
+  .step-box li { font-size: .88rem; line-height: 1.8; color: rgba(30,27,22,.85); }
+
+  /* ── CODING SCHEME BADGES ── */
+  .scheme-badge {
+    display: inline-block;
+    background: var(--purple-light);
+    color: var(--purple);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: .72rem;
+    padding: .25rem .7rem;
+    margin: .15rem;
+  }
+
+  /* ── DIVIDER ── */
+  hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding-top: 1.2rem;
+    margin-top: 3rem;
+    font-family: var(--mono);
+    font-size: .65rem;
+    color: var(--muted);
+    letter-spacing: .08em;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 820px) {
+    #sidebar { display: none; }
+    #main { margin-left: 0; padding: 2rem 1.5rem 5rem; }
+    .two-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<aside id="sidebar">
+  <div class="brand">
+    Data Representation in a Computer
+    <span>Form 3 · Computer Studies</span>
+  </div>
+  <nav>
+    <div class="nav-group">Introduction</div>
+    <a href="#intro">Overview</a>
+    <a href="#wave-params">Wave Parameters</a>
+    <a href="#modulation">Modulation</a>
+
+    <div class="nav-group">Data Representation</div>
+    <a href="#electronic">Electronic Circuits</a>
+    <a href="#magnetic">Magnetic Media</a>
+    <a href="#optical">Optical Media</a>
+    <a href="#why-binary">Why Binary?</a>
+
+    <div class="nav-group">Units</div>
+    <a href="#bits-bytes">Bits, Bytes, Nibble & Word</a>
+
+    <div class="nav-group">Number Systems</div>
+    <a href="#number-systems">Overview</a>
+    <a href="#decimal">Decimal System</a>
+    <a href="#binary-sys">Binary System</a>
+    <a href="#octal">Octal System</a>
+    <a href="#hexadecimal">Hexadecimal System</a>
+
+    <div class="nav-group">Conversions</div>
+    <a href="#bin-to-dec">Binary ↔ Decimal</a>
+    <a href="#fractions">Binary Fractions</a>
+    <a href="#oct-conv">Octal Conversions</a>
+    <a href="#hex-conv">Hex Conversions</a>
+
+    <div class="nav-group">Coding Schemes</div>
+    <a href="#coding">BCD, EBCDIC & ASCII</a>
+
+    <div class="nav-group">Arithmetic</div>
+    <a href="#signed">Signed Numbers</a>
+    <a href="#addition">Binary Addition</a>
+    <a href="#subtraction">Binary Subtraction</a>
+  </nav>
+</aside>
+
+<main id="main">
+
+  <header class="doc-header">
+    <div class="kicker">EasyElimu · Computer Studies · Form 3</div>
+    <h1>Data Representation in a Computer</h1>
+    <p class="sub">Complete Notes — Number Systems, Coding Schemes & Binary Arithmetic</p>
+  </header>
+
+  <!-- ══ INTRO ══ -->
+  <section class="section" id="intro">
+    <h2><span class="h2-icon">01</span>Introduction</h2>
+    <ul>
+      <li>Computers are classified according to <strong>functionality</strong>, <strong>physical size</strong>, and <strong>purpose</strong>.</li>
+      <li>By functionality: computers can be <strong>analog</strong>, <strong>digital</strong>, or <strong>hybrid</strong>.</li>
+      <li>Digital computers process data in <strong>discrete</strong> form; analog computers process data that is <strong>continuous</strong> in nature.</li>
+      <li>Hybrid computers can process both discrete and continuous data.</li>
+      <li>In digital computers, user input is first converted and transmitted as electrical pulses represented by two distinct digits: <strong>1</strong> and <strong>0</strong>.</li>
+      <li>These two digits are called <strong>binary digits</strong> or, in short, <strong>bits</strong>.</li>
+      <li>Electronic signals that repeat at equal time intervals are called <strong>periodic</strong> signals.</li>
+    </ul>
+
+    <p>A periodic wave can be described using three parameters:</p>
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">Parameter A</div>
+        <h4>Amplitude</h4>
+        <ul><li>The maximum value a wave can attain</li><li>E.g., amplitude of a standard signal wave = 1</li></ul>
+      </div>
+      <div class="card">
+        <div class="card-label">Parameter f</div>
+        <h4>Frequency</h4>
+        <ul><li>Number of cycles per second</li><li>Measured in <strong>Hertz (Hz)</strong></li><li>1 Hz = 1 cycle/second</li></ul>
+      </div>
+      <div class="card">
+        <div class="card-label">Parameter T</div>
+        <h4>Periodic Time</h4>
+        <ul><li>Time taken to complete one cycle</li><li>Formula: <strong>T = 1/f</strong></li></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ MODULATION ══ -->
+  <section class="section" id="modulation">
+    <h2><span class="h2-icon">02</span>Modulation & Demodulation</h2>
+    <p>When a digital signal is sent over analog telephone lines (e.g., email), it must be converted to an analog signal. This is done by connecting a <strong>modem</strong> to the digital computer.</p>
+    <div class="two-col">
+      <div class="col-box green">
+        <div class="col-label">Modulation</div>
+        <ul><li>Converting a digital signal to an analog signal for transmission</li><li>Done at the <strong>sending end</strong></li></ul>
+      </div>
+      <div class="col-box red">
+        <div class="col-label">Demodulation</div>
+        <ul><li>Converting the incoming analog signal back to digital form</li><li>Done at the <strong>receiving end</strong></li></ul>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ══ ELECTRONIC ══ -->
+  <section class="section" id="electronic">
+    <h2><span class="h2-icon">03</span>Data Representation in Electronic Circuits</h2>
+    <p>Electronic components such as microprocessors are made of millions of electronic circuits.</p>
+    <div class="two-col">
+      <div class="col-box green">
+        <div class="col-label">State 1 (HIGH voltage / ON)</div>
+        <ul><li>High voltage present in the circuit</li><li>Interpreted as <strong>binary 1</strong></li><li>Analogous to a closed switch — bulb lights up</li></ul>
+      </div>
+      <div class="col-box red">
+        <div class="col-label">State 0 (LOW voltage / OFF)</div>
+        <ul><li>Low voltage in the circuit</li><li>Interpreted as <strong>binary 0</strong></li><li>Analogous to an open switch — bulb goes off</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ MAGNETIC ══ -->
+  <section class="section" id="magnetic">
+    <h2><span class="h2-icon">04</span>Data Representation on Magnetic Media</h2>
+    <p>Storage devices are coated with special magnetic materials such as <strong>iron oxide</strong>.</p>
+    <div class="two-col">
+      <div class="col-box green">
+        <div class="col-label">Binary 1</div>
+        <ul><li>Magnetic field present in <strong>one direction</strong></li><li>Dipoles of iron oxide particles face the same direction</li></ul>
+      </div>
+      <div class="col-box red">
+        <div class="col-label">Binary 0</div>
+        <ul><li>Magnetic field present in the <strong>opposite direction</strong></li><li>Dipoles arranged in the opposite direction</li></ul>
+      </div>
+    </div>
+    <p>Data is written by arranging the magnetic dipoles of iron oxide particles so that some face one direction and others face the opposite direction. The dipoles are arranged in groups on the track of the disk.</p>
+  </section>
+
+  <!-- ══ OPTICAL ══ -->
+  <section class="section" id="optical">
+    <h2><span class="h2-icon">05</span>Data Representation on Optical Media</h2>
+    <p>Optical devices (e.g., CD-ROM) use light to represent data. The shiny surface of a CD has very tiny holes called <strong>pits</strong>; areas without pits are called <strong>land</strong>.</p>
+    <div class="two-col">
+      <div class="col-box green">
+        <div class="col-label">Binary 1 — Land</div>
+        <ul><li>Laser beam reflects from the <strong>flat land</strong></li><li>Reflected light → interpreted as <strong>1</strong></li></ul>
+      </div>
+      <div class="col-box red">
+        <div class="col-label">Binary 0 — Pit</div>
+        <ul><li>Laser beam enters a <strong>pit</strong> and is not reflected</li><li>No reflection → interpreted as <strong>0</strong></li></ul>
+      </div>
+    </div>
+    <p>The reflected pattern of light from the rotating disk falls on a <strong>photoelectric detector</strong> that transforms the patterns into digital form.</p>
+  </section>
+
+  <!-- ══ WHY BINARY ══ -->
+  <section class="section" id="why-binary">
+    <h2><span class="h2-icon">06</span>Why Binary is Used in Computers</h2>
+    <ul>
+      <li>It has proved difficult to develop devices that can understand or process natural language due to its complexity.</li>
+      <li>It is, however, possible to develop devices that understand <strong>binary language</strong>.</li>
+      <li>Binary logic has simplified the technology needed to develop both hardware and software systems.</li>
+      <li>Digital devices are more <strong>reliable</strong>, <strong>smaller in size</strong>, and use <strong>less energy</strong> compared to analog devices.</li>
+    </ul>
+  </section>
+
+  <hr>
+
+  <!-- ══ BITS BYTES ══ -->
+  <section class="section" id="bits-bytes">
+    <h2><span class="h2-icon">07</span>Bits, Bytes, Nibble and Word</h2>
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">Smallest Unit</div>
+        <h4>Bit</h4>
+        <ul><li>A binary digit — either <strong>0</strong> or <strong>1</strong></li><li>The basic unit of data in digital computers</li></ul>
+      </div>
+      <div class="card">
+        <div class="card-label">4 Bits</div>
+        <h4>Nibble</h4>
+        <ul><li>Half a byte</li><li>A grouping of <strong>4 bits</strong></li></ul>
+      </div>
+      <div class="card">
+        <div class="card-label">8 Bits</div>
+        <h4>Byte</h4>
+        <ul><li>A group of 8 bits used to represent one character</li><li>Basic unit of measuring memory size</li></ul>
+      </div>
+      <div class="card">
+        <div class="card-label">2+ Bytes</div>
+        <h4>Word</h4>
+        <ul><li>Two or more bytes</li><li>Word length: 16-bit, 32-bit, 64-bit, etc.</li></ul>
+      </div>
+    </div>
+
+    <div class="bit-row">
+      <div class="bit bit-1">1</div>
+      <div class="bit bit-0">0</div>
+      <div class="bit bit-1">1</div>
+      <div class="bit bit-1">1</div>
+      <div class="bit bit-0">0</div>
+      <div class="bit bit-1">1</div>
+      <div class="bit bit-0">0</div>
+      <div class="bit bit-1">1</div>
+      <span class="bit-label">← 1 Byte (8 bits) = 1 character</span>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ══ NUMBER SYSTEMS ══ -->
+  <section class="section" id="number-systems">
+    <h2><span class="h2-icon">08</span>Number Systems</h2>
+    <p>Higher number systems are used in computing to reduce long streams of binary digits into manageable form, improving processing speed and optimising memory usage. The four major number systems in computing are:</p>
+    <div class="cards">
+      <div class="card"><div class="card-label">Base 10</div><h4>Decimal</h4><ul><li>Digits: 0–9</li><li>Most common in everyday life</li></ul></div>
+      <div class="card"><div class="card-label">Base 2</div><h4>Binary</h4><ul><li>Digits: 0, 1</li><li>Native language of computers</li></ul></div>
+      <div class="card"><div class="card-label">Base 8</div><h4>Octal</h4><ul><li>Digits: 0–7</li><li>Shorthand for binary groups of 3</li></ul></div>
+      <div class="card"><div class="card-label">Base 16</div><h4>Hexadecimal</h4><ul><li>Digits: 0–9, A–F</li><li>Shorthand for binary groups of 4</li></ul></div>
+    </div>
+  </section>
+
+  <!-- ══ DECIMAL ══ -->
+  <section class="section" id="decimal">
+    <h2><span class="h2-icon">09</span>Decimal Number System (Base 10)</h2>
+    <p>The term <em>decimal</em> is derived from the Latin prefix <em>deci</em> meaning ten. It uses digits <strong>0–9</strong> and is also called the <strong>denary</strong> or <strong>base-10</strong> system.</p>
+
+    <h3>Three Parameters of a Number</h3>
+    <ul>
+      <li><strong>Absolute value</strong> — the magnitude of a digit itself (e.g., digit 5 in 7458 has an absolute value of 5).</li>
+      <li><strong>Place value (positional value)</strong> — the position of the digit in the number (ones, tens, hundreds, thousands, etc.).</li>
+      <li><strong>Base value (radix)</strong> — depends on the number system in use.</li>
+    </ul>
+
+    <h4>Example: 7458 in Decimal</h4>
+    <table class="data-table">
+      <thead><tr><th>Thousands (10³)</th><th>Hundreds (10²)</th><th>Tens (10¹)</th><th>Ones (10⁰)</th></tr></thead>
+      <tbody>
+        <tr><td>7</td><td>4</td><td>5</td><td>8</td></tr>
+        <tr><td>7 × 1000 = 7000</td><td>4 × 100 = 400</td><td>5 × 10 = 50</td><td>8 × 1 = 8</td></tr>
+      </tbody>
+    </table>
+    <div class="math-block"><span class="step">Total = 7000 + 400 + 50 + 8 = </span><span class="result">7458₁₀</span></div>
+  </section>
+
+  <!-- ══ BINARY SYSTEM ══ -->
+  <section class="section" id="binary-sys">
+    <h2><span class="h2-icon">10</span>Binary Number System (Base 2)</h2>
+    <p>Uses two digits: <strong>0</strong> and <strong>1</strong>. Place values increase by factors of <strong>2</strong> from right to left. Written with subscript 2 (e.g., 1011₂).</p>
+
+    <h4>Example: 1011₂</h4>
+    <table class="data-table">
+      <thead><tr><th>2³ = 8</th><th>2² = 4</th><th>2¹ = 2</th><th>2⁰ = 1</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+        <tr><td>1 × 8 = 8</td><td>0 × 4 = 0</td><td>1 × 2 = 2</td><td>1 × 1 = 1</td></tr>
+      </tbody>
+    </table>
+    <div class="math-block"><span class="step">Total = 8 + 0 + 2 + 1 = </span><span class="result">11₁₀</span></div>
+  </section>
+
+  <!-- ══ OCTAL ══ -->
+  <section class="section" id="octal">
+    <h2><span class="h2-icon">11</span>Octal Number System (Base 8)</h2>
+    <p>Uses digits <strong>0–7</strong>. Place values increase by factors of <strong>8</strong> from right to left. Valid octal numbers only contain digits 0–7 (e.g., 982 is NOT valid; 736₈ IS valid).</p>
+
+    <h4>Example: 7245₈ → Decimal</h4>
+    <table class="data-table">
+      <thead><tr><th>8³ = 512</th><th>8² = 64</th><th>8¹ = 8</th><th>8⁰ = 1</th></tr></thead>
+      <tbody>
+        <tr><td>7</td><td>2</td><td>4</td><td>5</td></tr>
+        <tr><td>7 × 512 = 3584</td><td>2 × 64 = 128</td><td>4 × 8 = 32</td><td>5 × 1 = 5</td></tr>
+      </tbody>
+    </table>
+    <div class="math-block"><span class="step">Total = 3584 + 128 + 32 + 5 = </span><span class="result">3749₁₀</span></div>
+  </section>
+
+  <!-- ══ HEX ══ -->
+  <section class="section" id="hexadecimal">
+    <h2><span class="h2-icon">12</span>Hexadecimal Number System (Base 16)</h2>
+    <p>Uses sixteen digits: <strong>0–9</strong> and <strong>A–F</strong> (where A=10, B=11, C=12, D=13, E=14, F=15). Written as X₁₆ or XH.</p>
+
+    <table class="data-table">
+      <thead><tr><th>Base 10</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th><th>15</th></tr></thead>
+      <tbody><tr><td><strong>Base 16</strong></td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td></tr></tbody>
+    </table>
+
+    <h4>Example: 94B₁₆ → Decimal</h4>
+    <table class="data-table">
+      <thead><tr><th>16² = 256</th><th>16¹ = 16</th><th>16⁰ = 1</th></tr></thead>
+      <tbody>
+        <tr><td>9</td><td>4</td><td>B (=11)</td></tr>
+        <tr><td>9 × 256 = 2304</td><td>4 × 16 = 64</td><td>11 × 1 = 11</td></tr>
+      </tbody>
+    </table>
+    <div class="math-block"><span class="step">Total = 2304 + 64 + 11 = </span><span class="result">2379₁₀</span></div>
+  </section>
+
+  <hr>
+
+  <!-- ══ CONVERSIONS ══ -->
+  <section class="section" id="bin-to-dec">
+    <h2><span class="h2-icon">13</span>Binary ↔ Decimal Conversions</h2>
+
+    <h3>Binary → Decimal</h3>
+    <div class="step-box">
+      <div class="step-header">METHOD: Place Value</div>
+      <div class="step-body">
+        <ol>
+          <li>Write the place values starting from the right-hand side (2⁰, 2¹, 2², …).</li>
+          <li>Write each binary digit under its corresponding place value.</li>
+          <li>Multiply each digit by its place value.</li>
+          <li>Add up all products — the result is the decimal equivalent.</li>
+        </ol>
+      </div>
+    </div>
+
+    <h3>Decimal → Binary</h3>
+    <div class="two-col">
+      <div class="col-box green">
+        <div class="col-label">Method 1: Long Division</div>
+        <ul>
+          <li>Continuously divide the decimal number by 2.</li>
+          <li>At each step, write the remainder (0 or 1) to the right.</li>
+          <li>Read the remainders from <strong>bottom to top</strong> — this gives the binary equivalent.</li>
+        </ul>
+      </div>
+      <div class="col-box green">
+        <div class="col-label">Method 2: Place Value</div>
+        <ul>
+          <li>Write down place values in factors of 2 up to the value ≥ the number.</li>
+          <li>Subtract each place value from left to right.</li>
+          <li>If difference ≥ 0: write <strong>1</strong>; carry the difference forward.</li>
+          <li>If difference &lt; 0: write <strong>0</strong>; carry the number forward.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h4>Example: 247₁₀ → Binary (Place Value Method)</h4>
+    <table class="data-table">
+      <thead><tr><th>256 (2⁸)</th><th>128 (2⁷)</th><th>64 (2⁶)</th><th>32 (2⁵)</th><th>16 (2⁴)</th><th>8 (2³)</th><th>4 (2²)</th><th>2 (2¹)</th><th>1 (2⁰)</th></tr></thead>
+      <tbody>
+        <tr><td>247−256 &lt;0</td><td>247−128=119</td><td>119−64=55</td><td>55−32=23</td><td>23−16=7</td><td>7−8 &lt;0</td><td>7−4=3</td><td>3−2=1</td><td>1−1=0</td></tr>
+        <tr><td><strong>0</strong></td><td><strong>1</strong></td><td><strong>1</strong></td><td><strong>1</strong></td><td><strong>1</strong></td><td><strong>0</strong></td><td><strong>1</strong></td><td><strong>1</strong></td><td><strong>1</strong></td></tr>
+      </tbody>
+    </table>
+    <div class="math-block"><span class="result">247₁₀ = 011110111₂ = 11110111₂</span></div>
+  </section>
+
+  <!-- ══ FRACTIONS ══ -->
+  <section class="section" id="fractions">
+    <h2><span class="h2-icon">14</span>Binary Fractions</h2>
+
+    <h3>Binary Fraction → Decimal</h3>
+    <p>For binary numbers with a fractional part, the place values to the right of the decimal point decrease as negative powers of 2 (2⁻¹ = 0.5, 2⁻² = 0.25, 2⁻³ = 0.125 …).</p>
+
+    <h4>Example: 11.11011₂ → Decimal</h4>
+    <table class="data-table">
+      <thead><tr><th>2¹</th><th>2⁰</th><th>.</th><th>2⁻¹</th><th>2⁻²</th><th>2⁻³</th><th>2⁻⁴</th><th>2⁻⁵</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>1</td><td>.</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+        <tr><td>2</td><td>1</td><td>.</td><td>0.5</td><td>0.25</td><td>0</td><td>0.0625</td><td>0.03125</td></tr>
+      </tbody>
+    </table>
+    <div class="math-block"><span class="step">Integral: 2 + 1 = 3</span><br><span class="step">Fractional: 0.5 + 0.25 + 0 + 0.0625 + 0.03125 = 0.84375</span><br><span class="result">Total = 3.84375₁₀</span></div>
+
+    <h3>Decimal Fraction → Binary</h3>
+    <div class="step-box">
+      <div class="step-header">METHOD</div>
+      <div class="step-body">
+        <ol>
+          <li>Convert the integer part using long division or place value method.</li>
+          <li>For the fractional part: multiply it by 2 and note the product.</li>
+          <li>Take the <em>fractional part</em> of that product and multiply by 2 again.</li>
+          <li>Continue until the fractional part becomes 0 or starts repeating.</li>
+          <li>Read the integer digits of each product from <strong>top to bottom</strong> — this gives the binary fractional equivalent.</li>
+          <li>Combine both parts.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="note">
+      <div class="note-label">NB</div>
+      <p>When converting a real number from binary to decimal, work out the integral and fractional parts separately, then combine them.</p>
+    </div>
+  </section>
+
+  <!-- ══ OCTAL CONV ══ -->
+  <section class="section" id="oct-conv">
+    <h2><span class="h2-icon">15</span>Octal Conversions</h2>
+
+    <h3>Octal → Decimal</h3>
+    <p>Use the place value method with powers of 8. Multiply each digit by its positional value and add the products.</p>
+    <div class="math-block">
+      <span class="comment">// Convert 275₈ to decimal</span><br>
+      <span class="step">2 × 64 + 7 × 8 + 5 × 1</span><br>
+      <span class="step">= 128 + 56 + 5</span><br>
+      <span class="result">= 189₁₀</span>
+    </div>
+
+    <h3>Octal → Binary</h3>
+    <p>Replace each octal digit with its <strong>3-bit binary equivalent</strong> (the maximum octal digit, 7, requires 3 bits).</p>
+
+    <table class="data-table">
+      <thead><tr><th>Octal</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th></tr></thead>
+      <tbody><tr><td><strong>Binary</strong></td><td>000</td><td>001</td><td>010</td><td>011</td><td>100</td><td>101</td><td>110</td><td>111</td></tr></tbody>
+    </table>
+
+    <div class="math-block">
+      <span class="comment">// Convert 540₈ to binary</span><br>
+      <span class="step">5 → 101 &nbsp; 4 → 100 &nbsp; 0 → 000</span><br>
+      <span class="result">= 101100000₂</span>
+    </div>
+  </section>
+
+  <!-- ══ HEX CONV ══ -->
+  <section class="section" id="hex-conv">
+    <h2><span class="h2-icon">16</span>Hexadecimal Conversions</h2>
+
+    <h3>Hexadecimal → Decimal</h3>
+    <p>Write the place values as powers of 16. Replace any letter digit (A–F) with its decimal equivalent, multiply each digit by its place value, and sum the products.</p>
+    <div class="math-block">
+      <span class="comment">// Convert ABCDEF₁₆ to decimal</span><br>
+      <span class="step">A(10)×16⁵ + B(11)×16⁴ + C(12)×16³ + D(13)×16² + E(14)×16¹ + F(15)×16⁰</span><br>
+      <span class="step">= 10485760 + 720896 + 49152 + 3328 + 224 + 15</span><br>
+      <span class="result">= 11259375₁₀</span>
+    </div>
+
+    <h3>Hexadecimal → Binary</h3>
+    <p>Replace each hexadecimal digit with its <strong>4-bit binary equivalent</strong> (since F = 1111₂).</p>
+
+    <table class="data-table">
+      <thead><tr><th>Hex</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Dec</strong></td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td></tr>
+        <tr><td><strong>Bin</strong></td><td>0000</td><td>0001</td><td>0010</td><td>0011</td><td>0100</td><td>0101</td><td>0110</td><td>0111</td><td>1000</td><td>1001</td><td>1010</td><td>1011</td><td>1100</td><td>1101</td><td>1110</td><td>1111</td></tr>
+      </tbody>
+    </table>
+
+    <div class="math-block">
+      <span class="comment">// Convert 3B29₁₆ to binary</span><br>
+      <span class="step">3 → 0011 &nbsp; B → 1011 &nbsp; 2 → 0010 &nbsp; 9 → 1001</span><br>
+      <span class="result">= 0011101100101001₂</span>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ══ CODING SCHEMES ══ -->
+  <section class="section" id="coding">
+    <h2><span class="h2-icon">17</span>Symbolic Representation Using Coding Schemes</h2>
+    <p>In computing, a single character (letter, number, or symbol) is represented by a group of bits. The number of bits per character depends on the <strong>coding scheme</strong> used.</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">4-bit / 6-bit</div>
+        <h4>BCD</h4>
+        <ul>
+          <li>Binary Coded Decimal</li>
+          <li>4-bit form: numeric data only</li>
+          <li>Standard BCD: 6-bit, represents 64 characters (including non-numeric)</li>
+          <li>Used in calculators, microwave ovens (LCD displays)</li>
+          <li>E.g., digit 9 = <code>1001</code>; letter A = <code>110001</code></li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-label">8-bit</div>
+        <h4>EBCDIC</h4>
+        <ul>
+          <li>Extended Binary Coded Decimal Interchange Code</li>
+          <li>8-bit scheme → 256 (2⁸) characters</li>
+          <li>Used primarily on IBM computers</li>
+          <li>E.g., letter A = <code>11000001</code></li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-label">7-bit / 8-bit</div>
+        <h4>ASCII</h4>
+        <ul>
+          <li>American Standard Code for Information Interchange</li>
+          <li>7-bit: 128 (2⁷) characters</li>
+          <li>8-bit extended: 256 characters</li>
+          <li>E.g., letter A = <code>1000001</code></li>
+        </ul>
+      </div>
+    </div>
+
+    <h4>Comparison of Coding Schemes</h4>
+    <table class="data-table">
+      <thead><tr><th>Scheme</th><th>Bits</th><th>Characters</th><th>Primary Use</th><th>Letter A</th></tr></thead>
+      <tbody>
+        <tr><td>BCD (basic)</td><td>4</td><td>Numeric only</td><td>Calculators, LCD devices</td><td>N/A</td></tr>
+        <tr><td>Standard BCD</td><td>6</td><td>64</td><td>Early computing</td><td>110001</td></tr>
+        <tr><td>EBCDIC</td><td>8</td><td>256</td><td>IBM mainframes</td><td>11000001</td></tr>
+        <tr><td>ASCII (7-bit)</td><td>7</td><td>128</td><td>General computing</td><td>1000001</td></tr>
+        <tr><td>ASCII (8-bit)</td><td>8</td><td>256</td><td>Modern computing</td><td>01000001</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <hr>
+
+  <!-- ══ SIGNED NUMBERS ══ -->
+  <section class="section" id="signed">
+    <h2><span class="h2-icon">18</span>Representation of Signed Binary Numbers</h2>
+    <p>There are three common ways to represent signed binary numbers in computers:</p>
+
+    <h3>1. Extra Sign Bit</h3>
+    <p>Prefix a digit to the binary number: <strong>0</strong> for positive, <strong>1</strong> for negative.</p>
+    <div class="math-block">
+      <span class="step">+127 = (0) 1111111₂</span><br>
+      <span class="step">−127 = (1) 1111111₂</span><br>
+      <span class="comment">Problem: zero can be represented two ways — (0)0000000 and (1)0000000</span>
+    </div>
+
+    <h3>2. One's Complement</h3>
+    <p>Apply a <strong>bitwise NOT</strong> — flip every bit (0 becomes 1, 1 becomes 0). This is also called logical negation.</p>
+    <div class="math-block">
+      <span class="step">1100₂ → ones complement → 0011₂</span><br>
+      <span class="step">00101101₂ → ones complement → 11010010₂  (represents −45₁₀)</span><br>
+      <span class="comment">Problem: zero still has two representations (+0 and −0)</span>
+    </div>
+
+    <h3>3. Two's Complement (Most Popular)</h3>
+    <p>Obtain the one's complement, then <strong>add 1</strong>. This is the standard method used in modern computers.</p>
+    <div class="two-col">
+      <div class="col-box green">
+        <div class="col-label">Advantages</div>
+        <ul>
+          <li>Only one representation of zero</li>
+          <li>Addition and subtraction work correctly without extra circuitry to check the sign</li>
+        </ul>
+      </div>
+      <div class="col-box red" style="border-top-color:var(--purple)">
+        <div class="col-label" style="color:var(--purple)">Method</div>
+        <ul>
+          <li>Get the binary equivalent</li>
+          <li>Find one's complement (flip all bits)</li>
+          <li>Add 1 to the result</li>
+        </ul>
+      </div>
+    </div>
+    <div class="math-block">
+      <span class="comment">// Two's complement of 45₁₀</span><br>
+      <span class="step">45₁₀ = 00101101₂</span><br>
+      <span class="step">One's complement: 11010010₂</span><br>
+      <span class="step">Add 1:          + 00000001</span><br>
+      <span class="result">Two's complement: 11010011₂</span>
+    </div>
+  </section>
+
+  <!-- ══ ADDITION ══ -->
+  <section class="section" id="addition">
+    <h2><span class="h2-icon">19</span>Binary Addition</h2>
+    <p>There are five possible addition cases in binary:</p>
+
+    <table class="data-table">
+      <thead><tr><th>Rule</th><th>Operation</th><th>Result</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>0 + 0</td><td>0</td><td>—</td></tr>
+        <tr><td>2</td><td>0 + 1</td><td>1</td><td>—</td></tr>
+        <tr><td>3</td><td>1 + 0</td><td>1</td><td>—</td></tr>
+        <tr><td>4</td><td>1 + 1</td><td>10₂</td><td>Write 0, carry 1</td></tr>
+        <tr><td>5</td><td>1 + 1 + 1</td><td>11₂</td><td>Write 1, carry 1</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ══ SUBTRACTION ══ -->
+  <section class="section" id="subtraction">
+    <h2><span class="h2-icon">20</span>Binary Subtraction</h2>
+
+    <h3>Direct Subtraction</h3>
+    <table class="data-table">
+      <thead><tr><th>Rule</th><th>Operation</th><th>Result</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>0 − 0</td><td>0</td><td>—</td></tr>
+        <tr><td>2</td><td>1 − 0</td><td>1</td><td>—</td></tr>
+        <tr><td>3</td><td>1 − 1</td><td>0</td><td>—</td></tr>
+        <tr><td>4</td><td>10₂ − 1</td><td>1</td><td>Borrow 1 from next significant bit to make 0 become 10₂</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Subtraction Using One's Complement</h3>
+    <p>The computer performs binary subtraction by <strong>adding</strong> the one's complement of the subtrahend.</p>
+
+    <div class="math-block">
+      <span class="comment">// 5 − 3 using one's complement (8-bit)</span><br>
+      <span class="step">Rewrite as: 5 + (−3)</span><br>
+      <span class="step">3₁₀ = 00000011₂</span><br>
+      <span class="step">One's complement of 3: 11111100₂</span><br><br>
+      <span class="step">&nbsp;&nbsp;00000101  (5)</span><br>
+      <span class="step">+ 11111100  (−3 in one's complement)</span><br>
+      <span class="carry">──────────</span><br>
+      <span class="step">(1)00000001  ← overflow bit + 8-bit result</span><br><br>
+      <span class="comment">// Add the overflow bit back to the result:</span><br>
+      <span class="step">00000001 + 1 = </span><span class="result">00000010₂ = 2₁₀ ✓</span>
+    </div>
+
+    <div class="note">
+      <div class="note-label">One's Complement Rule</div>
+      <p>When using one's complement, the overflow (carry-out) bit is added back to the 8-bit result to obtain the correct answer.</p>
+    </div>
+
+    <h3>Subtraction Using Two's Complement</h3>
+    <p>Like one's complement, but after finding the one's complement, <strong>add 1 before the final addition</strong>. The overflow bit is then simply <strong>discarded</strong>.</p>
+
+    <div class="math-block">
+      <span class="comment">// 5 − 3 using two's complement (8-bit)</span><br>
+      <span class="step">Rewrite as: 5 + (−3)</span><br>
+      <span class="step">3₁₀ = 00000011₂</span><br>
+      <span class="step">One's complement: 11111100₂</span><br>
+      <span class="step">Add 1 (two's comp): 11111101₂</span><br><br>
+      <span class="step">&nbsp;&nbsp;00000101  (5)</span><br>
+      <span class="step">+ 11111101  (−3 in two's complement)</span><br>
+      <span class="carry">──────────</span><br>
+      <span class="step">(1)00000010  ← overflow bit discarded</span><br><br>
+      <span class="comment">// Result (ignoring overflow):</span><br>
+      <span class="result">00000010₂ = 2₁₀ ✓</span>
+    </div>
+
+    <div class="note">
+      <div class="note-label">Two's Complement Rule</div>
+      <p>When using two's complement subtraction, the overflow (carry-out) bit is simply <strong>ignored</strong>. The remaining 8 bits give the correct answer directly.</p>
+    </div>
+
+    <h4>Summary: Complement Methods Compared</h4>
+    <table class="data-table">
+      <thead><tr><th>Method</th><th>How to get complement</th><th>Overflow handling</th><th>Zero representation</th></tr></thead>
+      <tbody>
+        <tr><td>Sign bit</td><td>Prefix 0 (positive) or 1 (negative)</td><td>—</td><td>Two ways (+0 and −0)</td></tr>
+        <tr><td>One's complement</td><td>Flip all bits</td><td>Add overflow back to result</td><td>Two ways (+0 and −0)</td></tr>
+        <tr><td>Two's complement</td><td>Flip all bits, then add 1</td><td>Discard overflow</td><td>Only one way ✓</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer>
+    Data Representation in a Computer — Computer Studies Form 3 &nbsp;|&nbsp; © EasyElimu Learning Innovations
+  </footer>
+
+</main>
+
+<script>
+  const sections = document.querySelectorAll('.section');
+  const links = document.querySelectorAll('#sidebar nav a');
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(a => a.classList.remove('active'));
+        const match = document.querySelector(`#sidebar nav a[href="#${e.target.id}"]`);
+        if (match) match.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -65% 0px' });
+
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>

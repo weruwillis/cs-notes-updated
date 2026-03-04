@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Elementary Programming Principles – Form 3 Notes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #181c27;
+      --surface2: #1e2336;
+      --accent: #e8c547;
+      --accent2: #5bc8ff;
+      --accent3: #ff6b6b;
+      --text: #e8e8f0;
+      --muted: #8891aa;
+      --border: #2a3050;
+      --code-bg: #0a0d14;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Lora', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, #0a0d14 0%, #141928 60%, #1a1030 100%);
+      border-bottom: 2px solid var(--accent);
+      padding: 3.5rem 2rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 40px, rgba(232,197,71,0.03) 40px, rgba(232,197,71,0.03) 41px
+      ), repeating-linear-gradient(
+        90deg, transparent, transparent 40px, rgba(232,197,71,0.03) 40px, rgba(232,197,71,0.03) 41px
+      );
+      pointer-events: none;
+    }
+    .badge {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 0.25rem 0.8rem;
+      border-radius: 2px;
+      margin-bottom: 1.2rem;
+    }
+    header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.9rem, 5vw, 3.2rem);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 0.6rem;
+    }
+    header h1 span { color: var(--accent); }
+    header p.subtitle {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+    /* ── Layout ── */
+    .wrapper {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 0;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ── Sidebar / TOC ── */
+    nav {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 2rem 1.2rem;
+      border-right: 1px solid var(--border);
+      background: var(--surface);
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    nav::-webkit-scrollbar { width: 4px; }
+    nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .nav-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+    nav ul { list-style: none; }
+    nav ul li { margin: 0; }
+    nav ul li a {
+      display: block;
+      padding: 0.35rem 0.6rem;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      transition: all 0.2s;
+      border-radius: 0 4px 4px 0;
+    }
+    nav ul li a:hover {
+      color: var(--accent);
+      border-left-color: var(--accent);
+      background: rgba(232,197,71,0.06);
+    }
+    nav ul.sub { margin-left: 0.8rem; }
+    nav ul.sub li a {
+      font-family: 'Lora', serif;
+      font-size: 0.75rem;
+      font-weight: 400;
+    }
+
+    /* ── Main Content ── */
+    main {
+      padding: 3rem 3.5rem;
+      min-width: 0;
+    }
+
+    /* ── Sections ── */
+    section {
+      margin-bottom: 4rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid var(--border);
+      animation: fadeUp 0.5s ease both;
+    }
+    section:last-child { border-bottom: none; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 1.4rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    h2 .num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      background: rgba(232,197,71,0.1);
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      font-weight: 500;
+    }
+    h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--accent2);
+      margin: 2rem 0 0.8rem;
+    }
+    h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 1.5rem 0 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    p { margin-bottom: 1rem; color: #d0d4e8; }
+
+    /* ── Lists ── */
+    ul, ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+      color: #d0d4e8;
+    }
+    li { margin-bottom: 0.4rem; }
+    li::marker { color: var(--accent); }
+
+    /* ── Code / Pseudocode ── */
+    pre, .pseudocode {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 1.25rem 1.5rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.82rem;
+      line-height: 1.7;
+      color: #c8d0ff;
+      overflow-x: auto;
+      margin: 1.2rem 0;
+      white-space: pre;
+    }
+    .pseudocode { border-left-color: var(--accent2); }
+
+    /* ── Info Boxes ── */
+    .info-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent2);
+      border-radius: 6px;
+      padding: 1.1rem 1.4rem;
+      margin: 1.4rem 0;
+    }
+    .info-box.warn { border-left-color: var(--accent3); }
+    .info-box.success { border-left-color: #4ade80; }
+    .info-box strong {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent2);
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+    .info-box.warn strong { color: var(--accent3); }
+    .info-box.success strong { color: #4ade80; }
+
+    /* ── Comparison Table ── */
+    .table-wrap { overflow-x: auto; margin: 1.4rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    thead tr {
+      background: var(--surface2);
+    }
+    th {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+    td {
+      padding: 0.65rem 1rem;
+      border: 1px solid var(--border);
+      color: #d0d4e8;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+    /* ── Adv/Dis cards ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin: 1.2rem 0;
+    }
+    .card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.2rem 1.4rem;
+    }
+    .card h5 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.8rem;
+    }
+    .card.pros h5 { color: #4ade80; }
+    .card.cons h5 { color: var(--accent3); }
+    .card ul { padding-left: 1.1rem; font-size: 0.87rem; }
+
+    /* ── Steps ── */
+    .steps {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+    }
+    .steps li {
+      counter-increment: step;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      padding: 0.9rem 1.1rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+    .steps li::before {
+      content: counter(step);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--bg);
+      background: var(--accent);
+      min-width: 1.6rem;
+      height: 1.6rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.1rem;
+    }
+
+    /* ── Flowchart placeholder ── */
+    .flowchart {
+      background: var(--code-bg);
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      padding: 2rem;
+      margin: 1.2rem 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    /* ── Tag pill ── */
+    .tag {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      background: rgba(91,200,255,0.1);
+      color: var(--accent2);
+      border: 1px solid rgba(91,200,255,0.25);
+      margin: 0 2px 4px;
+    }
+
+    /* ── HTML tag table ── */
+    .html-tag { font-family: 'IBM Plex Mono', monospace; color: var(--accent); font-size: 0.82rem; }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .wrapper { grid-template-columns: 1fr; }
+      nav { display: none; }
+      main { padding: 2rem 1.5rem; }
+      .card-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="badge">Computer Studies · Form 3</div>
+  <h1>Elementary <span>Programming</span> Principles</h1>
+  <p class="subtitle">Complete Notes &mdash; EasyElimu Learning Innovations</p>
+</header>
+
+<div class="wrapper">
+
+<!-- ── Sidebar TOC ── -->
+<nav>
+  <div class="nav-title">Contents</div>
+  <ul>
+    <li><a href="#intro">Introduction</a></li>
+    <li><a href="#terms">Key Terms</a>
+      <ul class="sub">
+        <li><a href="#source">Source Program</a></li>
+        <li><a href="#object">Object Code</a></li>
+        <li><a href="#translators">Translators</a></li>
+      </ul>
+    </li>
+    <li><a href="#levels">Language Levels</a>
+      <ul class="sub">
+        <li><a href="#low">Low-Level</a></li>
+        <li><a href="#high">High-Level</a></li>
+      </ul>
+    </li>
+    <li><a href="#advdis">Advantages &amp; Disadvantages</a></li>
+    <li><a href="#development">Program Development</a></li>
+    <li><a href="#algorithms">Algorithms</a>
+      <ul class="sub">
+        <li><a href="#pseudocode">Pseudocode</a></li>
+        <li><a href="#flowcharts">Flowcharts</a></li>
+      </ul>
+    </li>
+    <li><a href="#control">Control Structures</a>
+      <ul class="sub">
+        <li><a href="#sequence">Sequence</a></li>
+        <li><a href="#selection">Selection</a></li>
+        <li><a href="#iteration">Iteration</a></li>
+      </ul>
+    </li>
+    <li><a href="#complex">Complex Algorithms</a></li>
+  </ul>
+</nav>
+
+<!-- ── Main ── -->
+<main>
+
+  <!-- Introduction -->
+  <section id="intro">
+    <h2><span class="num">01</span> Introduction</h2>
+    <p>Human beings have evolved from the Stone Age to a highly sophisticated and advanced society by inventing things like the wheel, fire, transistors, and today's ultra-modern devices like computers. The idea of computers started way back in the nineteenth century.</p>
+    <p>The first generation computers — called <strong>Electronic Numeric Integrator and Calculator (ENIAC 1)</strong> — were operated by plugging wires into a control panel that resembles the old telephone switchboards.</p>
+
+    <h3>Computer Programming</h3>
+    <p>A computer works by executing a set of instructions known as a <strong>program</strong>. The term <em>programming</em> refers to the process of developing computer instructions (programs) used to solve a particular task. It involves use of special characters, signs and symbols found in a particular programming language to create computer instructions.</p>
+    <p>A <strong>programming language</strong> is a special set of symbols that can be translated into machine-readable form by the computer when arranged in a particular sequence or order. Each language has a special sequence or order of writing characters, usually referred to as <strong>syntax</strong>.</p>
+    <div class="info-box">
+      <strong>Historical Note</strong>
+      It was <strong>John von Neumann</strong> of Princeton University (USA) who first proposed storing programs in computer memory — one of the most dramatic developments in computer history. This not only increased processing speed but also allowed easy and flexible methods of editing and updating the program.
+    </div>
+  </section>
+
+  <!-- Key Terms -->
+  <section id="terms">
+    <h2><span class="num">02</span> Description of Terms</h2>
+
+    <h3 id="source">Source Program</h3>
+    <p>The <strong>source program</strong> refers to the program code that the programmer enters in the program editor window — not yet translated into machine-readable form. The source program is usually created using a particular programming language.</p>
+
+    <h3 id="object">Object Code</h3>
+    <p><strong>Object code</strong> refers to program code in machine-readable form. A source code that is not in machine-readable form must be translated into object code.</p>
+
+    <h3 id="translators">Translators</h3>
+    <p>A <strong>translator</strong> is a language processor — such as an assembler, interpreter, or compiler — that converts the source program into object code.</p>
+
+    <h4>Assembler</h4>
+    <p>An <strong>assembler</strong> translates assembly language into machine language that the computer can understand and execute.</p>
+
+    <h4>Interpreter</h4>
+    <p>An <strong>interpreter</strong> translates the source program <em>line-by-line</em>, allowing the CPU to execute one line before translating the next. The translated line is not stored in memory — meaning every time the program is needed, it must be translated again.</p>
+
+    <h4>Compiler</h4>
+    <p>A <strong>compiler</strong> translates the <em>entire</em> source program into object code at once. The object code can then be <em>linked</em> into a fully executable program (e.g. <code>.EXE</code> files like <code>WINWORD.EXE</code>).</p>
+
+    <h4>Interpreter vs. Compiler — Comparison</h4>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>#</th><th>Interpreters</th><th>Compilers</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Translates one statement at a time</td><td>Translates the entire source code at once before execution</td></tr>
+          <tr><td>2</td><td>Must translate every time it is run — slower execution</td><td>Compiled object code can be saved and run as required — executes faster</td></tr>
+          <tr><td>3</td><td>Takes less memory (smaller object)</td><td>Requires more memory — object files are larger</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Language Levels -->
+  <section id="levels">
+    <h2><span class="num">03</span> Levels of Programming Languages</h2>
+    <p>Programming languages are classified into two major levels:</p>
+    <ol>
+      <li>Low-level languages</li>
+      <li>High-level languages</li>
+    </ol>
+    <p>These levels are further subdivided into five generations. The 1st and 2nd generations consist of low-level languages; the 3rd–5th generations consist of high-level languages.</p>
+
+    <h3 id="low">Low-Level Languages</h3>
+    <p>Low-level languages are so named because the computer can understand them directly, or they require little translation effort. They are <strong>hardware-oriented</strong> and <strong>not portable</strong> — a program written for one computer cannot run on another.</p>
+
+    <h4>Machine Languages (1st Generation)</h4>
+    <p>Instructions are written in <strong>binary logic (0s and 1s)</strong>. Many lines of code are needed even for simple tasks. Different CPUs have different machine codes, making them hard to understand for programmers but easy to execute for computers.</p>
+
+    <h4>Assembly Languages (2nd Generation)</h4>
+    <p>Developed to overcome the difficulties of machine language. Programmers write programs as symbolic operation codes called <strong>mnemonics</strong> (two or three letter abbreviations). An <strong>assembler</strong> converts them to machine language. Like machine language, assembly languages are machine-dependent.</p>
+
+    <h3 id="high">High-Level Languages</h3>
+    <p>High-level languages are close to human language (English-like) and can be read even by non-experts. They are <strong>machine independent</strong>, allowing the programmer to focus on problem-solving rather than machine operation.</p>
+    <p>High-level languages are classified into five groups:</p>
+
+    <h4>Third Generation Languages (3GLs) — Structured/Procedural</h4>
+    <p>Allow programs to be broken into <strong>modules</strong> called structured programming. Structured programming uses <em>sequence, selection,</em> and <em>iteration</em>.</p>
+    <p><strong>Examples:</strong></p>
+    <ul>
+      <li><span class="tag">Pascal</span> — teaching structured programming</li>
+      <li><span class="tag">FORTRAN</span> — mathematics, science, engineering</li>
+      <li><span class="tag">COBOL</span> — business data processing</li>
+      <li><span class="tag">BASIC</span> — beginners; microcomputer users</li>
+      <li><span class="tag">C</span> — system software; powerful yet readable</li>
+      <li><span class="tag">Ada</span> — military, industrial, real-time systems</li>
+    </ul>
+
+    <h4>Sample Pascal Program — Straight Line Equation (Y = MX + C)</h4>
+<pre>Program Straight_Line (Input, Output);
+Var
+  y, m, x, c: Integer;
+Begin
+  Writeln ('Input the value of m');  Readln (m);
+  Writeln ('Input the value of x');  Readln (x);
+  Writeln ('Input the value of c');  Readln (c);
+  y := m * x + c;
+  Writeln ('The value of y is:', y);
+End.</pre>
+
+    <h4>Fourth Generation Languages (4GLs)</h4>
+    <p>Provide more programming tools (forms, command buttons, application generators). The programmer selects graphical objects on screen. Examples: <span class="tag">Visual Basic</span> <span class="tag">Delphi Pascal</span> <span class="tag">Visual COBOL</span>.</p>
+
+    <h4>Fifth Generation Languages (5GLs)</h4>
+    <p>Designed around solving problems using <strong>human-like intelligence (AI)</strong>. The computer solves the problem for the programmer. Examples: <span class="tag">PROLOG</span> <span class="tag">Mercury</span> <span class="tag">LISP</span> <span class="tag">OCCAM</span>.</p>
+
+    <h4>Object-Oriented Programming (OOP)</h4>
+    <p>Views a program as <strong>objects</strong> interacting with each other. Each object has <em>state</em> (data) and <em>behaviour</em> (functions). The bundling of data and functions within an object is called <strong>encapsulation</strong>. Examples: <span class="tag">Simula</span> <span class="tag">C++</span> <span class="tag">Java</span> <span class="tag">SmallTalk</span>.</p>
+
+    <h4>Web Scripting Languages</h4>
+    <p>Used to develop or add functionality to web pages. Web pages are <strong>HTML</strong> (Hypertext Markup Language) documents. HTML uses tags — special words enclosed in <code>&lt; &gt;</code> symbols.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tag</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td class="html-tag">&lt;HTML&gt;&lt;/HTML&gt;</td><td>Marks the beginning and end of an HTML document</td></tr>
+          <tr><td class="html-tag">&lt;HEAD&gt;&lt;/HEAD&gt;</td><td>Marks the header part of the document</td></tr>
+          <tr><td class="html-tag">&lt;TITLE&gt;&lt;/TITLE&gt;</td><td>Gives the title of the web page (shown in title bar)</td></tr>
+          <tr><td class="html-tag">&lt;BODY&gt;&lt;/BODY&gt;</td><td>Marks the body part of the document</td></tr>
+          <tr><td class="html-tag">&lt;CENTER&gt;&lt;/CENTER&gt;</td><td>Centres text and objects on the web page</td></tr>
+          <tr><td class="html-tag">&lt;B&gt;&lt;/B&gt;</td><td>Bolds the text</td></tr>
+          <tr><td class="html-tag">&lt;I&gt;&lt;/I&gt;</td><td>Italicises the text</td></tr>
+          <tr><td class="html-tag">&lt;H1&gt;…&lt;H6&gt;</td><td>Sets text size (H1 largest, H6 smallest)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Sample JavaScript / HTML Script</h4>
+<pre>&lt;HTML&gt;
+&lt;HEAD&gt;
+  &lt;TITLE&gt; Scripting Example &lt;/TITLE&gt;
+&lt;/HEAD&gt;
+&lt;BODY&gt;
+  &lt;H1&gt;&lt;CENTER&gt;&lt;B&gt;We are the world&lt;/B&gt;&lt;/CENTER&gt;&lt;/H1&gt;
+  &lt;SCRIPT&gt;
+    document.write('My name is strongman');
+    alert('congratulations for succeeding to run this script');
+  &lt;/SCRIPT&gt;
+&lt;/BODY&gt;&lt;/HTML&gt;</pre>
+
+    <h4>C++ vs Pascal — Area of a Circle</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Pascal</th><th>C++</th><th>Explanation</th></tr></thead>
+        <tbody>
+          <tr><td>Program AreaCircle (input, output);</td><td>#include&lt;iostream.h&gt;</td><td>Program header — declares I/O</td></tr>
+          <tr><td>Const Pi = 3.142;</td><td>const double pi = 3.142;</td><td>Declares constant pi</td></tr>
+          <tr><td>Var radius, area: real</td><td>double area, radius;</td><td>Declares real variables</td></tr>
+          <tr><td>Begin</td><td>{</td><td>Begins program body</td></tr>
+          <tr><td>Writeln('Enter radius');</td><td>cout&lt;&lt;"Enter radius";</td><td>Displays string on screen</td></tr>
+          <tr><td>Readln(Radius)</td><td>cin&gt;&gt;radius;</td><td>Reads user input</td></tr>
+          <tr><td>Area := Pi*Radius*Radius;</td><td>area = pi*radius*radius;</td><td>Calculates area (note := vs =)</td></tr>
+          <tr><td>Writeln('The area is', Area)</td><td>cout&lt;&lt;"The area is"&lt;&lt;area;</td><td>Displays result</td></tr>
+          <tr><td>End.</td><td>return 0; }</td><td>Ends the program</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Advantages & Disadvantages -->
+  <section id="advdis">
+    <h2><span class="num">04</span> Advantages &amp; Disadvantages</h2>
+
+    <h3>Low-Level Languages</h3>
+    <div class="card-grid">
+      <div class="card pros">
+        <h5>✓ Advantages</h5>
+        <ul>
+          <li>CPU understands machine language directly — no translation needed</li>
+          <li>Executes faster — complex instructions are pre-broken into simple ones</li>
+          <li>Stable — rarely crash once written</li>
+        </ul>
+      </div>
+      <div class="card cons">
+        <h5>✗ Disadvantages</h5>
+        <ul>
+          <li>Difficult and cumbersome to use and learn</li>
+          <li>Require highly trained experts to develop and maintain</li>
+          <li>Debugging is very difficult</li>
+          <li>Machine-dependent — not portable across hardware/software platforms</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>High-Level Languages</h3>
+    <div class="card-grid">
+      <div class="card pros">
+        <h5>✓ Advantages</h5>
+        <ul>
+          <li>Portable — transferable from one computer to another</li>
+          <li>User-friendly and easy to learn</li>
+          <li>Flexible — enhances creativity and productivity</li>
+          <li>Much easier to debug (correct errors)</li>
+        </ul>
+      </div>
+      <div class="card cons">
+        <h5>✗ Disadvantages</h5>
+        <ul>
+          <li>Many instructions per statement causes slower processing</li>
+          <li>Must be interpreted or compiled before execution</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Program Development -->
+  <section id="development">
+    <h2><span class="num">05</span> Program Development</h2>
+    <p>Program development can be broken into the following stages:</p>
+    <ol class="steps">
+      <li><strong>Problem Recognition</strong> — Understanding and interpreting the problem. Identify key words such as <em>compute, evaluate, compare</em>. Recognise undesirable situations, opportunities to improve, or new directives.</li>
+      <li><strong>Problem Definition</strong> — Determine likely input, processing activities, and expected output (IPO analysis). Define the boundaries of the expected program. Example: for calculating the area of a circle, Input = π &amp; radius; Process = π × r²; Output = Area.</li>
+      <li><strong>Program Design</strong> — Develop the algorithm (the processing logic). Programs are broken into <strong>modules</strong>, each performing a specific task (modular programming).</li>
+      <li><strong>Program Coding</strong> — Convert the design model into actual program code using a programming language. The result is a source program.</li>
+      <li><strong>Program Testing &amp; Debugging</strong> — Test the program and correct errors (bugs). Two types of errors:
+        <ul>
+          <li><strong>Syntax errors</strong> — improper use of language rules; detectable by the translator</li>
+          <li><strong>Logical errors</strong> — program runs but gives wrong output (runtime/execution errors); not detectable by the translator</li>
+        </ul>
+        Methods: Desk checking (dry-run), debugging utilities, and test data.
+      </li>
+      <li><strong>Implementation &amp; Maintenance</strong> — Actual delivery and installation of the program. Includes review, maintenance, and documentation (internal comments + external user manuals).</li>
+    </ol>
+    <div class="info-box">
+      <strong>Documentation</strong>
+      Documentation should be done at <em>all</em> stages. Three target groups: User-oriented, Operator-oriented, and Programmer-oriented documentation.
+    </div>
+  </section>
+
+  <!-- Algorithms -->
+  <section id="algorithms">
+    <h2><span class="num">06</span> Development of Algorithms</h2>
+    <p>An <strong>algorithm</strong> is a limited number of logical steps that a program follows to solve a problem. Algorithms are most commonly expressed using <strong>pseudocodes</strong> and <strong>flowcharts</strong>.</p>
+
+    <h3 id="pseudocode">Pseudocode</h3>
+    <p>A pseudocode is a set of statements written in a readable, English-like language that expresses a program's processing logic. It is <strong>not executable</strong> by a computer.</p>
+    <h4>Guidelines for a Good Pseudocode</h4>
+    <ul>
+      <li>Statements must be short, clear, and readable</li>
+      <li>Statements must be unambiguous (one meaning only)</li>
+      <li>Lines should be clearly outlined and indented</li>
+      <li>Show clearly the start, stop, and control structures</li>
+      <li>Input, output, and processing clearly stated using keywords: PRINT, READ, INPUT</li>
+    </ul>
+
+    <h4>Example 1 — Sum and Average of Two Numbers</h4>
+    <div class="pseudocode">START
+  PRINT "Enter two numbers"
+  INPUT X, Y
+  SUM = X + Y
+  AVERAGE = SUM / 2
+  PRINT SUM
+  PRINT AVERAGE
+STOP</div>
+
+    <h4>Example 2 — Area and Perimeter of a Rectangle</h4>
+    <div class="pseudocode">START
+  PRINT "Enter length and width"
+  READ L, W
+  AREA = L * W
+  PERIMETER = 2(L + W)
+  PRINT AREA
+  PRINT PERIMETER
+STOP</div>
+
+    <h4>Example 3 — Classify People by Age</h4>
+    <div class="pseudocode">START
+  PRINT "Enter the age"
+  INPUT AGE
+  IF AGE &gt; 20 THEN
+    PRINT "Adult"
+  ELSE
+    PRINT "Young person"
+  ENDIF
+STOP</div>
+
+    <h3 id="flowcharts">Program Flowcharts</h3>
+    <p>A flowchart is constructed using standard shapes that have specific meanings. Symbols are joined by arrows showing the order of execution.</p>
+
+    <h4>Standard Flowchart Symbols (ANSI)</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Symbol</th><th>Shape</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td>Terminal</td><td>Ellipse / Oval</td><td>Indicates START or STOP of a flowchart</td></tr>
+          <tr><td>Input / Output</td><td>Parallelogram</td><td>Specifies an input (READ) or output (PRINT) operation</td></tr>
+          <tr><td>Process</td><td>Rectangle</td><td>Indicates processing or data transformation (formula or sentence)</td></tr>
+          <tr><td>Decision</td><td>Rhombus / Diamond</td><td>Specifies a condition (YES/NO); branches the flow</td></tr>
+          <tr><td>Flow Lines</td><td>Arrows</td><td>Show the direction and order of execution (Top→Bottom, Left→Right)</td></tr>
+          <tr><td>Connector</td><td>Circle (with letter/digit)</td><td>Connects two parts of a flowchart without crossing lines</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Guidelines for Drawing Flowcharts</h4>
+    <ul>
+      <li>One entry/starting point and one exit point</li>
+      <li>Clear, neat, and unambiguous</li>
+      <li>Use correct symbols at each stage</li>
+      <li>Avoid overlapping or crossing flow lines</li>
+      <li>Decision instructions should be simple YES/NO</li>
+      <li>Use connectors for long multi-page flowcharts</li>
+      <li>Verify the flowchart is logically correct and complete</li>
+    </ul>
+
+    <div class="card-grid">
+      <div class="card pros">
+        <h5>✓ Advantages of Flowcharts</h5>
+        <ul>
+          <li>Quicker understanding of relationships</li>
+          <li>Effective synthesis — used as working models</li>
+          <li>Proper program documentation</li>
+          <li>Effective coding guide</li>
+          <li>Orderly debugging and testing</li>
+          <li>Efficient program maintenance</li>
+        </ul>
+      </div>
+      <div class="card cons">
+        <h5>✗ Limitations of Flowcharts</h5>
+        <ul>
+          <li>Complex and clumsy for complex logic</li>
+          <li>Changes may require complete re-drawing</li>
+          <li>Symbols cannot be typed</li>
+          <li>No uniform drawing practice</li>
+          <li>Difficult to link conditions and actions</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Control Structures -->
+  <section id="control">
+    <h2><span class="num">07</span> Program Control Structures</h2>
+    <p>Control structures are blocks of statements that determine how statements are executed. There are three types in structured programming:</p>
+
+    <h3 id="sequence">Sequence</h3>
+    <p>The computer reads instructions from top to bottom, one-by-one — called <strong>sequential program execution</strong>. Each statement executes in order after the previous one completes.</p>
+
+    <h3 id="selection">Selection</h3>
+    <p>Execution of statements depends on a <strong>boolean condition</strong> (true or false). Example boolean expression: <code>x &gt;= 20</code>. The four types of selection controls are:</p>
+
+    <h4>1. IF … THEN</h4>
+    <p>Used when only one option is available. All other options are ignored.</p>
+    <div class="pseudocode">IF &lt;Condition&gt; THEN
+  Program statement (executed if condition is TRUE)
+ENDIF</div>
+    <p><strong>Example:</strong> Reward students who attain 80% and above.</p>
+    <div class="pseudocode">IF Mark &gt; 80 THEN
+  PRINT "Give reward"
+ENDIF</div>
+
+    <h4>2. IF … THEN … ELSE</h4>
+    <p>Used when there are two available options.</p>
+    <div class="pseudocode">IF &lt;Condition&gt; THEN
+  Statement 1   ← THEN part
+ELSE
+  Statement 2   ← ELSE part
+ENDIF</div>
+    <p><strong>Example:</strong> Football card decision.</p>
+    <div class="pseudocode">IF Fault = Serious THEN
+  PRINT "Give red card"
+ELSE
+  PRINT "Give yellow card"
+ENDIF</div>
+
+    <h4>3. Nested IF</h4>
+    <p>Used when two or more conditions must be considered to make a selection.</p>
+    <div class="pseudocode">IF &lt;Condition 1&gt; THEN
+  Statement 1
+ELSE
+  IF &lt;Condition 2&gt; THEN
+    Statement 2
+  ELSE
+    IF &lt;Condition 3&gt; THEN
+      Statement 3
+    ELSE
+      Statement 4
+    ENDIF
+  ENDIF
+ENDIF</div>
+    <p><strong>Example:</strong> Olympic medals.</p>
+    <div class="pseudocode">IF position = 1 THEN
+  medal = "Gold"
+ELSE
+  IF position = 2 THEN
+    medal = "Silver"
+  ELSE
+    IF position = 3 THEN
+      medal = "Bronze"
+    ELSE
+      medal = "None"
+    ENDIF
+  ENDIF
+ENDIF</div>
+
+    <h4>4. CASE Selection</h4>
+    <p>Alternative to Nested IF for multiple options; reduces lines of code. Boolean expression can only use integers or alphabetic characters.</p>
+    <div class="pseudocode">CASE average OF
+  80..100 : Grade = 'A'
+  70..79  : Grade = 'B'
+  60..69  : Grade = 'C'
+  50..59  : Grade = 'D'
+  40..49  : Grade = 'E'
+  ELSE
+            Grade = 'F'
+ENDCASE</div>
+
+    <h3 id="iteration">Iteration (Looping)</h3>
+    <p>Iteration executes the same block of code repeatedly until a condition is fulfilled. Three types of loops exist:</p>
+
+    <h4>Types of Loops</h4>
+    <ul>
+      <li><strong>Conditional loop</strong> — Number of repetitions not known in advance</li>
+      <li><strong>Unconditional loop</strong> — Repeated a specified number of times</li>
+      <li><strong>Infinite/Continuous loop</strong> — Repeats without ending</li>
+    </ul>
+
+    <h4>The WHILE Loop</h4>
+    <p>Condition is tested <em>before</em> executing statements. Statements may execute zero or many times.</p>
+    <div class="pseudocode">WHILE &lt;condition&gt; DO
+  statements
+ENDWHILE</div>
+    <p><strong>Example:</strong> ATM cash withdrawal (requires positive balance).</p>
+    <div class="pseudocode">WHILE balance &gt; 0 DO
+  Withdraw cash
+  Update account
+END WHILE</div>
+
+    <h4>The REPEAT … UNTIL Loop</h4>
+    <p>Condition is tested <em>after</em> executing statements. Statements execute <strong>at least once</strong>.</p>
+    <div class="pseudocode">REPEAT
+  statements
+UNTIL &lt;condition&gt;</div>
+    <p><strong>Example:</strong> ATM withdrawal (client can withdraw at least once).</p>
+    <div class="pseudocode">REPEAT
+  Withdraw cash
+  Update account
+UNTIL balance &gt; 0;</div>
+
+    <h4>The FOR Loop</h4>
+    <p>Used when statements must repeat a <strong>predetermined number of times</strong>.</p>
+    <div class="pseudocode">FOR loop_variable = lower_limit TO upper_limit DO
+  statements
+ENDFOR</div>
+    <p>Can also count downwards:</p>
+    <div class="pseudocode">FOR loop_variable = upper_limit DOWN TO lower_limit DO
+  statements
+ENDFOR</div>
+    <p><strong>Example:</strong> Sum of ten numbers.</p>
+    <div class="pseudocode">FOR count = 1 TO 10 DO
+  PRINT "Enter a number (N)"
+  INPUT N
+  Sum = Sum + N
+END FOR
+Display SUM</div>
+    <div class="info-box">
+      <strong>How the FOR loop works</strong>
+      1. Loop variable (count) initialised to lower limit (1). 2. Lower limit tested against upper limit (10). 3. If count ≤ 10, execute body; else exit loop. 4. After body, count is incremented by 1. 5. Repeat from step 2.
+    </div>
+  </section>
+
+  <!-- Complex Algorithms -->
+  <section id="complex">
+    <h2><span class="num">08</span> Designing More Complex Algorithms</h2>
+
+    <h3>Example 1 — Division with Zero Check</h3>
+    <p>Prompt user for two numbers X and Y. Divide X by Y, but if Y = 0, display an error message.</p>
+    <div class="pseudocode">START
+  PRINT "Enter 2 numbers X and Y"
+  INPUT X, Y
+  IF Y = 0 THEN
+    PRINT "Error: Division by zero"
+  ELSE
+    Quotient = X / Y
+    PRINT X, Y, Quotient
+  ENDIF
+STOP</div>
+
+    <h3>Example 2 — TSS Savings Interest Calculator</h3>
+    <p>Pays 5% interest on shares &gt; 100,000 and 3% on shares ≤ 100,000. No interest on deposits.</p>
+    <div class="pseudocode">START
+  PRINT "Enter member name, share and deposit"
+  INPUT Name, Shares, Deposit
+  IF Shares &gt; 100000 THEN
+    Interest = 0.05 * Shares
+  ELSE
+    Interest = 0.03 * Shares
+  ENDIF
+  TotalSavings = Deposit + Shares + Interest
+  PRINT Name, TotalSavings, Interest
+STOP</div>
+
+    <h3>Example 3 — Olympic Medals</h3>
+    <p>1st = Gold, 2nd = Silver, 3rd = Bronze, otherwise = None.</p>
+    <div class="pseudocode">START
+  PRINT "Enter athlete Name and Position"
+  INPUT Name, Position
+  IF Position = 1 THEN
+    Medal = "Gold"
+  ELSE
+    IF Position = 2 THEN
+      Medal = "Silver"
+    ELSE
+      IF Position = 3 THEN
+        Medal = "Bronze"
+      ELSE
+        Medal = "None"
+      ENDIF
+    ENDIF
+  ENDIF
+  PRINT Name, Medal
+STOP</div>
+
+    <h3>Example 4 — Student Grade Calculator (8 Subjects)</h3>
+    <p>Enter name + marks for 8 subjects, calculate sum and average, assign grade (A–E), print result.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Average Range</th><th>Grade</th></tr></thead>
+        <tbody>
+          <tr><td>80 – 100</td><td>A</td></tr>
+          <tr><td>70 – 79</td><td>B</td></tr>
+          <tr><td>60 – 69</td><td>C</td></tr>
+          <tr><td>50 – 59</td><td>D</td></tr>
+          <tr><td>Below 50</td><td>E</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pseudocode">START
+REPEAT
+  PRINT "Enter name and subject marks"
+  INPUT Name, Maths, Eng, Kisw, Bio, Chem, Business, Computer, History
+  SUM = Maths + Eng + Kisw + Bio + Chem + Business + Computer + History
+  AVG = SUM / 8
+  IF AVG &gt;= 80 THEN
+    Grade = 'A'
+  ELSE
+    IF AVG &gt;= 70 THEN
+      Grade = 'B'
+    ELSE
+      IF AVG &gt;= 60 THEN
+        Grade = 'C'
+      ELSE
+        IF AVG &gt;= 50 THEN
+          Grade = 'D'
+        ELSE
+          Grade = 'E'
+        ENDIF
+      ENDIF
+    ENDIF
+  ENDIF
+  PRINT Name, SUM, AVG, Grade
+UNTIL Count = Number_of_students
+STOP</div>
+
+    <h3>Example 5 — KARU BOOKS Gross Salary Calculator</h3>
+    <p>Employees with &gt;10 years experience get +10% basic. Monthly bonus depends on sales:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Monthly Sales</th><th>Bonus Rate</th></tr></thead>
+        <tbody>
+          <tr><td>Above 500,000</td><td>15%</td></tr>
+          <tr><td>250,000 – 500,000</td><td>10%</td></tr>
+          <tr><td>Below 250,000</td><td>5%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pseudocode">START
+REPEAT
+  ENTER Name, Basic, Sales, Years
+  IF Years &gt; 10 THEN
+    Benefit = Basic * 0.1
+  ENDIF
+  IF Sales &gt; 500000 THEN
+    Bonus = Sales * 0.15
+  ELSE
+    IF Sales &lt; 250000 THEN
+      Bonus = Sales * 0.05
+    ELSE
+      Bonus = Sales * 0.1
+    ENDIF
+  ENDIF
+  Gross = Basic + Benefit + Bonus
+  PRINT Name, Gross, Basic, Benefit, Bonus
+UNTIL Exit
+STOP</div>
+  </section>
+
+</main>
+</div>
+
+<footer style="text-align:center;padding:2rem;border-top:1px solid var(--border);font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--muted);">
+  &copy; 2025 EasyElimu Learning Innovations &nbsp;|&nbsp; Computer Studies Form 3 Notes
+</footer>
+
+</body>
+</html>

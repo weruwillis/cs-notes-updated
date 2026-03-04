@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spreadsheets (MS Excel 2013) – Form 2 Computer Studies</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f4f8;
+    --surface: #ffffff;
+    --surface2: #e8f0fe;
+    --ink: #1a2340;
+    --muted: #6b7a99;
+    --border: rgba(26,57,135,.12);
+    --green: #1d6a3b;
+    --green-light: #e6f4ec;
+    --blue: #1a3987;
+    --blue-light: #e8f0fe;
+    --blue-mid: #3d68d8;
+    --orange: #c05621;
+    --orange-light: #fff3ea;
+    --sidebar: 265px;
+    --mono: 'Roboto Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Nunito', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    position: fixed; top: 0; left: 0;
+    width: var(--sidebar);
+    height: 100vh;
+    background: var(--blue);
+    overflow-y: auto;
+    padding: 1.8rem 1.3rem 3rem;
+    z-index: 100;
+  }
+
+  .brand {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.35;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,.15);
+    margin-bottom: 1.3rem;
+  }
+
+  .brand span {
+    display: block;
+    font-family: var(--mono);
+    font-size: .58rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.55);
+    margin-top: .3rem;
+    font-weight: 400;
+  }
+
+  .nav-group {
+    font-family: var(--mono);
+    font-size: .58rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: #93c5fd;
+    margin: 1.1rem 0 .3rem .4rem;
+  }
+
+  #sidebar nav a {
+    display: block;
+    font-size: .77rem;
+    font-weight: 400;
+    color: rgba(255,255,255,.6);
+    text-decoration: none;
+    padding: .28rem .5rem;
+    border-radius: 4px;
+    border-left: 2px solid transparent;
+    transition: all .15s;
+    line-height: 1.5;
+  }
+
+  #sidebar nav a:hover { color: #fff; background: rgba(255,255,255,.1); }
+  #sidebar nav a.active { color: #fff; border-left-color: #93c5fd; background: rgba(255,255,255,.12); }
+
+  /* ── MAIN ── */
+  #main {
+    margin-left: var(--sidebar);
+    flex: 1;
+    max-width: 900px;
+    padding: 4rem 4rem 7rem;
+  }
+
+  /* ── HEADER ── */
+  .doc-header {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-mid) 100%);
+    color: #fff;
+    border-radius: 12px;
+    padding: 2.5rem 2.5rem 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .doc-header .kicker {
+    font-family: var(--mono);
+    font-size: .62rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.65);
+    margin-bottom: .8rem;
+  }
+
+  .doc-header h1 {
+    font-size: clamp(1.7rem, 4vw, 2.5rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: .5rem;
+  }
+
+  .doc-header .sub {
+    font-size: .9rem;
+    color: rgba(255,255,255,.7);
+  }
+
+  /* ── SECTIONS ── */
+  .section { margin-bottom: 3.5rem; scroll-margin-top: 2rem; }
+
+  h2 {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: var(--blue);
+    margin-bottom: 1.1rem;
+    padding-bottom: .5rem;
+    border-bottom: 2px solid var(--blue-light);
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+  }
+
+  h2 .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px; height: 30px;
+    background: var(--blue);
+    color: #fff;
+    border-radius: 6px;
+    font-size: .75rem;
+    font-family: var(--mono);
+    flex-shrink: 0;
+  }
+
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--blue-mid);
+    margin: 1.8rem 0 .6rem;
+  }
+
+  h4 {
+    font-size: .85rem;
+    font-weight: 700;
+    color: var(--orange);
+    font-family: var(--mono);
+    letter-spacing: .05em;
+    margin: 1.3rem 0 .5rem;
+    text-transform: uppercase;
+  }
+
+  p { font-size: .93rem; line-height: 1.8; color: rgba(26,35,64,.85); margin-bottom: .85rem; }
+
+  ul, ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+  li { font-size: .92rem; line-height: 1.75; margin-bottom: .25rem; color: rgba(26,35,64,.82); }
+  li::marker { color: var(--blue-mid); }
+  strong { font-weight: 700; color: var(--ink); }
+
+  /* ── DEFINITION BOX ── */
+  .def {
+    background: var(--blue-light);
+    border-left: 4px solid var(--blue-mid);
+    padding: 1rem 1.4rem;
+    margin: 1.2rem 0;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .def .def-label {
+    font-family: var(--mono);
+    font-size: .6rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--blue-mid);
+    margin-bottom: .3rem;
+  }
+
+  .def p { margin: 0; font-style: italic; }
+
+  /* ── NOTE ── */
+  .note {
+    background: var(--orange-light);
+    border-left: 4px solid var(--orange);
+    padding: .8rem 1.2rem;
+    margin: 1rem 0;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .note .note-label {
+    font-family: var(--mono);
+    font-size: .6rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: .2rem;
+  }
+
+  .note p { margin: 0; font-size: .88rem; }
+
+  /* ── TIP (green) ── */
+  .tip {
+    background: var(--green-light);
+    border-left: 4px solid var(--green);
+    padding: .8rem 1.2rem;
+    margin: 1rem 0;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .tip .tip-label {
+    font-family: var(--mono);
+    font-size: .6rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: .2rem;
+  }
+
+  .tip p { margin: 0; font-size: .88rem; }
+
+  /* ── CARDS ── */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+    gap: .85rem;
+    margin: 1rem 0;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--blue-mid);
+    padding: 1rem 1.1rem;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 1px 4px rgba(26,57,135,.06);
+    transition: box-shadow .2s;
+  }
+
+  .card:hover { box-shadow: 0 4px 16px rgba(26,57,135,.12); }
+
+  .card .card-label {
+    font-family: var(--mono);
+    font-size: .58rem;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--blue-mid);
+    margin-bottom: .4rem;
+  }
+
+  .card h4 { margin: 0 0 .5rem; color: var(--ink); font-size: .9rem; text-transform: none; letter-spacing: 0; font-family: 'Nunito', sans-serif; }
+  .card ul { padding-left: 1rem; margin: 0; }
+  .card li { font-size: .82rem; color: var(--muted); }
+  .card li::marker { color: var(--blue-mid); }
+
+  /* ── TWO-COL ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+
+  .col-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1rem 1.2rem;
+    border-radius: 8px;
+  }
+
+  .col-box .col-label {
+    font-family: var(--mono);
+    font-size: .6rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: .5rem;
+  }
+
+  .col-box.blue { border-top: 3px solid var(--blue-mid); }
+  .col-box.blue .col-label { color: var(--blue-mid); }
+  .col-box.green { border-top: 3px solid var(--green); }
+  .col-box.green .col-label { color: var(--green); }
+  .col-box.orange { border-top: 3px solid var(--orange); }
+  .col-box.orange .col-label { color: var(--orange); }
+  .col-box li { font-size: .85rem; }
+  .col-box.blue li::marker { color: var(--blue-mid); }
+  .col-box.green li::marker { color: var(--green); }
+  .col-box.orange li::marker { color: var(--orange); }
+
+  /* ── TABLE ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.2rem 0;
+    font-size: .87rem;
+    background: var(--surface);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(26,57,135,.07);
+  }
+
+  .data-table th {
+    background: var(--blue);
+    color: #fff;
+    padding: .65rem 1rem;
+    text-align: left;
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+  }
+
+  .data-table td {
+    padding: .55rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: rgba(26,35,64,.82);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:nth-child(even) td { background: var(--blue-light); }
+  .data-table tr:hover td { background: #dbeafe; }
+
+  /* ── FORMULA / CODE ── */
+  .formula {
+    background: var(--ink);
+    color: #a5f3fc;
+    font-family: var(--mono);
+    font-size: .88rem;
+    padding: 1rem 1.4rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    line-height: 1.9;
+    overflow-x: auto;
+  }
+
+  .formula .fn { color: #86efac; font-weight: 500; }
+  .formula .arg { color: #fde68a; }
+  .formula .comment { color: #94a3b8; font-size: .8rem; }
+  .formula .result { color: #f9a8d4; }
+
+  code {
+    background: var(--blue-light);
+    color: var(--blue);
+    font-family: var(--mono);
+    font-size: .82rem;
+    padding: .1rem .45rem;
+    border-radius: 4px;
+    border: 1px solid rgba(26,57,135,.15);
+  }
+
+  /* ── STEP LIST ── */
+  .step-list {
+    counter-reset: step;
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+  }
+
+  .step-list li {
+    counter-increment: step;
+    display: flex;
+    gap: .9rem;
+    margin-bottom: .9rem;
+    align-items: flex-start;
+  }
+
+  .step-list li::before {
+    content: counter(step);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 26px; height: 26px;
+    background: var(--blue-mid);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: .75rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: .15rem;
+    font-weight: 700;
+  }
+
+  /* ── KEYBOARD KEY ── */
+  kbd {
+    display: inline-block;
+    background: var(--surface);
+    border: 1px solid #cbd5e1;
+    border-bottom: 3px solid #94a3b8;
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: .72rem;
+    padding: .1rem .45rem;
+    color: var(--ink);
+    margin: 0 .1rem;
+  }
+
+  /* ── CHART TYPE TABLE ── */
+  .chart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: .87rem;
+  }
+
+  .chart-table th {
+    background: var(--green);
+    color: #fff;
+    padding: .6rem 1rem;
+    text-align: left;
+  }
+
+  .chart-table td {
+    padding: .55rem 1rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .chart-table tr:hover td { background: var(--green-light); }
+
+  /* ── DIVIDER ── */
+  hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding-top: 1.2rem;
+    margin-top: 3rem;
+    font-family: var(--mono);
+    font-size: .65rem;
+    color: var(--muted);
+    letter-spacing: .08em;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 820px) {
+    #sidebar { display: none; }
+    #main { margin-left: 0; padding: 2rem 1.5rem 5rem; }
+    .two-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<aside id="sidebar">
+  <div class="brand">
+    Spreadsheets (MS Excel 2013)
+    <span>Form 2 · Computer Studies</span>
+  </div>
+  <nav>
+    <div class="nav-group">Introduction</div>
+    <a href="#definition">Definition</a>
+    <a href="#advantages">Advantages</a>
+    <a href="#examples">Examples</a>
+    <a href="#components">Components</a>
+    <a href="#areas">Application Areas</a>
+
+    <div class="nav-group">Getting Started</div>
+    <a href="#window">Excel Window</a>
+    <a href="#layout">Worksheet Layout</a>
+    <a href="#navigating">Navigating Excel</a>
+    <a href="#creating">Creating a Worksheet</a>
+    <a href="#editing-cell">Editing a Cell</a>
+    <a href="#range">Selecting a Range</a>
+    <a href="#saving">Saving & Closing</a>
+
+    <div class="nav-group">Data & Formulas</div>
+    <a href="#data-types">Cell Data Types</a>
+    <a href="#referencing">Cell Referencing</a>
+    <a href="#functions">Functions & Formulae</a>
+    <a href="#operators">Arithmetic Operators</a>
+
+    <div class="nav-group">Editing</div>
+    <a href="#copy-move">Copy & Move Data</a>
+
+    <div class="nav-group">Formatting</div>
+    <a href="#formatting">Worksheet Formatting</a>
+    <a href="#rows-cols">Rows & Columns</a>
+    <a href="#global">Global Formatting</a>
+
+    <div class="nav-group">Data Management</div>
+    <a href="#sorting">Sorting</a>
+    <a href="#filtering">Filtering</a>
+    <a href="#subtotals">Subtotals</a>
+    <a href="#forms">Forms</a>
+
+    <div class="nav-group">Charts & Printing</div>
+    <a href="#charts">Charts / Graphs</a>
+    <a href="#printing">Printing Worksheets</a>
+  </nav>
+</aside>
+
+<main id="main">
+
+  <header class="doc-header">
+    <div class="kicker">EasyElimu · Computer Studies · Form 2</div>
+    <h1>Spreadsheets<br>(MS Excel 2013)</h1>
+    <p class="sub">Complete Notes — Worksheets, Formulae, Data Management & Charts</p>
+  </header>
+
+  <!-- ══ DEFINITION ══ -->
+  <section class="section" id="definition">
+    <h2><span class="icon">01</span>Definition of a Spreadsheet</h2>
+
+    <div class="def">
+      <div class="def-label">Definition</div>
+      <p>A spreadsheet is essentially a ledger sheet that lets you enter, edit and manipulate numeric data.</p>
+    </div>
+
+    <p>There are two types of spreadsheets:</p>
+    <div class="two-col">
+      <div class="col-box orange">
+        <div class="col-label">Manual Spreadsheet</div>
+        <ul>
+          <li>Used by bookkeepers as a ledger book</li>
+          <li>Sheets of paper divided into rows and columns</li>
+          <li>Amounts entered manually with pen or pencil</li>
+          <li>Limited in size and accuracy</li>
+        </ul>
+      </div>
+      <div class="col-box blue">
+        <div class="col-label">Electronic Spreadsheet</div>
+        <ul>
+          <li>Prepared using a computer program</li>
+          <li>Enter values in rows and columns like a manual sheet</li>
+          <li>Manipulate data mathematically using formulae</li>
+          <li>Far more powerful, accurate and flexible</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note">
+      <div class="note-label">Note</div>
+      <p>In these notes, the word <strong>spreadsheet</strong> refers to the <strong>electronic spreadsheet</strong>.</p>
+    </div>
+  </section>
+
+  <!-- ══ ADVANTAGES ══ -->
+  <section class="section" id="advantages">
+    <h2><span class="icon">02</span>Advantages of Electronic over Manual Spreadsheets</h2>
+    <ol>
+      <li><strong>Speed, accuracy and efficiency</strong> — utilises the powerful aspects of the computer to quickly accomplish tasks.</li>
+      <li><strong>Larger work area</strong> — a manual ledger has at most 30 columns and 51 rows; an electronic spreadsheet has at least 255 columns and 255 rows.</li>
+      <li><strong>Large storage space</strong> — utilises computer storage devices to save and retrieve documents.</li>
+      <li><strong>Neat work</strong> — all work is edited on screen; a final clean copy is printed. Neatness is not dependent on handwriting.</li>
+      <li><strong>Better formatting capabilities</strong> — far more options for presentation and layout.</li>
+      <li><strong>Built-in functions</strong> — inbuilt formulae (functions) enable quick mathematical data manipulation.</li>
+      <li><strong>Automatic recalculation</strong> — results of a formula are automatically updated when any referenced value changes. A manual sheet requires erasing and rewriting.</li>
+    </ol>
+  </section>
+
+  <!-- ══ EXAMPLES ══ -->
+  <section class="section" id="examples">
+    <h2><span class="icon">03</span>Examples of Spreadsheets</h2>
+    <div class="cards">
+      <div class="card"><div class="card-label">First Ever</div><h4>VisiCalc</h4><ul><li>First spreadsheet developed for personal computers</li></ul></div>
+      <div class="card"><div class="card-label">Integrated</div><h4>Lotus 1-2-3</h4><ul><li>Integrated software with spreadsheet, graphs, and database modules</li></ul></div>
+      <div class="card"><div class="card-label">Most Common</div><h4>Microsoft Excel</h4><ul><li>The spreadsheet covered in these notes</li><li>Version: Excel 2013</li></ul></div>
+      <div class="card"><div class="card-label">Other</div><h4>VP-Planner</h4><ul><li>Alternative spreadsheet application</li></ul></div>
+    </div>
+  </section>
+
+  <!-- ══ COMPONENTS ══ -->
+  <section class="section" id="components">
+    <h2><span class="icon">04</span>Components of a Spreadsheet</h2>
+
+    <h3>1. Worksheet</h3>
+    <p>The component in which data values are entered. Made up of <strong>rows</strong> (horizontal) and <strong>columns</strong> (vertical). The intersection of a row and a column is a <strong>cell</strong>. Each column is labelled with a letter and each row with a number. A cell is referenced by its column letter followed by its row number (e.g., B3). A group of worksheets makes up a <strong>workbook</strong>.</p>
+
+    <h3>2. Database</h3>
+    <p>Data values entered in worksheet cells can be managed using special Excel features (filtering, forms, subtotals, pivot tables, data validation). If related values for the same entity are entered on the same row, they form a <strong>record</strong>. A worksheet can therefore be used as a simple database.</p>
+
+    <div class="formula">
+      <span class="comment">// Example worksheet with records</span><br>
+      <span class="fn">Name &nbsp;&nbsp; IDNo. &nbsp; Age &nbsp; Nationality</span><br>
+      <span class="arg">Joy &nbsp;&nbsp;&nbsp; 123445 &nbsp; 25 &nbsp;&nbsp; Kenyan</span><br>
+      <span class="arg">Jeff &nbsp;&nbsp; 125675 &nbsp; 35 &nbsp;&nbsp; Ugandan</span>
+    </div>
+
+    <h3>3. Graphs / Charts</h3>
+    <p>A pictorial representation of data on a worksheet. Charts make it easy to present complex data in a simple, easy-to-understand format. Examples include <strong>pie charts</strong>, <strong>line charts</strong>, and <strong>bar charts</strong>.</p>
+  </section>
+
+  <!-- ══ AREAS ══ -->
+  <section class="section" id="areas">
+    <h2><span class="icon">05</span>Application Areas of a Spreadsheet</h2>
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">Area 1</div>
+        <h4>Statistical Analysis</h4>
+        <ul>
+          <li>Data analysis tools for statistical and engineering analyses</li>
+          <li>Functions: Average, Median, Mode, etc.</li>
+          <li>Some tools generate charts alongside output tables</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-label">Area 2</div>
+        <h4>Accounting</h4>
+        <ul>
+          <li>Recording daily transactions and financial records</li>
+          <li>Tracking asset depreciation/appreciation</li>
+          <li>Calculating profits and preparing budgets</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-label">Area 3</div>
+        <h4>Data Management</h4>
+        <ul>
+          <li>Neat tabular arrangement of data</li>
+          <li>Sorting, filtering, using forms</li>
+          <li>Linking worksheets for accessibility</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-label">Area 4</div>
+        <h4>Forecasting ("What if")</h4>
+        <ul>
+          <li>Change one value to see its effect on results</li>
+          <li>Financial forecasting, budgeting, stock portfolio analysis</li>
+          <li>E.g., "What if sales increase by 20%?"</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ══ WINDOW ══ -->
+  <section class="section" id="window">
+    <h2><span class="icon">06</span>The Microsoft Excel Application Window</h2>
+    <p>To start Excel: click <strong>Start → Programs → Microsoft Excel</strong>, or double-click the Excel shortcut on the desktop.</p>
+
+    <table class="data-table">
+      <thead><tr><th>#</th><th>Component</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Quick Access Toolbar</td><td>Quick access to commonly used commands</td></tr>
+        <tr><td>2</td><td>Title Bar</td><td>Shows the application title; has minimise, maximise and close buttons</td></tr>
+        <tr><td>3</td><td>File Tab</td><td>Replaced the Office button; provides Open, New, Save, Print, etc.</td></tr>
+        <tr><td>4</td><td>Name Box</td><td>Left of the formula bar; displays the position (address) of the current cell</td></tr>
+        <tr><td>5</td><td>Cell</td><td>Intersection of a row and column; named as column letter + row number (e.g., A1, AB209)</td></tr>
+        <tr><td>6</td><td>Range</td><td>One or more adjacent cells; identified by first and last cell address separated by a colon (e.g., B5:B8)</td></tr>
+        <tr><td>7</td><td>Status Bar</td><td>Shows the processing state (e.g., "Ready")</td></tr>
+        <tr><td>8</td><td>New Sheet Button</td><td>Adds a new worksheet</td></tr>
+        <tr><td>9</td><td>Ribbon</td><td>Groups of related commands organised in tabs</td></tr>
+        <tr><td>10</td><td>Formula Bar</td><td>Enter or edit formulae/data; identified by the <code>=</code> or <code>fx</code> sign</td></tr>
+        <tr><td>11</td><td>Worksheet Area</td><td>Cells, rows and columns where data is entered</td></tr>
+        <tr><td>12</td><td>View Options</td><td>Switches the worksheet display mode</td></tr>
+        <tr><td>13</td><td>Cell Pointer</td><td>Rectangular cursor marking the current (active) cell</td></tr>
+        <tr><td>14</td><td>Worksheet Labels</td><td>Sheet 1, Sheet 2, etc.; right-click to rename; active sheet appears lighter</td></tr>
+        <tr><td>15</td><td>Scroll Bars</td><td>Vertical and horizontal bars for navigating the worksheet</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ══ LAYOUT ══ -->
+  <section class="section" id="layout">
+    <h2><span class="icon">07</span>Worksheet Layout</h2>
+    <div class="cards">
+      <div class="card"><div class="card-label">Element</div><h4>Cell</h4><ul><li>Intersection of a row and a column</li><li>Named: column letter + row number (e.g., C5)</li></ul></div>
+      <div class="card"><div class="card-label">Element</div><h4>Row</h4><ul><li>Horizontal arrangement of cells</li><li>Labelled with numbers (1, 2, 3…)</li></ul></div>
+      <div class="card"><div class="card-label">Element</div><h4>Column</h4><ul><li>Vertical arrangement of cells</li><li>Labelled with letters (A, B, C…)</li></ul></div>
+      <div class="card"><div class="card-label">Element</div><h4>Range</h4><ul><li>A rectangular group of cells selected as a block</li><li>Identified by top-left to bottom-right address (e.g., A1:C10)</li></ul></div>
+    </div>
+  </section>
+
+  <!-- ══ NAVIGATING ══ -->
+  <section class="section" id="navigating">
+    <h2><span class="icon">08</span>Navigating the Microsoft Excel Screen</h2>
+    <table class="data-table">
+      <thead><tr><th>Action / Key</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td>Click a cell</td><td>Moves the cell pointer to that cell; Name Box shows address</td></tr>
+        <tr><td>Click column letter</td><td>Selects (highlights) the entire column</td></tr>
+        <tr><td>Double-click a cell</td><td>Activates edit mode inside the cell; Status bar shows "Enter"</td></tr>
+        <tr><td><kbd>→</kbd> or <kbd>Tab</kbd></td><td>Moves cell pointer one column to the right</td></tr>
+        <tr><td><kbd>←</kbd></td><td>Moves cell pointer one column to the left</td></tr>
+        <tr><td><kbd>↑</kbd></td><td>Moves cell pointer one row up</td></tr>
+        <tr><td><kbd>↓</kbd></td><td>Moves cell pointer one row down</td></tr>
+        <tr><td><kbd>End</kbd> + arrow key</td><td>Moves to the last cell in that direction on the row/column</td></tr>
+        <tr><td><kbd>Ctrl</kbd>+<kbd>Home</kbd></td><td>Moves cell pointer to cell A1 (beginning of worksheet)</td></tr>
+        <tr><td>Scroll bar arrows</td><td>Scrolls the worksheet vertically or horizontally</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ══ CREATING ══ -->
+  <section class="section" id="creating">
+    <h2><span class="icon">09</span>Creating a Worksheet</h2>
+
+    <h3>Using the General Format</h3>
+    <p>When the spreadsheet program starts, a new blank screen of rows and columns is presented. Enter data directly into the cells. To create a new blank workbook: <strong>File Tab → New → Blank Workbook</strong>.</p>
+
+    <h3>Using a Template</h3>
+    <p>Click <strong>File Tab → New</strong>, then select from available templates (Agendas, Budgets, Calendars, Expense Reports, Forms, Invoices, etc.) and double-click to open.</p>
+
+    <div class="note">
+      <div class="note-label">NB</div>
+      <p>If the template was saved previously on the hard disk, it opens as a new worksheet with preformatted features ready for data entry. Some templates may require the original installation disk.</p>
+    </div>
+  </section>
+
+  <!-- ══ EDITING CELL ══ -->
+  <section class="section" id="editing-cell">
+    <h2><span class="icon">10</span>Editing a Cell Entry</h2>
+    <p>Editing a cell means changing its contents. The cell must first be selected (made the current cell).</p>
+    <ol class="step-list">
+      <li>Move the cell pointer to the cell you wish to edit.</li>
+      <li>Double-click the formula bar for the text cursor to appear; the Status bar changes to <strong>"Edit"</strong>.</li>
+      <li>Use the keyboard to delete and add content in the formula bar, then press <kbd>Enter</kbd> to apply.</li>
+      <li>Click the Save button on the Quick Access Toolbar or press <kbd>Ctrl</kbd>+<kbd>S</kbd> to save.</li>
+    </ol>
+  </section>
+
+  <!-- ══ RANGE ══ -->
+  <section class="section" id="range">
+    <h2><span class="icon">11</span>Selecting a Range</h2>
+    <p>A <strong>range</strong> is a rectangular arrangement of cells specified by the top-left and bottom-right cell addresses, separated by a colon (e.g., <code>A1:C10</code>).</p>
+
+    <h3>Selecting Multiple Ranges</h3>
+    <div class="two-col">
+      <div class="col-box blue">
+        <div class="col-label">Shift Key</div>
+        <ul><li>Highlights all columns/rows <strong>between</strong> the first selected cell and the newly clicked cell</li></ul>
+      </div>
+      <div class="col-box green">
+        <div class="col-label">Ctrl Key</div>
+        <ul><li>Selects <strong>individually clicked</strong> cells or ranges without deselecting others</li></ul>
+      </div>
+    </div>
+
+    <h3>Hiding Rows / Columns</h3>
+    <ol class="step-list">
+      <li>Highlight the columns/rows you want to hide.</li>
+      <li>Right-click on the selected column/row header.</li>
+      <li>Click the <strong>Hide</strong> command from the context menu.</li>
+    </ol>
+  </section>
+
+  <!-- ══ SAVING ══ -->
+  <section class="section" id="saving">
+    <h2><span class="icon">12</span>Saving, Closing & Exiting</h2>
+
+    <h3>Saving a Worksheet</h3>
+    <ol class="step-list">
+      <li>Click <strong>File Tab → Save As</strong> (or click the Save icon on the Quick Access Toolbar).</li>
+      <li>Select the save location in the <em>Save in</em> box; type a unique name in the <em>File name</em> box. Ensure <strong>Microsoft Excel Workbook</strong> is selected as the file type.</li>
+      <li>Click <strong>Save</strong>.</li>
+    </ol>
+
+    <h3>Retrieving a Saved Workbook</h3>
+    <ol class="step-list">
+      <li>Click <strong>File Tab → Open</strong>.</li>
+      <li>Select the drive or folder where the workbook was saved.</li>
+      <li>Double-click the workbook icon to open it.</li>
+    </ol>
+
+    <h3>Closing & Exiting</h3>
+    <ul>
+      <li><strong>Close:</strong> File → Close — closes the worksheet but keeps Excel open.</li>
+      <li><strong>Exit:</strong> File → Exit — closes both the worksheet and the Excel program.</li>
+    </ul>
+  </section>
+
+  <hr>
+
+  <!-- ══ DATA TYPES ══ -->
+  <section class="section" id="data-types">
+    <h2><span class="icon">13</span>Cell Data Types</h2>
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">Type 1</div>
+        <h4>Labels</h4>
+        <ul>
+          <li>Any text or alphanumeric characters</li>
+          <li>Used as row/column headings</li>
+          <li>Left-aligned by default</li>
+          <li>Cannot be manipulated mathematically</li>
+          <li>Prefix apostrophe (<code>'</code>) to treat a number as a label (e.g., <code>'1990</code>)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-label">Type 2</div>
+        <h4>Values</h4>
+        <ul>
+          <li>Numbers that can be manipulated mathematically</li>
+          <li>Includes currency, dates, numbers (0–9) and special symbols</li>
+          <li>Right-aligned by default</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-label">Type 3</div>
+        <h4>Formulae</h4>
+        <ul>
+          <li>User-designed mathematical expressions</li>
+          <li>Must begin with <code>=</code> in Excel</li>
+          <li>Create relationships between cells</li>
+          <li>E.g., <code>=B3+D4</code></li>
+          <li>Auto-recalculates when referenced cells change</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-label">Type 4</div>
+        <h4>Functions</h4>
+        <ul>
+          <li>Inbuilt predefined formulae</li>
+          <li>Cover common calculations</li>
+          <li>E.g., <code>=SUM(B3:D4)</code></li>
+          <li>Faster than creating custom formulae</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ REFERENCING ══ -->
+  <section class="section" id="referencing">
+    <h2><span class="icon">14</span>Cell Referencing</h2>
+    <p>A cell reference identifies a cell or range on the worksheet, telling Excel where to look for values used in a formula.</p>
+
+    <h3>A1 vs R1C1 Referencing Styles</h3>
+    <table class="data-table">
+      <thead><tr><th>A1 Style</th><th>R1C1 Style</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td><code>B2</code></td><td><code>R2C2</code></td><td>Row 2, Column 2</td></tr>
+        <tr><td><code>C10</code></td><td><code>R10C3</code></td><td>Row 10, Column 3</td></tr>
+        <tr><td><code>E20</code></td><td><code>R20C5</code></td><td>Row 20, Column 5</td></tr>
+      </tbody>
+    </table>
+    <p>The <strong>R1C1 style</strong> is useful when automating tasks using <strong>Macros</strong>.</p>
+
+    <h3>Relative Referencing</h3>
+    <p>Cell references that change automatically depending on their position when a formula is copied. For example, typing <code>=A1+B1</code> in cell C1 and copying it to C2 automatically changes it to <code>=A2+B2</code>.</p>
+
+    <h3>Absolute Referencing</h3>
+    <p>Cell references that always refer to a specific fixed location, even when copied. Add a <strong>dollar sign</strong> (<code>$</code>) before the column letter and/or row number to make it absolute.</p>
+    <div class="formula">
+      <span class="comment">// Absolute reference — does not change when copied</span><br>
+      <span class="fn">=$B$10</span> &nbsp;&nbsp;<span class="comment">// Both column B and row 10 are fixed</span><br>
+      <span class="fn">=$B10 </span> &nbsp;&nbsp;<span class="comment">// Only column B is fixed; row changes</span><br>
+      <span class="fn">=B$10 </span> &nbsp;&nbsp;<span class="comment">// Only row 10 is fixed; column changes</span>
+    </div>
+
+    <h3>Referencing Using Labels and Names</h3>
+    <p>You can create a <strong>named range</strong> to use descriptive names instead of cell addresses in formulae.</p>
+    <div class="formula">
+      <span class="comment">// Using a named range</span><br>
+      <span class="fn">=SUM(<span class="arg">SecondQuarterProfits</span>)</span><br>
+      <span class="comment">// Easier to understand than:</span><br>
+      <span class="fn">=SUM(<span class="arg">A10:C20</span>)</span>
+    </div>
+
+    <h4>Creating a Named Range</h4>
+    <ol class="step-list">
+      <li>Select the range to be named.</li>
+      <li>Click inside the Name Box (top left); delete the cell reference and type a descriptive name.</li>
+      <li>Press <kbd>Enter</kbd> to apply.</li>
+    </ol>
+  </section>
+
+  <!-- ══ FUNCTIONS ══ -->
+  <section class="section" id="functions">
+    <h2><span class="icon">15</span>Basic Functions and Formulae</h2>
+
+    <h3>Statistical Functions</h3>
+    <table class="data-table">
+      <thead><tr><th>Function</th><th>Syntax</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><strong>AVERAGE</strong></td><td><code>=AVERAGE(D10:E10)</code></td><td>Returns the mean of a set of values</td></tr>
+        <tr><td><strong>COUNT</strong></td><td><code>=COUNT(A10:E10)</code></td><td>Counts cells that contain values in a range</td></tr>
+        <tr><td><strong>MAX</strong></td><td><code>=MAX(A10:E10)</code></td><td>Returns the largest value in a set (ignores text)</td></tr>
+        <tr><td><strong>MIN</strong></td><td><code>=MIN(A10:E10)</code></td><td>Returns the smallest value in a set (ignores text)</td></tr>
+        <tr><td><strong>MODE</strong></td><td><code>=MODE(A10:E10)</code></td><td>Returns the most frequently occurring value</td></tr>
+        <tr><td><strong>RANK</strong></td><td><code>=RANK(A2,A1:A5,1)</code></td><td>Returns the rank of a number within a list; format: RANK(number, range, order)</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Logical Functions</h3>
+    <table class="data-table">
+      <thead><tr><th>Function</th><th>Example</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><strong>IF</strong></td><td><code>=IF(marks&gt;50,"pass","fail")</code></td><td>Returns one value if condition is TRUE, another if FALSE</td></tr>
+        <tr><td><strong>COUNTIF</strong></td><td><code>=COUNTIF(A10:E10,"Eggs")</code></td><td>Counts cells that meet a given condition</td></tr>
+        <tr><td><strong>SUMIF</strong></td><td><code>=SUMIF(A10:E10,"&gt;50")</code></td><td>Adds values in cells that meet a given condition</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Mathematical Functions</h3>
+    <table class="data-table">
+      <thead><tr><th>Function</th><th>Example</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><strong>SUM</strong></td><td><code>=SUM(A10:E10)</code></td><td>Adds all values in a range</td></tr>
+        <tr><td><strong>PRODUCT</strong></td><td><code>=PRODUCT(A10:B10)</code></td><td>Multiplies all values in a range</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ══ OPERATORS ══ -->
+  <section class="section" id="operators">
+    <h2><span class="icon">16</span>Arithmetic Operators & Order of Execution</h2>
+
+    <div class="two-col">
+      <div class="col-box blue">
+        <div class="col-label">Operators</div>
+        <ul>
+          <li><code>+</code> — Addition</li>
+          <li><code>-</code> — Subtraction</li>
+          <li><code>*</code> — Multiplication</li>
+          <li><code>/</code> — Division</li>
+          <li><code>( )</code> — Parentheses (calculated first)</li>
+        </ul>
+      </div>
+      <div class="col-box orange">
+        <div class="col-label">Operator Precedence</div>
+        <ol>
+          <li>Negation (−)</li>
+          <li>Percent (%)</li>
+          <li>Exponentiation (^)</li>
+          <li>Multiplication and Division (* /)</li>
+          <li>Addition and Subtraction (+ −)</li>
+          <li>Relational (=, &lt;&gt;, &gt;, &lt;, &lt;=, &gt;=)</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="tip">
+      <div class="tip-label">Tip</div>
+      <p>Enclose part of a formula in parentheses to force it to be calculated first. For example: <code>=(A1+C3)/E20</code> adds A1 and C3 <em>before</em> dividing by E20.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ══ COPY MOVE ══ -->
+  <section class="section" id="copy-move">
+    <h2><span class="icon">17</span>Copying and Moving Data</h2>
+    <p>When data is cut or copied, it is temporarily held in a storage location called the <strong>clipboard</strong>.</p>
+
+    <div class="two-col">
+      <div class="col-box green">
+        <div class="col-label">Copying Data</div>
+        <ul>
+          <li>Creates a duplicate — original remains unchanged</li>
+        </ul>
+        <ol style="padding-left:1.2rem;margin-top:.5rem;">
+          <li style="font-size:.84rem;line-height:1.7;">Highlight the cells/range to copy</li>
+          <li style="font-size:.84rem;line-height:1.7;">Click <strong>Copy</strong> on the Home tab</li>
+          <li style="font-size:.84rem;line-height:1.7;">Select the destination cell</li>
+          <li style="font-size:.84rem;line-height:1.7;">Click <strong>Paste</strong> on the Home tab</li>
+        </ol>
+      </div>
+      <div class="col-box orange">
+        <div class="col-label">Moving Data</div>
+        <ul>
+          <li>Transfers contents to a new location — original is removed</li>
+        </ul>
+        <ol style="padding-left:1.2rem;margin-top:.5rem;">
+          <li style="font-size:.84rem;line-height:1.7;">Highlight the range to move</li>
+          <li style="font-size:.84rem;line-height:1.7;">Click <strong>Cut</strong> on the Home tab</li>
+          <li style="font-size:.84rem;line-height:1.7;">Select the destination cell</li>
+          <li style="font-size:.84rem;line-height:1.7;">Click <strong>Paste</strong> on the Home tab</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ══ FORMATTING ══ -->
+  <section class="section" id="formatting">
+    <h2><span class="icon">18</span>Worksheet Formatting</h2>
+    <p>Formatting enhances the appearance of a worksheet to make it more attractive and readable. The golden rule: <strong>use simple, clear formats</strong>.</p>
+
+    <h3>Formatting Text</h3>
+    <ol class="step-list">
+      <li>Highlight the cells containing the text to format.</li>
+      <li>Click the dialog box launcher under the Font group on the Home tab.</li>
+      <li>Select the <strong>Font</strong> tab and choose font type (e.g., Times New Roman), style, size, underline, and colour.</li>
+      <li>Click <strong>OK</strong> to apply.</li>
+    </ol>
+
+    <h3>Formatting Numbers</h3>
+    <ol class="step-list">
+      <li>Highlight the cells with the numbers to format.</li>
+      <li>Open the Format Cells dialog → select the <strong>Number</strong> tab.</li>
+      <li>Choose from the available formats:</li>
+    </ol>
+
+    <table class="data-table">
+      <thead><tr><th>Format</th><th>Use</th></tr></thead>
+      <tbody>
+        <tr><td>General</td><td>No specific number format</td></tr>
+        <tr><td>Number</td><td>General display of numbers (e.g., 2345.23)</td></tr>
+        <tr><td>Currency</td><td>Monetary values (e.g., $100, Ksh.10)</td></tr>
+        <tr><td>Accounting</td><td>Lines up currency symbols and decimal points</td></tr>
+        <tr><td>Date</td><td>Displays date in chosen format</td></tr>
+        <tr><td>Time</td><td>Displays time in chosen format</td></tr>
+        <tr><td>Percentage</td><td>Multiplies cell value by 100 and displays with %</td></tr>
+        <tr><td>Text</td><td>Treats cell content as text, even if it's a number</td></tr>
+        <tr><td>Custom</td><td>Define a number format not predefined in Excel</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Worksheet Borders</h3>
+    <ol class="step-list">
+      <li>Highlight the range to add borders.</li>
+      <li>Open Format Cells dialog → click the <strong>Borders</strong> tab.</li>
+      <li>Specify border options (left, right, top, bottom); select line thickness and style.</li>
+      <li>Click <strong>OK</strong>.</li>
+    </ol>
+  </section>
+
+  <!-- ══ ROWS COLS ══ -->
+  <section class="section" id="rows-cols">
+    <h2><span class="icon">19</span>Formatting Rows and Columns</h2>
+    <p>The standard column width in Excel is <strong>8.43 characters</strong> (adjustable between 0–255).</p>
+
+    <h3>Changing Column Width</h3>
+    <ul>
+      <li><strong>Drag method:</strong> Move the mouse to the right-hand border line between column headers; the pointer becomes a double arrow — drag to the desired width.</li>
+      <li><strong>Menu method:</strong> Click the column header → Right-click → <strong>Column Width</strong> → type a value → OK.</li>
+    </ul>
+
+    <h3>Changing Row Height</h3>
+    <ul>
+      <li><strong>Drag method:</strong> Point to the line separating two row numbers; the pointer becomes a double arrow — drag to the required height.</li>
+      <li><strong>Menu method:</strong> Click the row header → Right-click → <strong>Row Height</strong> → type a value → OK.</li>
+    </ul>
+
+    <h3>Inserting Rows</h3>
+    <ol class="step-list">
+      <li>Click a cell (e.g., A5) to make it active.</li>
+      <li>Home tab → Insert dropdown → <strong>Insert Sheet Rows</strong>. A row is inserted above A5; all other rows shift down.</li>
+    </ol>
+
+    <h3>Inserting Columns</h3>
+    <ol class="step-list">
+      <li>Click a cell (e.g., A5) to make it active.</li>
+      <li>Home tab → Insert dropdown → <strong>Insert Sheet Columns</strong>. A column is inserted to the left; all others shift right.</li>
+    </ol>
+  </section>
+
+  <!-- ══ GLOBAL ══ -->
+  <section class="section" id="global">
+    <h2><span class="icon">20</span>Global Worksheet Formatting</h2>
+    <p>To format the entire worksheet at once, first select it globally using one of these methods:</p>
+    <ul>
+      <li>Click the <strong>blank corner cell</strong> (top-left, just left of column A and above row 1)</li>
+      <li>Press <kbd>Ctrl</kbd>+<kbd>A</kbd></li>
+    </ul>
+    <p>The whole worksheet becomes highlighted. Apply Format Cells settings to format it as one block.</p>
+  </section>
+
+  <hr>
+
+  <!-- ══ SORTING ══ -->
+  <section class="section" id="sorting">
+    <h2><span class="icon">21</span>Sorting</h2>
+    <p>Arranges records in a particular order (ascending or descending) for easier data access.</p>
+    <ol class="step-list">
+      <li>Highlight the range to sort by clicking its column header letter.</li>
+      <li>Click the <strong>Data</strong> tab → <strong>Sort</strong>.</li>
+      <li>In the Sort dialog: select the field (criteria), the sort key, and sort order (Ascending/Descending).</li>
+      <li>Click <strong>OK</strong> to apply.</li>
+    </ol>
+  </section>
+
+  <!-- ══ FILTERING ══ -->
+  <section class="section" id="filtering">
+    <h2><span class="icon">22</span>Filtering Data</h2>
+    <p>Filtering displays only the rows that meet a specified condition. Excel has two filter commands:</p>
+    <div class="two-col">
+      <div class="col-box green">
+        <div class="col-label">AutoFilter</div>
+        <ul><li>Uses simple criteria including filter by selection</li><li>One filter per worksheet at a time</li></ul>
+      </div>
+      <div class="col-box blue">
+        <div class="col-label">Advanced Filter</div>
+        <ul><li>Uses more complex, multi-condition criteria</li></ul>
+      </div>
+    </div>
+
+    <h4>Using AutoFilter</h4>
+    <ol class="step-list">
+      <li>Click a cell in the list/column to be filtered.</li>
+      <li>On the <strong>Data</strong> tab, click <strong>Filter</strong>.</li>
+      <li>Click the dropdown arrow in the column containing the data.</li>
+      <li>Select the value to display from the dropdown list.</li>
+    </ol>
+  </section>
+
+  <!-- ══ SUBTOTALS ══ -->
+  <section class="section" id="subtotals">
+    <h2><span class="icon">23</span>Subtotals Function</h2>
+    <p>Automatically summarises data by calculating subtotal and grand total values for a sorted list.</p>
+
+    <div class="note">
+      <div class="note-label">Requirement</div>
+      <p>The list must have <strong>labelled columns</strong> and must be <strong>sorted</strong> on the column for which you want subtotals.</p>
+    </div>
+
+    <ol class="step-list">
+      <li>Click a cell in the list (e.g., A3).</li>
+      <li>On the <strong>Data</strong> tab, click <strong>Subtotals</strong>. The entire data range is selected.</li>
+      <li>In the <em>At each change in</em> box, select the grouping field (e.g., Name).</li>
+      <li>In the <em>Use function</em> box, select the function (e.g., Sum).</li>
+      <li>In the <em>Add subtotals to</em> box, check the appropriate field (e.g., Amount Owed).</li>
+      <li>Click <strong>OK</strong> — subtotals are inserted automatically.</li>
+    </ol>
+
+    <h3>AutoCalculate / Totals</h3>
+    <p>To quickly find the total of a range, highlight it then click the <strong>AutoSum (∑)</strong> icon on the Standard toolbar. Right-clicking the sum on the Status Bar also shows Min, Max and Average.</p>
+  </section>
+
+  <!-- ══ FORMS ══ -->
+  <section class="section" id="forms">
+    <h2><span class="icon">24</span>Forms</h2>
+    <p>A form is a specially prepared template allowing users to enter data in a more convenient format. If data is first collected on paper, a form can mirror that paper layout to speed up data entry.</p>
+    <p>To display a form: <strong>Data → Form</strong>.</p>
+  </section>
+
+  <hr>
+
+  <!-- ══ CHARTS ══ -->
+  <section class="section" id="charts">
+    <h2><span class="icon">25</span>Charts / Graphs</h2>
+    <p>Charts are graphics that represent values and their relationships, helping readers quickly see trends and comparisons. Excel supports both 2D and 3D charts.</p>
+
+    <h3>Types of Charts</h3>
+    <table class="chart-table">
+      <thead><tr><th>Chart Type</th><th>Description / Best Use</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Line Chart</strong></td><td>Represents data as lines with markers at each data value. Best for showing <strong>trends over time</strong> (e.g., student performance Form 1–3).</td></tr>
+        <tr><td><strong>Column Chart</strong></td><td>Clusters of vertical columns comparing values across categories.</td></tr>
+        <tr><td><strong>Bar Chart</strong></td><td>Data values arranged horizontally; compares values across categories.</td></tr>
+        <tr><td><strong>Pie Chart</strong></td><td>Displays the contribution of each value to a grand total (percentage view).</td></tr>
+        <tr><td><strong>Scatter Chart</strong></td><td>Compares pairs of values on the same axis.</td></tr>
+        <tr><td><strong>Bubble Chart</strong></td><td>Like a scatter chart but with a third data dimension shown by bubble size.</td></tr>
+        <tr><td><strong>Area Chart</strong></td><td>Like a line chart but with the area below the line filled in.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Creating a Chart</h3>
+    <ol class="step-list">
+      <li>Select the range of values for the chart.</li>
+      <li>Click the <strong>Insert</strong> tab → in the Charts group, click the chart type of your choice (or click the dialog box launcher to see all chart types).</li>
+      <li>Select the <strong>All Charts</strong> tab and choose the chart sub-type.</li>
+      <li>Click <strong>OK</strong> — the chart appears on the spreadsheet.</li>
+    </ol>
+
+    <h3>Moving and Resizing a Chart</h3>
+    <ul>
+      <li><strong>Resize:</strong> Click the chart object and drag the handles at its edges/corners.</li>
+      <li><strong>Move:</strong> Click inside the chart area and drag it to the desired position.</li>
+    </ul>
+
+    <h3>Data Ranges</h3>
+    <p>A <strong>data range</strong> is the rectangular block of cells providing the base data for the chart. Referenced as an absolute range (e.g., <code>=Sheet1!$B$2:$C$8</code>). To view: right-click the chart → <strong>Source Data</strong>.</p>
+
+    <h3>Labels, Titles and Legends</h3>
+    <p>To add any chart element (data labels, chart title, axis titles, legend):</p>
+    <ol class="step-list">
+      <li>Select the chart.</li>
+      <li>Click the <strong>+</strong> (plus) icon on the right side of the chart to display chart elements.</li>
+      <li>Check the desired element (Data Labels, Chart Title, Axis Titles, Legend) and edit as needed.</li>
+    </ol>
+
+    <div class="def">
+      <div class="def-label">Legend</div>
+      <p>Like a map key — explains what each colour or pattern in the chart represents. Essential when a chart has multiple data series.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ══ PRINTING ══ -->
+  <section class="section" id="printing">
+    <h2><span class="icon">26</span>Printing Worksheets</h2>
+
+    <h3>Page Setup</h3>
+    <ol class="step-list">
+      <li>Click <strong>Page Layout</strong> tab → <strong>Page Setup</strong> dialog box launcher.</li>
+      <li>On the <strong>Page</strong> tab, select orientation (<strong>Portrait</strong> or <strong>Landscape</strong>) and other settings.</li>
+      <li>Click <strong>OK</strong> to apply.</li>
+    </ol>
+
+    <h3>Page Orientation</h3>
+    <div class="two-col">
+      <div class="col-box blue">
+        <div class="col-label">Portrait</div>
+        <ul><li>Taller than wide (standard)</li><li>Best for worksheets with few columns</li></ul>
+      </div>
+      <div class="col-box green">
+        <div class="col-label">Landscape</div>
+        <ul><li>Wider than tall</li><li>Best for worksheets with many columns</li></ul>
+      </div>
+    </div>
+
+    <h3>Print Options</h3>
+    <p>Click <strong>File Tab → Print</strong> to open the Print dialog.</p>
+    <ul>
+      <li><strong>Select Printer</strong> — choose from all installed printers.</li>
+      <li><strong>Selection</strong> — prints only the selected worksheet area.</li>
+      <li><strong>Workbook</strong> — prints all worksheets in the workbook.</li>
+      <li><strong>Selected Chart</strong> — prints only the selected chart.</li>
+      <li><strong>Number of Copies</strong> — specify how many copies to print.</li>
+      <li><strong>Page Range</strong> — specify pages to print (e.g., pages 50 to 60 from a 100-page workbook).</li>
+    </ul>
+
+    <h3>Common Printing Problems & Solutions</h3>
+    <table class="data-table">
+      <thead><tr><th>Problem</th><th>Possible Cause & Solution</th></tr></thead>
+      <tbody>
+        <tr><td>Printer not found</td><td>Printer may be off — switch it on. Data cable may be loose — check connections. Wrong printer selected — choose the correct one in the print dialog.</td></tr>
+        <tr><td>Paper jam</td><td>The printer is clogged with paper. Alert the lab technician or teacher to clear the jam.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer>
+    Spreadsheets (MS Excel 2013) — Computer Studies Form 2 &nbsp;|&nbsp; © EasyElimu Learning Innovations
+  </footer>
+
+</main>
+
+<script>
+  const sections = document.querySelectorAll('.section');
+  const links = document.querySelectorAll('#sidebar nav a');
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(a => a.classList.remove('active'));
+        const match = document.querySelector(`#sidebar nav a[href="#${e.target.id}"]`);
+        if (match) match.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -65% 0px' });
+
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>

@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Impact of ICT on Society — Form 4 Notes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0f0e0c;
+      --paper: #f5f0e8;
+      --accent: #c0392b;
+      --accent2: #1a6b4a;
+      --muted: #7a7265;
+      --rule: #d4cfc4;
+      --highlight: #fdf3d0;
+      --card: #fffdf8;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 60px 48px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 320px; height: 320px;
+      border: 3px solid rgba(192,57,43,0.35);
+      border-radius: 50%;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: 200px;
+      width: 200px; height: 200px;
+      border: 2px solid rgba(255,255,255,0.08);
+      border-radius: 50%;
+    }
+    .header-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 5vw, 52px);
+      font-weight: 900;
+      line-height: 1.1;
+      max-width: 700px;
+      position: relative;
+      z-index: 1;
+    }
+    header h1 span { color: var(--accent); }
+    .header-sub {
+      margin-top: 20px;
+      font-size: 14px;
+      color: rgba(245,240,232,0.55);
+      font-style: italic;
+      letter-spacing: 0.03em;
+    }
+
+    /* ── Layout ── */
+    .wrapper {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 28px 80px;
+    }
+
+    /* ── TOC ── */
+    .toc {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-left: 4px solid var(--accent);
+      padding: 32px 36px;
+      margin: 48px 0 56px;
+    }
+    .toc-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--accent);
+    }
+    .toc ol {
+      list-style: none;
+      counter-reset: toc-cnt;
+    }
+    .toc ol li {
+      counter-increment: toc-cnt;
+      padding: 5px 0;
+      border-bottom: 1px dashed var(--rule);
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .toc ol li:last-child { border-bottom: none; }
+    .toc ol li::before {
+      content: counter(toc-cnt, decimal-leading-zero);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      min-width: 24px;
+    }
+    .toc ol li a {
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 15px;
+      transition: color 0.2s;
+    }
+    .toc ol li a:hover { color: var(--accent); }
+
+    /* ── Sections ── */
+    section {
+      margin-bottom: 64px;
+      animation: fadeUp 0.5s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22px, 3vw, 34px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 24px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid var(--rule);
+    }
+
+    h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 19px;
+      font-weight: 700;
+      margin: 32px 0 12px;
+      color: var(--accent2);
+    }
+
+    h4 {
+      font-family: 'Source Serif 4', serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 24px 0 8px;
+    }
+
+    p { margin-bottom: 14px; }
+
+    /* ── Lists ── */
+    ul, ol {
+      padding-left: 22px;
+      margin-bottom: 16px;
+    }
+    li { margin-bottom: 6px; }
+
+    /* ── Cards ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 24px 0;
+    }
+    @media (max-width: 600px) { .card-grid { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      padding: 22px 24px;
+    }
+    .card.green { border-top: 3px solid var(--accent2); }
+    .card.red   { border-top: 3px solid var(--accent); }
+
+    .card-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .card.green .card-label { color: var(--accent2); }
+    .card.red   .card-label { color: var(--accent); }
+
+    .card ul { padding-left: 18px; }
+    .card li  { font-size: 14.5px; margin-bottom: 5px; }
+
+    /* ── Highlight box ── */
+    .highlight-box {
+      background: var(--highlight);
+      border: 1px solid #e8d99a;
+      border-left: 4px solid #d4a017;
+      padding: 20px 24px;
+      margin: 24px 0;
+      font-size: 15px;
+    }
+    .highlight-box strong { color: #8a6000; }
+
+    /* ── AI Areas Grid ── */
+    .ai-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .ai-item {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 18px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .ai-item::before {
+      content: '';
+      position: absolute;
+      bottom: -20px; right: -20px;
+      width: 70px; height: 70px;
+      border: 2px solid rgba(192,57,43,0.3);
+      border-radius: 50%;
+    }
+    .ai-item-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 6px;
+      color: var(--accent);
+    }
+    .ai-item p { font-size: 13px; color: rgba(245,240,232,0.75); margin: 0; }
+
+    /* ── Laws block ── */
+    .laws {
+      counter-reset: law-cnt;
+      list-style: none;
+      padding-left: 0;
+    }
+    .laws li {
+      counter-increment: law-cnt;
+      display: flex;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--rule);
+      font-size: 15px;
+      font-style: italic;
+    }
+    .laws li::before {
+      content: 'Law ' counter(law-cnt);
+      font-style: normal;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      min-width: 52px;
+      padding-top: 2px;
+    }
+
+    /* ── Expert systems table ── */
+    .expert-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14.5px;
+      margin: 20px 0;
+    }
+    .expert-table th {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 10px 14px;
+      text-align: left;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .expert-table td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .expert-table tr:nth-child(even) td { background: rgba(0,0,0,0.025); }
+
+    /* ── Health issues ── */
+    .health-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 18px;
+      margin: 24px 0;
+    }
+    .health-card {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      padding: 20px;
+    }
+    .health-icon {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    .health-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+    .health-body { font-size: 14px; color: #4a4540; }
+
+    /* ── Breakthroughs ── */
+    .breakthrough-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0;
+      list-style: none;
+      padding: 0;
+    }
+    .breakthrough-list li {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 8px 16px;
+      font-size: 13.5px;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.05em;
+      margin: 0;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--ink);
+      color: rgba(245,240,232,0.45);
+      text-align: center;
+      padding: 32px;
+      font-size: 13px;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.08em;
+    }
+    footer span { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-label">Computer Studies — Form 4</div>
+  <h1>Impact of <span>ICT</span> on Society</h1>
+  <p class="header-sub">Information &amp; Communication Technology · Issues, Effects &amp; Breakthroughs</p>
+</header>
+
+<div class="wrapper">
+
+  <!-- TOC -->
+  <nav class="toc">
+    <div class="toc-title">Table of Contents</div>
+    <ol>
+      <li><a href="#employment">Effects on Employment</a></li>
+      <li><a href="#automated">Effects on Automated Production</a></li>
+      <li><a href="#health">Issues of Workers' Health</a></li>
+      <li><a href="#environment">Environmental Issues</a></li>
+      <li><a href="#culture">Cultural Effects &amp; Computer Crimes</a></li>
+      <li><a href="#breakthroughs">Breakthroughs in ICT</a></li>
+      <li><a href="#evolution">Evolution of Computer Systems</a></li>
+      <li><a href="#ai">Artificial Intelligence</a></li>
+      <li><a href="#superhighway">Expanded Information Superhighway</a></li>
+    </ol>
+  </nav>
+
+  <!-- 1. Employment -->
+  <section id="employment">
+    <span class="section-number">01 — Employment</span>
+    <h2>Effects on Employment</h2>
+    <p>The introduction of computers in the workplace has resulted in three major employment shifts: the creation of new jobs, the replacement of computer-illiterate workers, and the displacement of formerly manual jobs.</p>
+
+    <h3>Job Creation</h3>
+    <p>ICT has introduced employment opportunities that never existed before. The use of computers in financial institutions, reservation systems, educational institutions, and communications has created entirely new roles.</p>
+    <ul>
+      <li>Computer operators &amp; programmers</li>
+      <li>Network administrators &amp; IT/IS managers</li>
+      <li>Database administrators &amp; software developers</li>
+      <li>System analysts</li>
+    </ul>
+
+    <h3>Job Replacement</h3>
+    <p>Certain jobs disappear in one form but reappear requiring higher-skilled manpower. Many clerical and repetitive tasks have been made redundant, and computer-illiterate employees have been replaced by those with the required digital skills.</p>
+
+    <h3>Job Displacement</h3>
+    <p>Employees are moved to departments where computer skills are not required — typically those unwilling to acquire new skills. To retain competent staff, most employers organise regular in-service training to help employees keep up with rapid ICT changes.</p>
+  </section>
+
+  <!-- 2. Automated Production -->
+  <section id="automated">
+    <span class="section-number">02 — Production</span>
+    <h2>Effects on Automated Production</h2>
+    <p>Automation refers to substituting mechanical and electronic devices for manual ones to improve quality and speed. Manufacturing industries such as vehicle assembly plants, oil refineries, and food processing companies use computers to automate processes, with computer-controlled robots and assembly lines now commonplace.</p>
+
+    <div class="card-grid">
+      <div class="card green">
+        <div class="card-label">✓ Advantages</div>
+        <ul>
+          <li>Increased efficiency from balanced workload and production capacity</li>
+          <li>Improved customer service through high-quality goods</li>
+          <li>Faster delivery and timely production</li>
+          <li>Efficient utilisation of resources — less operating expense</li>
+          <li>Reduced accidents in hazardous sectors (mining, chemicals)</li>
+        </ul>
+      </div>
+      <div class="card red">
+        <div class="card-label">✗ Disadvantages</div>
+        <ul>
+          <li>High initial cost of setup</li>
+          <li>Can cause unemployment in labour-intensive areas</li>
+          <li>Possible hardware/software incompatibility</li>
+          <li>Over-reliance leads to laziness</li>
+          <li>Resistance to change among employees</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Why Employees Resist Automated Systems</h3>
+    <ul>
+      <li><strong>Fear of change</strong> — people are creatures of habit</li>
+      <li><strong>Fear of job loss</strong> — computers are associated with redundancies</li>
+      <li><strong>Fear of failure</strong> — anxiety about never adapting to new systems</li>
+      <li><strong>Loss of control</strong> — management fears losing organisational oversight</li>
+      <li><strong>Lack of understanding</strong> — not seeing the benefits leads to treating computers as intruders</li>
+    </ul>
+  </section>
+
+  <!-- 3. Health -->
+  <section id="health">
+    <span class="section-number">03 — Health</span>
+    <h2>Issues of Workers' Health</h2>
+
+    <div class="health-grid">
+      <div class="health-card">
+        <div class="health-icon">🤲</div>
+        <div class="health-title">Repetitive Strain Injuries (RSI)</div>
+        <div class="health-body">Injuries from wrist, hand, arm, and muscle strain due to forced repetitive movement — e.g. continuous keyboard data entry. Remedies: rest, relaxed posture, changed typing techniques.</div>
+      </div>
+      <div class="health-card">
+        <div class="health-icon">👁</div>
+        <div class="health-title">Eye Strain &amp; Headaches</div>
+        <div class="health-body">Prolonged close-range monitor use causes Computer Vision Syndrome (CVS): eye strain, headaches, double vision, fatigue. Use good-resolution monitors with antiglare screens and take regular breaks.</div>
+      </div>
+      <div class="health-card">
+        <div class="health-icon">⚡</div>
+        <div class="health-title">Electromagnetic Emissions</div>
+        <div class="health-body">Waves of electrical and magnetic energy emitted by current-carrying conductors. Users are advised to use low-emission devices to reduce exposure.</div>
+      </div>
+      <div class="health-card">
+        <div class="health-icon">🧠</div>
+        <div class="health-title">Mental Stress</div>
+        <div class="health-body">Workers feel pressure to match computer speed and productivity. Those monitored by computers experience additional performance anxiety.</div>
+      </div>
+      <div class="health-card">
+        <div class="health-icon">🚶</div>
+        <div class="health-title">Isolation</div>
+        <div class="health-body">People conduct business and communicate without face-to-face contact. Operators can work entire shifts without personal conversation, leading to feelings of social isolation.</div>
+      </div>
+      <div class="health-card">
+        <div class="health-icon">☢️</div>
+        <div class="health-title">Radiation &amp; VDU / Chip Toxins</div>
+        <div class="health-body">VDUs have been linked to birth defects, cancer, and miscarriages. Workers in chip manufacturing are exposed to toxic chemicals posing similar risks.</div>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <strong>Ergonomics</strong> — the science of designing the workplace for worker comfort and safety. Better working environments have driven the design of special furniture to prevent backaches and specially designed monitors to reduce eye strain.
+    </div>
+  </section>
+
+  <!-- 4. Environment -->
+  <section id="environment">
+    <span class="section-number">04 — Environment</span>
+    <h2>Environmental Issues</h2>
+
+    <h3>Energy Consumption &amp; Radiation</h3>
+    <p>Early computers consumed vast amounts of energy, generating heat and emitting harmful electromagnetic radiation. Modern devices must now be <strong>Energy Star compliant</strong> — a standard launched by the Environmental Protection Agency (EPA) to encourage minimal power use.</p>
+
+    <h3>Electronic Waste</h3>
+    <p>Huge dumps of dead computer parts, printers, ink toner cartridges, monitors and accessories are disposed in landfills, causing significant environmental pollution. Of particular concern are <strong>Nickel-cadmium laptop batteries</strong>, which contain toxic cadmium that can leak into underground water tables and catchment areas when buried.</p>
+  </section>
+
+  <!-- 5. Cultural -->
+  <section id="culture">
+    <span class="section-number">05 — Culture &amp; Crime</span>
+    <h2>Cultural Effects &amp; Computer Crimes</h2>
+
+    <h3>Moral Effects</h3>
+    <p>The rapid growth of ICT challenges moral and cultural values. It has changed how we communicate and has affected privacy, human rights, and integrity. Issues include exposure to <em>flaming</em> (derogatory online messages), access to pornographic material, and the use of computers to forge documents. On a positive note, ICT is used as a campaign platform against diseases like AIDS and drug abuse.</p>
+
+    <h3>Computer Crimes</h3>
+    <p>The use of computer software for illegal purposes. Computer-related crimes — hacking, eavesdropping, and piracy — are on the increase.</p>
+
+    <table class="expert-table">
+      <thead>
+        <tr>
+          <th>Crime Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Data Manipulation</strong></td><td>Altering data entering or exiting a computer, e.g. changing data on a certificate.</td></tr>
+        <tr><td><strong>Time Bomb</strong></td><td>Coding a program to destroy itself after running a set number of times.</td></tr>
+        <tr><td><strong>Computer Virus</strong></td><td>A program designed to destroy or alter data and spread to networked computers.</td></tr>
+        <tr><td><strong>Trap Door</strong></td><td>Creating a special password giving its creator sole system access.</td></tr>
+        <tr><td><strong>Data Stealing</strong></td><td>Using a computer to steal information gathered for someone else.</td></tr>
+        <tr><td><strong>Eavesdropping</strong></td><td>Tapping unauthorised communication lines carrying computer data.</td></tr>
+        <tr><td><strong>Industrial Espionage</strong></td><td>Stealing trade secrets (designs, marketing plans) from one company and selling them to another.</td></tr>
+        <tr><td><strong>Piracy</strong></td><td>Making unauthorised copies of copyrighted software.</td></tr>
+        <tr><td><strong>Fraud</strong></td><td>Using computers to cheat people for financial gain or information.</td></tr>
+        <tr><td><strong>Sabotage</strong></td><td>Illegally destroying data and information to cause organisational loss.</td></tr>
+        <tr><td><strong>Logic Bomb</strong></td><td>A program executed when a specific condition is met, e.g. a fired employee's delayed attack on records.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 6. Breakthroughs -->
+  <section id="breakthroughs">
+    <span class="section-number">06 — Breakthroughs</span>
+    <h2>Breakthroughs in ICT</h2>
+    <p>Significant breakthroughs have been achieved across multiple sectors:</p>
+    <ul class="breakthrough-list">
+      <li>Health Care</li>
+      <li>Education</li>
+      <li>Communication</li>
+      <li>Research</li>
+      <li>Commerce</li>
+      <li>Art &amp; Design</li>
+      <li>Entertainment</li>
+      <li>Transport</li>
+    </ul>
+    <p>Communication breakthroughs include fax, e-mail, and the internet. Commerce has been transformed through digital shipping and tracking of imports and exports. Entertainment now encompasses digital music, video, and games.</p>
+  </section>
+
+  <!-- 7. Evolution -->
+  <section id="evolution">
+    <span class="section-number">07 — Evolution</span>
+    <h2>Evolution of Computer Systems</h2>
+    <p>Future trends in ICT will be characterised by three major themes:</p>
+    <ol>
+      <li><strong>Rapid evolution in computer hardware and software</strong></li>
+      <li><strong>Artificial intelligence</strong></li>
+      <li><strong>Expanded information superhighway</strong></li>
+    </ol>
+
+    <h3>Rapid Hardware &amp; Software Evolution</h3>
+    <p>The silicon revolution has seen rapid increases in microprocessor speeds and capabilities. Future trends will see a reduction in size and cost of components alongside increased capability. Microprocessors the size of a thumb can now execute instructions in a trillionth of a second, enabling smaller but smarter devices. Computers will become more intelligent — able to learn from their environment, understand human voice, and respond accordingly. Software will be more versatile and easier to use.</p>
+  </section>
+
+  <!-- 8. AI -->
+  <section id="ai">
+    <span class="section-number">08 — Artificial Intelligence</span>
+    <h2>Artificial Intelligence (AI)</h2>
+    <p>A branch of computer science concerned with developing machines that emulate human-like qualities such as learning, reasoning, communicating, seeing, and hearing. AI developed from the need to create programs that could challenge humans in games like chess and scrabble.</p>
+
+    <h4>7 Main Application Areas</h4>
+    <div class="ai-grid">
+      <div class="ai-item">
+        <div class="ai-item-title">Expert Systems</div>
+        <p>Software that makes a computer operate at a human expert's level in a narrow specialisation.</p>
+      </div>
+      <div class="ai-item">
+        <div class="ai-item-title">Natural Language Processing</div>
+        <p>Enabling computers to recognise and understand natural languages, spoken or written.</p>
+      </div>
+      <div class="ai-item">
+        <div class="ai-item-title">Voice Recognition</div>
+        <p>Systems that allow voice input via microphone, with challenges around homophones and accents.</p>
+      </div>
+      <div class="ai-item">
+        <div class="ai-item-title">Voice Synthesis</div>
+        <p>Machines that create human-like speech, e.g. a computerised bank teller reading your balance.</p>
+      </div>
+      <div class="ai-item">
+        <div class="ai-item-title">Computer Vision</div>
+        <p>Processing and interpreting light waves to read and interpret text and objects visually.</p>
+      </div>
+      <div class="ai-item">
+        <div class="ai-item-title">Neural Networks</div>
+        <p>Electronic systems that emulate the neurological structure of the human brain.</p>
+      </div>
+      <div class="ai-item">
+        <div class="ai-item-title">Robotics</div>
+        <p>Computer-controlled devices that emulate humans for dangerous or difficult tasks.</p>
+      </div>
+    </div>
+
+    <h3>Expert Systems — In Detail</h3>
+    <p>Expert systems simulate the reasoning of specialists in areas such as medical diagnosis, financial forecasting, locomotive maintenance, and geological exploration.</p>
+
+    <h4>Components</h4>
+    <ul>
+      <li><strong>Knowledge Base</strong> — stores relevant facts, beliefs, assumptions, and problem-solving procedures.</li>
+      <li><strong>Inference Engine</strong> — software that controls the knowledge search and produces conclusions.</li>
+      <li><strong>User Interface</strong> — the display screen enabling user interaction.</li>
+    </ul>
+
+    <h4>Examples of Expert Systems</h4>
+    <table class="expert-table">
+      <thead>
+        <tr><th>System</th><th>Application</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>MYCIN</strong></td><td>Diagnosis and treatment of blood bacterial infections</td></tr>
+        <tr><td><strong>DELTA</strong></td><td>Maintaining locomotives</td></tr>
+        <tr><td><strong>MUDMAN</strong></td><td>Predicting mineral deposits by analysing soil composition</td></tr>
+        <tr><td><strong>STEAMER</strong></td><td>Training naval boiler room technicians</td></tr>
+        <tr><td><strong>R-1</strong></td><td>Designing computer systems for customers</td></tr>
+      </tbody>
+    </table>
+
+    <div class="card-grid">
+      <div class="card green">
+        <div class="card-label">✓ Advantages of Expert Systems</div>
+        <ul>
+          <li>Perform tasks faster than humans</li>
+          <li>Easily identify equipment faults</li>
+          <li>Store far more information than a human</li>
+          <li>Impartial and consistent recommendations</li>
+          <li>Never forget or make memory errors</li>
+          <li>Data kept up to date</li>
+          <li>Available 24 hours, will never retire</li>
+          <li>Usable remotely over a network</li>
+        </ul>
+      </div>
+      <div class="card red">
+        <div class="card-label">✗ Disadvantages of Expert Systems</div>
+        <ul>
+          <li>Can make mistakes and not learn from them</li>
+          <li>Work best for specific, well-defined problems — complex and costly to design</li>
+          <li>Lack human touch — cannot be questioned further</li>
+          <li>Heavy use can displace human experts</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Robotics</h3>
+    <div class="card-grid">
+      <div class="card green">
+        <div class="card-label">✓ Advantages of Robots</div>
+        <ul>
+          <li>Work 24/7 without breaks or fatigue</li>
+          <li>Faster than human workers</li>
+          <li>Very high and consistent productivity</li>
+          <li>Consistently high output quality</li>
+          <li>High degrees of accuracy</li>
+          <li>Can operate in hostile or dangerous conditions</li>
+        </ul>
+      </div>
+      <div class="card red">
+        <div class="card-label">✗ Disadvantages of Robots</div>
+        <ul>
+          <li>Expensive to build, install and maintain</li>
+          <li>Inflexible — designed for a single job</li>
+          <li>Malfunction can cause chaos or faulty goods</li>
+          <li>Displace human workers, causing unemployment</li>
+          <li>Risk of misuse in warfare or biohazard manipulation</li>
+        </ul>
+      </div>
+    </div>
+
+    <h4>The Three Laws of Robotics</h4>
+    <ol class="laws">
+      <li>A robot must not injure a human being or, through inaction, allow a human being to come to harm.</li>
+      <li>A robot must always obey orders given by a human being, except where doing so would conflict with the First Law.</li>
+      <li>A robot must protect its own existence, except where doing so would conflict with the First or Second Law.</li>
+    </ol>
+
+    <h3>Artificial Neural Networks</h3>
+    <p>The use of electronic devices and software to emulate the neurological structure of the human brain. Artificial neurodes perceive environmental stimuli and decide whether to pass signals on — mirroring biological neurons. Key attributes include pattern recognition in large data sets and the ability to make predictions and identify anomalies.</p>
+    <div class="highlight-box">
+      <strong>Banking Example:</strong> Credit card spending patterns can be tracked over time. If the card is lost or stolen, the bank can detect unusual spending patterns and take security measures even before the loss is officially reported.
+    </div>
+  </section>
+
+  <!-- 9. Superhighway -->
+  <section id="superhighway">
+    <span class="section-number">09 — Superhighway</span>
+    <h2>Expanded Information Superhighway</h2>
+    <p>Involves the integration of cabled and wireless technologies for data and information transmission. Key developments include:</p>
+    <ul>
+      <li>Vast increase in throughput of transmission media such as fibre optic and wireless technologies.</li>
+      <li>Scientists have demonstrated a fibre optic cable — the diameter of a single strand of hair — capable of carrying a <strong>trillion bits per second</strong>.</li>
+      <li>The Internet is growing tremendously, leading to what is called a <strong>digital explosion</strong> or digital hurricane of the information superhighway.</li>
+    </ul>
+  </section>
+
+</div>
+
+<footer>
+  <span>Computer Studies</span> · Form 4 Notes · Impact of ICT on Society
+</footer>
+
+</body>
+</html>

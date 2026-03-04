@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Introduction to Computers – Form 1 Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1208;
+    --paper: #faf6ef;
+    --cream: #f2ead8;
+    --gold: #c8922a;
+    --gold-light: #e8b84b;
+    --rust: #9b3a1a;
+    --teal: #1a5f6e;
+    --sidebar-w: 260px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--paper);
+    color: var(--ink);
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── Sidebar ── */
+  #sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--ink);
+    color: var(--cream);
+    overflow-y: auto;
+    padding: 2rem 1.5rem 3rem;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  #sidebar .brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: var(--gold-light);
+    letter-spacing: .04em;
+    border-bottom: 1px solid rgba(200,146,42,.3);
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.3;
+  }
+
+  #sidebar nav a {
+    display: block;
+    font-family: 'Source Serif 4', serif;
+    font-size: .78rem;
+    font-weight: 300;
+    color: rgba(242,234,216,.75);
+    text-decoration: none;
+    padding: .35rem 0 .35rem .6rem;
+    border-left: 2px solid transparent;
+    transition: color .2s, border-color .2s;
+    line-height: 1.4;
+  }
+
+  #sidebar nav a:hover,
+  #sidebar nav a.active {
+    color: var(--gold-light);
+    border-left-color: var(--gold);
+  }
+
+  #sidebar nav .nav-section {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .62rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 1.2rem 0 .3rem;
+  }
+
+  /* ── Main ── */
+  #main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    max-width: 860px;
+    padding: 4rem 4rem 6rem;
+  }
+
+  /* ── Header ── */
+  .doc-header {
+    border-bottom: 3px double var(--gold);
+    padding-bottom: 2.5rem;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+
+  .doc-header::before {
+    content: 'FORM 1 • COMPUTER STUDIES';
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .65rem;
+    letter-spacing: .2em;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .doc-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: .8rem;
+  }
+
+  .doc-header .subtitle {
+    font-size: 1rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--teal);
+  }
+
+  /* ── Section headings ── */
+  .section {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 2rem;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--ink);
+    border-left: 4px solid var(--gold);
+    padding-left: 1rem;
+    margin-bottom: 1.2rem;
+    line-height: 1.25;
+  }
+
+  h3 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--teal);
+    margin: 1.6rem 0 .6rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  h3::before {
+    content: '§';
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--gold);
+    font-size: .9rem;
+  }
+
+  h4 {
+    font-size: .95rem;
+    font-weight: 600;
+    color: var(--rust);
+    margin: 1.2rem 0 .4rem;
+    font-style: italic;
+  }
+
+  p {
+    font-size: .97rem;
+    line-height: 1.8;
+    margin-bottom: .9rem;
+    font-weight: 300;
+  }
+
+  ul, ol {
+    padding-left: 1.4rem;
+    margin-bottom: 1rem;
+  }
+
+  li {
+    font-size: .95rem;
+    line-height: 1.75;
+    font-weight: 300;
+    margin-bottom: .25rem;
+  }
+
+  li::marker { color: var(--gold); }
+
+  strong { font-weight: 600; color: var(--ink); }
+
+  /* ── Callout / definition box ── */
+  .definition {
+    background: var(--cream);
+    border-left: 3px solid var(--teal);
+    padding: 1rem 1.4rem;
+    margin: 1.2rem 0;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .definition .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .65rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: .3rem;
+  }
+
+  .definition p { margin: 0; font-style: italic; }
+
+  /* ── Comparison table ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.4rem 0;
+    font-size: .88rem;
+  }
+
+  .compare-table th {
+    background: var(--ink);
+    color: var(--gold-light);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: .7rem 1rem;
+    text-align: left;
+  }
+
+  .compare-table td {
+    padding: .6rem 1rem;
+    border-bottom: 1px solid rgba(26,18,8,.1);
+    vertical-align: top;
+    line-height: 1.65;
+  }
+
+  .compare-table tr:nth-child(even) td { background: var(--cream); }
+  .compare-table tr:hover td { background: rgba(200,146,42,.08); }
+
+  /* ── Generation cards ── */
+  .gen-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+
+  .gen-card {
+    border: 1px solid rgba(200,146,42,.3);
+    border-top: 3px solid var(--gold);
+    padding: 1rem 1.2rem;
+    background: #fff;
+    border-radius: 0 0 4px 4px;
+    transition: box-shadow .2s;
+  }
+
+  .gen-card:hover { box-shadow: 0 4px 20px rgba(200,146,42,.15); }
+
+  .gen-card .gen-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .65rem;
+    letter-spacing: .15em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: .4rem;
+  }
+
+  .gen-card h4 {
+    font-style: normal;
+    color: var(--ink);
+    font-size: .95rem;
+    margin: 0 0 .5rem;
+  }
+
+  .gen-card ul { padding-left: 1rem; margin: 0; }
+  .gen-card li { font-size: .82rem; }
+
+  /* ── Keyword badge ── */
+  .badge {
+    display: inline-block;
+    background: var(--teal);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .68rem;
+    padding: .15rem .5rem;
+    border-radius: 2px;
+    margin: .1rem .15rem;
+    letter-spacing: .05em;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    border: none;
+    border-top: 1px solid rgba(200,146,42,.3);
+    margin: 2.5rem 0;
+  }
+
+  /* ── Note / warning ── */
+  .note {
+    background: rgba(155,58,26,.06);
+    border-left: 3px solid var(--rust);
+    padding: .8rem 1.2rem;
+    margin: 1rem 0;
+    border-radius: 0 4px 4px 0;
+    font-size: .88rem;
+    line-height: 1.7;
+  }
+
+  .note .note-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .62rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: .2rem;
+  }
+
+  /* ── Footer ── */
+  footer {
+    border-top: 2px solid var(--gold);
+    padding-top: 1.5rem;
+    margin-top: 3rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem;
+    color: rgba(26,18,8,.4);
+    letter-spacing: .08em;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 780px) {
+    #sidebar { display: none; }
+    #main { margin-left: 0; padding: 2rem 1.5rem 4rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside id="sidebar">
+  <div class="brand">Introduction to<br>Computers<br>Form 1 Notes</div>
+  <nav>
+    <div class="nav-section">Foundations</div>
+    <a href="#definition">Definition of a Computer</a>
+    <a href="#data-info">Data & Information</a>
+    <a href="#characteristics">Characteristics</a>
+
+    <div class="nav-section">Hardware</div>
+    <a href="#parts">Parts of a Computer</a>
+    <a href="#system-unit">System Unit & CPU</a>
+    <a href="#input">Input Devices</a>
+    <a href="#output">Output Devices</a>
+    <a href="#storage">Memory & Storage</a>
+    <a href="#peripherals">Peripherals</a>
+
+    <div class="nav-section">History</div>
+    <a href="#history">History of Computing</a>
+    <a href="#generations">Computer Generations</a>
+
+    <div class="nav-section">Classification</div>
+    <a href="#factors">Factors & Type</a>
+    <a href="#by-size">By Physical Size</a>
+    <a href="#by-purpose">By Purpose</a>
+    <a href="#by-function">By Functionality</a>
+    <a href="#vs-calc">Computer vs Calculator</a>
+
+    <div class="nav-section">Usage</div>
+    <a href="#advantages">Advantages</a>
+    <a href="#disadvantages">Disadvantages</a>
+    <a href="#areas">Areas of Use</a>
+
+    <div class="nav-section">Lab & Safety</div>
+    <a href="#lab">Computer Laboratory</a>
+    <a href="#safety">Safety Precautions</a>
+    <a href="#booting">Booting & Shutdown</a>
+
+    <div class="nav-section">Input Skills</div>
+    <a href="#keyboard">Keyboard</a>
+    <a href="#mouse">Mouse</a>
+  </nav>
+</aside>
+
+<!-- Main content -->
+<main id="main">
+
+  <header class="doc-header">
+    <h1>Introduction to Computers</h1>
+    <p class="subtitle">Computer Studies — Form 1 Complete Notes</p>
+  </header>
+
+  <!-- ═══ DEFINITION ═══ -->
+  <section class="section" id="definition">
+    <h2>Definition of a Computer</h2>
+
+    <div class="definition">
+      <div class="label">Core Definition</div>
+      <p>A computer is an electronic device that operates under the control of programs stored in its own memory unit. It accepts data as input, processes it under a set of instructions (Programs), and produces the desired output (Information).</p>
+    </div>
+
+    <h3>Program</h3>
+    <p>A computer <strong>program</strong> is a set of related instructions written in the language of the computer, used to make the computer perform a specific task or direct it on what to do.</p>
+
+    <h3>Data</h3>
+    <p><strong>Data</strong> is a collection of raw facts, figures, or instructions that do not have much meaning on their own. Data may be in the form of numbers, alphabets/letters, or symbols.</p>
+
+    <h4>Types of Data</h4>
+    <ul>
+      <li><strong>Digital (discrete) data</strong> — discrete in nature; represented as numbers, alphabets, or symbols. Obtained by counting (e.g., 1, 2, 3…).</li>
+      <li><strong>Analogue (continuous) data</strong> — continuous in nature; represented in physical form (e.g., pressure, temperature, humidity). Obtained by measurement; output appears as smooth graphs.</li>
+    </ul>
+
+    <h3>Data Processing</h3>
+    <p>Data processing is the process of collecting all items of data and converting them into information. Processing may involve calculation, comparison, or any other logical operation.</p>
+
+    <h3>Information</h3>
+    <p><strong>Information</strong> is data that has been refined, summarized, and manipulated into a more meaningful form for decision-making. Information must be <em>accurate, timely, complete, and relevant</em>.</p>
+  </section>
+
+  <!-- ═══ DATA vs INFO ═══ -->
+  <section class="section" id="data-info">
+    <h2>Comparison: Data vs Information</h2>
+    <table class="compare-table">
+      <thead>
+        <tr><th>Data</th><th>Information</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Unprocessed (raw) facts or figures</td><td>End-product of data processing (processed data)</td></tr>
+        <tr><td>Not arranged</td><td>Arranged into a meaningful format</td></tr>
+        <tr><td>Does not have much meaning to the user</td><td>More meaningful to the user</td></tr>
+        <tr><td>Cannot be used for decision-making</td><td>Can be used to make decisions</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ═══ CHARACTERISTICS ═══ -->
+  <section class="section" id="characteristics">
+    <h2>Characteristics of a Computer</h2>
+
+    <h3>1. Speed</h3>
+    <p>Computers operate at very high speeds and can perform many functions within a very short time. Speed is measured in fractions of a second:</p>
+    <ul>
+      <li><strong>Millisecond</strong> — a thousandth of a second (10⁻³)</li>
+      <li><strong>Microsecond</strong> — a millionth of a second (10⁻⁶)</li>
+      <li><strong>Nanosecond</strong> — a thousand-millionth of a second (10⁻⁹)</li>
+      <li><strong>Picosecond</strong> — a million-millionth of a second (10⁻¹²)</li>
+    </ul>
+
+    <h3>2. Accuracy</h3>
+    <p>Computers are very accurate and rarely make mistakes. When errors occur, built-in self-checking features can detect and correct them. Most errors arise from incorrect data entry — hence the principle <strong>GIGO (Garbage In, Garbage Out)</strong>.</p>
+
+    <h3>3. Reliability</h3>
+    <p>A computer produces the correct answer when given correct instructions and correct data. The output is only as reliable as the instructions and data supplied.</p>
+
+    <h3>4. Consistency</h3>
+    <p>Given the same data and instructions, a computer will produce the same answer every time that particular process is repeated.</p>
+
+    <h3>5. Storage</h3>
+    <p>A computer can store large amounts of data in a very small space, retrieve it when needed, and protect it from unauthorized access through passwords.</p>
+
+    <h3>6. Diligence</h3>
+    <p>Unlike humans, a computer never gets tired or bored. It performs the millionth calculation with the same speed and accuracy as the first.</p>
+
+    <h3>7. Automation</h3>
+    <p>Once given instructions, a computer carries out its job automatically until it is complete. It can also perform a variety of jobs as long as there is a well-defined procedure.</p>
+
+    <h3>8. Versatility</h3>
+    <p>A computer can be used in different places to perform a large number of different jobs depending on the instructions fed to it.</p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ═══ PARTS ═══ -->
+  <section class="section" id="parts">
+    <h2>Parts of a Computer</h2>
+    <p>A computer consists of a collection of interconnected components working as a single entity:</p>
+    <ul>
+      <li>The System Unit</li>
+      <li>Input Devices</li>
+      <li>Output Devices</li>
+      <li>Storage Devices</li>
+    </ul>
+  </section>
+
+  <!-- ═══ SYSTEM UNIT ═══ -->
+  <section class="section" id="system-unit">
+    <h2>System Unit</h2>
+    <p>The system unit is the casing that houses the computer's electronic components, including the CPU and storage devices.</p>
+
+    <h4>Components inside the System Unit</h4>
+    <ul>
+      <li>Central Processing Unit (CPU) — the "brain" of the computer</li>
+      <li>Motherboard</li>
+      <li>Power Supply Unit</li>
+      <li>Memory storage devices</li>
+      <li>Disk drives</li>
+    </ul>
+
+    <h4>Types of System Units</h4>
+    <ul>
+      <li><strong>Tower style</strong> — stands alone; designed to sit on the floor; more expansion space.</li>
+      <li><strong>Desktop style</strong> — lies flat on a desk with the monitor resting on top.</li>
+    </ul>
+
+    <h4>Features of the System Unit</h4>
+    <ul>
+      <li>Houses the CPU</li>
+      <li>Connects to all peripheral devices using ports</li>
+      <li>Contains the computer's power switch</li>
+    </ul>
+  </section>
+
+  <!-- ═══ INPUT ═══ -->
+  <section class="section" id="input">
+    <h2>Input Devices</h2>
+    <p>Input devices are used to enter data into the computer. They accept data and convert it into a suitable form the computer can understand.</p>
+    <p><span class="badge">Keyboard</span><span class="badge">Mouse</span><span class="badge">Joystick</span><span class="badge">Light Pen</span><span class="badge">Scanner</span></p>
+
+    <h3>The Keyboard</h3>
+    <p>The keyboard looks like a typewriter and has letters, numbers, and other keys through which data is entered. To enter data, the user presses the required keys.</p>
+
+    <h3>The Mouse</h3>
+    <p>A pointing device that enables the user to issue instructions to the computer by controlling a special mouse pointer displayed on the screen.</p>
+  </section>
+
+  <!-- ═══ OUTPUT ═══ -->
+  <section class="section" id="output">
+    <h2>Output Devices</h2>
+    <p>Output devices give the end results of data entered into the computer. They convert processed data (information) from the computer into human-sensible form.</p>
+    <p><span class="badge">Monitor</span><span class="badge">Printer</span><span class="badge">Plotter</span><span class="badge">Speakers</span></p>
+
+    <h3>The Monitor</h3>
+    <p>A television-like screen used for displaying output. When you type a letter or number on the keyboard, it shows up on the monitor, enabling the user to monitor what is going on in the computer.</p>
+
+    <h3>Printer</h3>
+    <p>Printers are used to create permanent copies of output on paper.</p>
+  </section>
+
+  <!-- ═══ STORAGE ═══ -->
+  <section class="section" id="storage">
+    <h2>Memory Storage Devices</h2>
+    <p>Storage devices hold programs and data until they are needed for processing, and store results after processing.</p>
+
+    <h3>Primary (Main) Storage</h3>
+    <p>Storage found within the computer itself, used to hold data and programs currently being used by the processor.</p>
+    <p><span class="badge">RAM</span><span class="badge">ROM</span></p>
+
+    <h3>Secondary (Backing) Storage</h3>
+    <p>Used to store backup information not needed immediately. Provides permanent data storage on magnetic or optical media.</p>
+    <p><span class="badge">Hard Disk</span><span class="badge">Floppy Disk</span><span class="badge">Magnetic Tape</span><span class="badge">CD/DVD</span><span class="badge">Zip Disk</span></p>
+  </section>
+
+  <!-- ═══ PERIPHERALS ═══ -->
+  <section class="section" id="peripherals">
+    <h2>Computer Peripherals</h2>
+    <p>Peripheral devices are components connected to the system unit to assist the computer in serving its users. They connect via <strong>data interface cables</strong> and <strong>ports</strong>.</p>
+    <p><span class="badge">Monitor</span><span class="badge">Keyboard</span><span class="badge">Mouse</span><span class="badge">Printer</span><span class="badge">Modem</span><span class="badge">Speakers</span><span class="badge">Plotter</span></p>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ═══ HISTORY ═══ -->
+  <section class="section" id="history">
+    <h2>History of Computing</h2>
+    <ul>
+      <li>Before 1900: data processing was done manually using stones and sticks.</li>
+      <li>~2000 years ago: Asian merchants developed the <strong>Abacus</strong> — a rectangular frame fitted with wires and beads for calculating large figures.</li>
+      <li>Charles Babbage developed the <strong>Analytical Engine</strong> — regarded as the forerunner of modern computers.</li>
+      <li>1939: Professor Howard Aiken of Harvard University designed <strong>Mark 1</strong>, the first computer-like machine.</li>
+    </ul>
+
+    <div class="note">
+      <div class="note-label">Abacus — How it Works</div>
+      Each bead in the lower row has a value of 1; each bead in the upper row has a value of 5. A bead moved to the crossbar represents its value; beads away from the crossbar represent zero.
+    </div>
+  </section>
+
+  <!-- ═══ GENERATIONS ═══ -->
+  <section class="section" id="generations">
+    <h2>Computer Generations</h2>
+    <p>A computer generation is a grouped summary of gradual developments in computer technology, classified in durations rather than individual years.</p>
+
+    <div class="gen-grid">
+      <div class="gen-card">
+        <div class="gen-label">1st Generation</div>
+        <h4>1946 – 1956</h4>
+        <ul>
+          <li>Used <strong>Vacuum Tubes</strong></li>
+          <li>Speed: Milliseconds</li>
+          <li>Max memory: ~2 KB</li>
+          <li>Very large, costly, unreliable</li>
+          <li>Examples: ENIAC, EDVAC, UNIVAC</li>
+        </ul>
+      </div>
+      <div class="gen-card">
+        <div class="gen-label">2nd Generation</div>
+        <h4>1957 – 1963</h4>
+        <ul>
+          <li>Used <strong>Transistors</strong></li>
+          <li>Speed: Microseconds</li>
+          <li>RAM: up to 32 KB</li>
+          <li>Smaller, less costly</li>
+          <li>Examples: IBM 1401, UNIVAC 1107</li>
+        </ul>
+      </div>
+      <div class="gen-card">
+        <div class="gen-label">3rd Generation</div>
+        <h4>1964 – 1979</h4>
+        <ul>
+          <li>Used <strong>Integrated Circuits (ICs)</strong></li>
+          <li>Speed: 5 MIPS</li>
+          <li>RAM: up to 2 MB</li>
+          <li>Multi-user support</li>
+          <li>Examples: IBM 360, IBM 370</li>
+        </ul>
+      </div>
+      <div class="gen-card">
+        <div class="gen-label">4th Generation</div>
+        <h4>1979 – 1989</h4>
+        <ul>
+          <li>Used <strong>LSI / VLSI circuits</strong></li>
+          <li>Speed: 50 MIPS</li>
+          <li>RAM: hundreds of MB</li>
+          <li>Examples: IBM 308, Apple II</li>
+        </ul>
+      </div>
+      <div class="gen-card">
+        <div class="gen-label">5th Generation</div>
+        <h4>1990 – Present</h4>
+        <ul>
+          <li>Parallel architectures, 3D circuits</li>
+          <li>Speed: Nanoseconds/Picoseconds</li>
+          <li>RAM: 1 GB – 1 TB</li>
+          <li>Artificial Intelligence</li>
+          <li>Supercomputers, Microcomputers</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ═══ FACTORS ═══ -->
+  <section class="section" id="factors">
+    <h2>Factors that Determine the Type of Computer</h2>
+    <ol>
+      <li><strong>Type of processor (CPU)</strong> — microcomputers use a single microprocessor; larger computers use multiple high-speed components.</li>
+      <li><strong>Processing speed</strong> — larger computers have faster clocks and process more instructions per second.</li>
+      <li><strong>Amount of Main memory (RAM)</strong> — larger computers have more RAM, supporting larger data volumes and more sophisticated programs.</li>
+      <li><strong>Storage capacity of the Hard disk</strong> — larger computers have higher storage capacities.</li>
+      <li><strong>Cost</strong> — cost is directly related to size. Microcomputers are least expensive; supercomputers are most expensive.</li>
+      <li><strong>Speed of output devices</strong> — microcomputer output speed measured in characters per second (cps); larger computers measured in lines or pages per minute (lpm/ppm).</li>
+      <li><strong>Number of users</strong> — microcomputers support 1–3 users; larger computers can support hundreds simultaneously.</li>
+    </ol>
+  </section>
+
+  <!-- ═══ BY SIZE ═══ -->
+  <section class="section" id="by-size">
+    <h2>Classification by Physical Size</h2>
+
+    <h3>Supercomputers</h3>
+    <p>The fastest, largest, most expensive, and most powerful computers. Use multiple processors; require special cooling systems. Operated by computer specialists; can support 500+ users simultaneously.</p>
+    <p><strong>Uses:</strong> Weather forecasting, petroleum research, defence/weapons analysis, aerodynamic simulation.</p>
+    <p><strong>Examples:</strong> CRAY T3D, NEC-500.</p>
+
+    <h3>Mainframe Computers</h3>
+    <p>Less powerful than supercomputers but still have very high processing speeds and large storage. Support 5–300 terminals and up to hundreds of users at once.</p>
+    <p><strong>Uses:</strong> Banks, hospitals, government departments, airline reservations, internet servers.</p>
+    <p><strong>Examples:</strong> IBM 4381, ICL 39 Series.</p>
+
+    <h3>Minicomputers</h3>
+    <p>Smaller than mainframes; can support several users (e.g., 6 at a time). Cheaper than mainframes, more costly than microcomputers.</p>
+    <p><strong>Uses:</strong> Scientific labs, engineering plants, insurance companies, network servers.</p>
+    <p><strong>Example:</strong> PDP-8 (1965, Digital Equipment Corporation).</p>
+
+    <h3>Microcomputers</h3>
+    <p>Personal Computers (PCs) designed for one person at a time. Processing done by a single-chip <strong>microprocessor</strong>. Smaller, cheaper, energy-efficient, and highly reliable.</p>
+    <p><strong>Uses:</strong> Schools, small businesses, communication centres.</p>
+    <p><strong>Examples:</strong> Apple Macintosh, Dell, Compaq.</p>
+
+    <h3>Laptops & Notebooks</h3>
+    <p>Small and portable PCs that fit in a briefcase. Run on electricity or rechargeable batteries. Have built-in disk drives and flat LCD screens.</p>
+
+    <h3>Palmtops</h3>
+    <p>Small enough to fit in a pocket; used as personal organizers with minimal programs. Example: PDA (Personal Digital Assistant).</p>
+
+    <h3>Desktop Computers</h3>
+    <p>Designed to be used on a desk; not portable. Includes home computers, personal computers (PCs), workstations, and embedded computers.</p>
+  </section>
+
+  <!-- ═══ BY PURPOSE ═══ -->
+  <section class="section" id="by-purpose">
+    <h2>Classification by Purpose</h2>
+
+    <h3>General-Purpose Computers</h3>
+    <p>Designed to perform a wide variety of tasks using specifically written programs. Programs are exchangeable — you load the appropriate program for each task. <strong>Examples:</strong> Mainframes, minicomputers, microcomputers, laptops.</p>
+
+    <h3>Special-Purpose Computers</h3>
+    <p>Designed to handle only one specific task. Programs are fixed (hard-wired) at manufacture. Very efficient and fast for their dedicated task. <strong>Examples:</strong> Industrial robots, mobile phones, calculators, digital watches, petrol pumps, washing machine controllers, automatic pilots, word processors.</p>
+
+    <h3>Dedicated Computers</h3>
+    <p>A general-purpose computer committed to a single processing task (e.g., dedicated to word processing only).</p>
+  </section>
+
+  <!-- ═══ BY FUNCTION ═══ -->
+  <section class="section" id="by-function">
+    <h2>Classification by Functionality</h2>
+
+    <h3>Digital Computers</h3>
+    <p>Operate on discrete data; process both numeric and alphabetic data. Based on two states — ON/OFF or 1/0. Most widely used type. Output is in numbers, alphabets, and symbols.</p>
+    <p><strong>Examples:</strong> Digital watches, calculators, microcomputers.</p>
+
+    <h3>Analogue Computers</h3>
+    <p>Operate on continuous data by measuring changes in physical quantities (voltage, speed, pressure, temperature, etc.). Usually special-purpose devices dedicated to a single task. Output is in the form of smooth graphs.</p>
+    <p><strong>Examples:</strong> Flight simulators, bathroom scales, thermometers, speedometers, petrol pumps.</p>
+
+    <h3>Hybrid Computers</h3>
+    <p>Process both analogue and digital data by combining the elements of both types. More expensive. <strong>Example:</strong> Hospital ICU systems that measure vital signs (analogue) and send digital alerts to nurses' stations.</p>
+  </section>
+
+  <!-- ═══ VS CALC ═══ -->
+  <section class="section" id="vs-calc">
+    <h2>Computer vs Calculator</h2>
+    <table class="compare-table">
+      <thead>
+        <tr><th>Computer</th><th>Calculator</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Costly due to advanced technology</td><td>Cheaper; imitates simple computer technology</td></tr>
+        <tr><td>Bigger in size</td><td>Comparatively smaller</td></tr>
+        <tr><td>Operates at very high speeds</td><td>Slower than computers</td></tr>
+        <tr><td>More accurate (10+ decimal places)</td><td>Less accurate (typically 8 decimal places)</td></tr>
+        <tr><td>Flexible — can solve any problem</td><td>Mostly used for arithmetic/mathematical operations</td></tr>
+        <tr><td>Works under the control of programs</td><td>Non-programmable (or limited programming)</td></tr>
+        <tr><td>Supports wide variety of peripherals</td><td>Only display units and a limited keyboard</td></tr>
+        <tr><td>Large internal memory (several KBs)</td><td>Very small internal memory (registers only)</td></tr>
+        <tr><td>Supports large backing storage media</td><td>Some have very limited fixed backing store</td></tr>
+        <tr><td>Can support several users simultaneously</td><td>Serves only 1 user at a time</td></tr>
+        <tr><td>Has telecommunication capabilities</td><td>No telecommunication capabilities</td></tr>
+        <tr><td>Requires well-monitored environment</td><td>Does not require special environment</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ═══ ADVANTAGES ═══ -->
+  <section class="section" id="advantages">
+    <h2>Advantages of Using Computers</h2>
+    <ol>
+      <li>Process data faster than any other device</li>
+      <li>More accurate and reliable results</li>
+      <li>More efficient — require less effort to process data</li>
+      <li>Quickly and effectively store and retrieve large amounts of data</li>
+      <li>Very economical for storing information (conserve physical space)</li>
+      <li>Occupy very little office space</li>
+      <li>Help reduce paper work significantly</li>
+      <li>Flexible — can perform a variety of jobs</li>
+      <li>Can reduce the number of employees needed, lowering costs</li>
+      <li>Enhance security and confidentiality through password protection</li>
+      <li>Have made communication easier</li>
+      <li>Produce tidy, accurate output</li>
+      <li>Reduce problems of data duplication</li>
+      <li>Can operate in risky environments dangerous to humans</li>
+    </ol>
+  </section>
+
+  <!-- ═══ DISADVANTAGES ═══ -->
+  <section class="section" id="disadvantages">
+    <h2>Disadvantages of Using Computers</h2>
+    <ol>
+      <li>Very costly to purchase and maintain</li>
+      <li>Can only be used where there is a source of power</li>
+      <li>Require skilled manpower to operate</li>
+      <li>Records are kept in a form not visible or human-readable</li>
+      <li>Can break down like any other machine</li>
+      <li>Information stored can be lost due to power interruptions or breakdown</li>
+      <li>Do not have their own intelligence — can only work as instructed</li>
+      <li>May cause retraining or retrenchment of staff</li>
+      <li>Technology changes rapidly, causing computers to become obsolete quickly</li>
+      <li>Have increased unemployment — computers now do jobs previously done by humans</li>
+      <li>Increased computer crimes, particularly in banking</li>
+    </ol>
+  </section>
+
+  <!-- ═══ AREAS OF USE ═══ -->
+  <section class="section" id="areas">
+    <h2>Areas Where Computers are Used</h2>
+    <ul>
+      <li><strong>Supermarkets</strong> — stock control, receipts, barcode readers, change calculation.</li>
+      <li><strong>Industries</strong> — process monitoring, robots, management control, advertising.</li>
+      <li><strong>Banks/Insurance</strong> — ATMs, cheque processing, payrolls, electronic money transfer.</li>
+      <li><strong>Process Control</strong> — controlling chemical and mechanical processes in factories.</li>
+      <li><strong>Hospitals</strong> — patient records, disease diagnosis, ICU life-support, medical equipment.</li>
+      <li><strong>Offices</strong> — e-mails, fax, document production, record keeping.</li>
+      <li><strong>Government</strong> — storing records, bills, statements, improving civil service efficiency.</li>
+      <li><strong>Education</strong> — Computer Aided Learning (CAL), simulations, open university, pilot training.</li>
+      <li><strong>Research</strong> — scientific data analysis, engineering design, space exploration.</li>
+      <li><strong>Communication</strong> — telephone exchanges, electronic messaging, fax.</li>
+      <li><strong>Transport</strong> — traffic control, railways, shipping, airline reservations and radar.</li>
+      <li><strong>Police / Law Enforcement</strong> — fingerprint databases, face recognition, criminal investigations.</li>
+      <li><strong>Defence</strong> — radar systems, guided missiles, fighter jets, communication.</li>
+      <li><strong>Multimedia</strong> — presentations, music synthesizers, entertainment, games, movies.</li>
+      <li><strong>Domestic</strong> — watching movies, personal information, home budgets, shopping.</li>
+      <li><strong>Library Services</strong> — record keeping, book catalogue searches.</li>
+      <li><strong>Employment</strong> — computers have created many new employment opportunities.</li>
+    </ul>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ═══ LAB ═══ -->
+  <section class="section" id="lab">
+    <h2>Computer Laboratory</h2>
+
+    <div class="definition">
+      <div class="label">Definition</div>
+      <p>A computer laboratory is a room specially prepared to facilitate the installation of computers and provide a safe, conducive environment for teaching and learning Computer Studies.</p>
+    </div>
+
+    <h3>Factors to Consider When Preparing a Lab</h3>
+    <ul>
+      <li>Security of computers, programs, and other resources</li>
+      <li>Reliability of the power source</li>
+      <li>Number of computers to be installed and floor space available</li>
+      <li>Maximum number of users the laboratory can accommodate</li>
+    </ul>
+
+    <h3>Requirements of a Computer Laboratory</h3>
+    <ul>
+      <li>Standard and sufficient furniture</li>
+      <li>Good ventilation</li>
+      <li>Reliable and sufficient power supply</li>
+      <li>Free from dust and moisture</li>
+      <li>Sufficient floor space</li>
+      <li>Proper cabling of electric wires</li>
+      <li>Fire-fighting equipment</li>
+      <li>Good lighting equipment</li>
+      <li>Strong rooms and doors for security</li>
+    </ul>
+  </section>
+
+  <!-- ═══ SAFETY ═══ -->
+  <section class="section" id="safety">
+    <h2>Safety Precautions in a Computer Laboratory</h2>
+
+    <h3>1. Behaviour in the Lab</h3>
+    <ul>
+      <li>Only authorized people should enter the computer room</li>
+      <li>Remove shoes before entering to prevent dust</li>
+      <li>No smoking; avoid exposing computers to dust</li>
+      <li>Do not carry food, drinks, or beverages into the computer room</li>
+      <li>Avoid unnecessary movements</li>
+      <li>Computer illiterates should not operate computers unsupervised</li>
+      <li>Always follow proper procedures for starting and shutting down computers</li>
+    </ul>
+
+    <h3>2. Protection Against Fire and Accidents</h3>
+    <ul>
+      <li>Keep inflammable chemicals stored away after use</li>
+      <li>Ensure all electrical wires are properly insulated</li>
+      <li>Always use a <strong>gaseous (CO₂) fire extinguisher</strong> — never water or powder</li>
+      <li>Report any incidents to the person in charge</li>
+    </ul>
+
+    <div class="note">
+      <div class="note-label">Important</div>
+      Water-based or powder extinguishers should NOT be used in a computer room. Water causes rusting and short circuits; powder particles scratch storage devices during read/write operations.
+    </div>
+
+    <h3>3. Insulation of Cables</h3>
+    <p>All power cables must be properly insulated and laid away from busy pathways (preferably along walls) to prevent stumbling, electric shock, or power interruptions.</p>
+
+    <h3>4. Stable Power Supply</h3>
+    <p>Computers require a stable source of power. Use a <strong>UPS (Uninterrupted Power Supply)</strong> or <strong>Stabilizer</strong> to protect against surges and brownouts.</p>
+
+    <h4>Functions of the UPS</h4>
+    <ol>
+      <li>Regulates power from an unstable source to a clean, stable voltage</li>
+      <li>Prevents power surges and brownouts</li>
+      <li>Temporarily provides power during main power failure (allows the user to save work and shut down correctly)</li>
+      <li>Alerts the user of any power loss (by beeping)</li>
+    </ol>
+
+    <h3>5. Burglar Proofing</h3>
+    <ul>
+      <li>Fit strong metallic grills and locks on doors, windows, and roofs</li>
+      <li>Use personal identification cards and fingerprint identification</li>
+      <li>Install security alarms at strategic access points</li>
+      <li>Protect computers with passwords</li>
+    </ul>
+
+    <h3>6. Ventilation</h3>
+    <p>The computer room must have good air circulation to avoid overheating. Ensure large windows and doors, install air-conditioning systems and cooling fans, and avoid overcrowding.</p>
+
+    <h3>7. Dust Control</h3>
+    <ul>
+      <li>Set up the lab away from excessive dust</li>
+      <li>Remove shoes before entering</li>
+      <li>Fit special curtains to reduce dust entry</li>
+      <li>Cover floors with carpets to absorb dust and noise</li>
+      <li>Use dust covers when computers are not in use</li>
+    </ul>
+
+    <h3>8. Damp Control</h3>
+    <p>Maintain humidity at an optimum <strong>50%</strong>. Low humidity allows static electricity build-up; high humidity (over 70%) causes rusting. Use humidifiers or dehumidifiers as needed.</p>
+
+    <h3>9. Handling Materials & Equipment</h3>
+    <ul>
+      <li>Handle devices with great care — dropping or bumping causes permanent damage</li>
+      <li>Use the manufacturer's shipping carton when transporting devices</li>
+      <li>Do not place heavy objects on computers</li>
+      <li>Protect devices from direct sunlight and electrostatic discharge</li>
+      <li>Regularly check and service equipment</li>
+    </ul>
+
+    <h3>10. Standard Furniture & Posture</h3>
+    <ul>
+      <li>Table must be strong and wide enough to hold all equipment</li>
+      <li>Seat must be comfortable with a straight backrest</li>
+      <li>Forearms should be parallel to the floor; wrists straight</li>
+      <li>Eyes at the same level as the top of the screen</li>
+      <li>Feet firmly flat on the floor</li>
+    </ul>
+
+    <h3>11. Lighting & Vision Care</h3>
+    <ul>
+      <li>The room must be well lit to avoid eyestrain</li>
+      <li>Tilt the display away from windows to minimize glare</li>
+      <li>Use radiation filter screens and indirect lighting</li>
+      <li>Avoid using a flickering monitor</li>
+      <li>Use brightness and contrast controls to adjust the display</li>
+      <li>Take frequent breaks and rest your eyes</li>
+      <li>Distance between user and screen: <strong>450–500 mm</strong></li>
+    </ul>
+  </section>
+
+  <!-- ═══ BOOTING ═══ -->
+  <section class="section" id="booting">
+    <h2>Starting Up (Booting) a Computer</h2>
+    <ol>
+      <li>Ensure all components are properly connected and the computer is connected to an active power source.</li>
+      <li>Turn on the switch at the power source; if using a UPS or stabilizer, turn it on after the main supply.</li>
+      <li>Switch on the Monitor first, then the System Unit. The computer will automatically begin <strong>booting</strong>.</li>
+    </ol>
+
+    <div class="definition">
+      <div class="label">Booting</div>
+      <p>Booting is the process of starting up a computer — the entire process that makes the computer ready for use.</p>
+    </div>
+
+    <h3>Types of Booting</h3>
+    <h4>Cold Booting</h4>
+    <p>Happens when a computer that was originally OFF is switched on by pressing the power button on the system unit.</p>
+
+    <h4>Warm Booting</h4>
+    <p>Happens when a computer that was already ON is restarted by pressing the Restart button or using the keyboard shortcut <strong>Ctrl + Alt + Del</strong>.</p>
+
+    <h3>POST — Power-On Self-Test</h3>
+    <p>When power is switched on, the computer executes the <strong>POST</strong> program stored in ROM. POST checks RAM, CMOS (BIOS), hard disk controller, floppy disk drive controller, and keyboard. If a device is faulty or missing, an error message or abnormal beep codes are produced.</p>
+    <p>The program that directs POST is called the <strong>BIOS (Basic Input Output System)</strong>.</p>
+
+    <h3>Shutting Down a Computer</h3>
+    <ol>
+      <li>Save all work and close all running programs.</li>
+      <li>Remove any floppy disk from the drive.</li>
+      <li>Follow the proper shut-down procedure (e.g., Start → Shut Down in Windows).</li>
+      <li>After the system powers down, switch off the Monitor, Printer, and any other output devices.</li>
+    </ol>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ═══ KEYBOARD ═══ -->
+  <section class="section" id="keyboard">
+    <h2>The Keyboard</h2>
+    <p>The keyboard is a computer input device through which data and instructions are typed into the computer memory.</p>
+
+    <h3>Types of Keyboard</h3>
+    <ul>
+      <li><strong>Standard Keyboard</strong> — has 99 keys</li>
+      <li><strong>Enhanced Keyboard</strong> — has between 102 and 105 keys</li>
+    </ul>
+
+    <h3>Sections of the Keyboard (101 keys total)</h3>
+
+    <h4>a. Function / Command Keys (F1–F12)</h4>
+    <p>Located along the top of the keyboard. Used to issue commands; their function varies with different applications. Also called <em>Programmable Keys</em>.</p>
+
+    <h4>b. Alphanumeric Keys</h4>
+    <p>Contains 26 letters (A–Z), number keys (0–9), punctuation marks, and symbols. The <strong>Space Bar</strong> at the bottom is used to separate words.</p>
+
+    <h4>c. Numeric Keypad Keys</h4>
+    <p>Located on the rightmost part. Contains digits 0–9 and mathematical symbols (*, -, +, /, .). Used for fast numeric data entry. Active only when <strong>Num Lock</strong> is on.</p>
+
+    <h4>d. Directional / Cursor Positioning Keys</h4>
+    <ul>
+      <li><strong>Arrow keys</strong> — move the cursor one character/line in any direction</li>
+      <li><strong>Page Up / Page Down</strong> — move the cursor one page up or down</li>
+      <li><strong>Home / End</strong> — move the cursor to the beginning or end of the current line</li>
+    </ul>
+
+    <h4>Editing Keys</h4>
+    <ul>
+      <li><strong>Backspace (←)</strong> — erases characters to the left of the cursor</li>
+      <li><strong>Delete (Del)</strong> — erases characters to the right of the cursor</li>
+      <li><strong>Insert (Ins)</strong> — switches between Insert mode and Overtype mode</li>
+    </ul>
+
+    <h4>e. Special PC Operation Keys</h4>
+    <ul>
+      <li><strong>Tab (⭾)</strong> — moves the cursor at set intervals on the same line</li>
+      <li><strong>Caps Lock</strong> — toggles between uppercase and lowercase letters</li>
+      <li><strong>Shift (⇧)</strong> — used for single capital letters or symbols above number keys</li>
+      <li><strong>Enter (⏎)</strong> — moves to a new line; executes selected commands</li>
+      <li><strong>Escape (Esc)</strong> — cancels or quits a task</li>
+      <li><strong>Control (Ctrl)</strong> — used in combination with other keys for special functions (e.g., Ctrl+S to save)</li>
+    </ul>
+
+    <h3>Practical Keyboard Skills</h3>
+    <ol>
+      <li>Sit upright with both feet firmly on the ground.</li>
+      <li>Place material to be typed on your left in a readable position.</li>
+      <li>Rest both hands on the keyboard with fingers on the <strong>Home Keys</strong>: Left hand — A, S, D, F; Right hand — J, K, L, ; (semicolon). Thumbs on the Spacebar.</li>
+      <li>Start typing slowly, using all ten fingers, pressing the key nearest to the home keys with the closest finger.</li>
+    </ol>
+  </section>
+
+  <!-- ═══ MOUSE ═══ -->
+  <section class="section" id="mouse">
+    <h2>The Mouse</h2>
+    <p>A pointing device that enables the user to issue instructions to the computer by controlling a special <strong>mouse pointer</strong> on the screen.</p>
+
+    <h3>Parts of a Mouse</h3>
+    <ul>
+      <li><strong>Casing</strong> — for holding the mouse in the hand</li>
+      <li><strong>Roller ball</strong> — slides on a flat surface; moves the cursor on screen</li>
+      <li><strong>Sensor Buttons</strong> (Left & Right) — used for making selections</li>
+      <li><strong>Cable</strong> — connects the mouse to the system unit</li>
+    </ul>
+
+    <h3>Mouse Terminology</h3>
+    <ul>
+      <li><strong>Point</strong> — move the mouse until the pointer tip is over the desired item.</li>
+      <li><strong>Click</strong> — press and release the left button once; typically selects an item.</li>
+      <li><strong>Double-click</strong> — press the left button twice in quick succession; usually opens a file or starts a program.</li>
+      <li><strong>Right-click</strong> — press the right button once; displays a <em>Shortcut (Context-sensitive) Menu</em>.</li>
+      <li><strong>Drag and Drop</strong> — point to an item, hold left button, slide to new position, release button.</li>
+    </ul>
+
+    <h3>Rules for Using the Mouse</h3>
+    <ul>
+      <li>Place the mouse on a flat, smooth surface</li>
+      <li>Gently hold it with your right hand using the thumb and two rightmost fingers</li>
+      <li>Index finger rests on the left button; middle finger on the right button</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Introduction to Computers — Computer Studies Form 1 Notes &nbsp;|&nbsp; © EasyElimu Learning Innovations</p>
+  </footer>
+
+</main>
+
+<script>
+  // Highlight active nav link on scroll
+  const sections = document.querySelectorAll('.section');
+  const navLinks = document.querySelectorAll('#sidebar nav a');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const id = entry.target.id;
+        const active = document.querySelector(`#sidebar nav a[href="#${id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

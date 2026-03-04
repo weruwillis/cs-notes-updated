@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 4 — Career Opportunities in ICT</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0f0e0c;
+      --paper: #f5f0e8;
+      --accent: #c0392b;
+      --accent2: #1a6b4a;
+      --muted: #7a7265;
+      --rule: #d4cfc4;
+      --highlight: #fdf3d0;
+      --card: #fffdf8;
+      --blue: #1a3a6b;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.75;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--blue);
+      color: var(--paper);
+      padding: 60px 48px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50px; right: -50px;
+      width: 340px; height: 340px;
+      border: 3px solid rgba(192,57,43,0.3);
+      border-radius: 50%;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: 250px;
+      width: 220px; height: 220px;
+      border: 2px solid rgba(255,255,255,0.07);
+      border-radius: 50%;
+    }
+    .header-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #f9c74f;
+      margin-bottom: 14px;
+    }
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 5vw, 52px);
+      font-weight: 900;
+      line-height: 1.1;
+      max-width: 720px;
+      position: relative;
+      z-index: 1;
+    }
+    header h1 span { color: #f9c74f; }
+    .header-sub {
+      margin-top: 18px;
+      font-size: 14px;
+      color: rgba(245,240,232,0.5);
+      font-style: italic;
+    }
+
+    /* ── Layout ── */
+    .wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 28px 80px;
+    }
+
+    /* ── TOC ── */
+    .toc {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-left: 4px solid var(--blue);
+      padding: 32px 36px;
+      margin: 48px 0 56px;
+    }
+    .toc-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--blue);
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 24px;
+    }
+    @media (max-width: 580px) { .toc-grid { grid-template-columns: 1fr; } }
+    .toc-grid a {
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 14.5px;
+      padding: 5px 0;
+      border-bottom: 1px dashed var(--rule);
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      transition: color 0.2s;
+    }
+    .toc-grid a:hover { color: var(--accent); }
+    .toc-grid a::before {
+      content: attr(data-n);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      min-width: 20px;
+    }
+
+    /* ── Sections ── */
+    section { margin-bottom: 64px; }
+
+    .chapter-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 8px;
+    }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22px, 3.5vw, 36px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 28px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid var(--rule);
+    }
+    h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      margin: 36px 0 12px;
+      color: var(--blue);
+    }
+    h4 {
+      font-family: 'Source Serif 4', serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 20px 0 8px;
+    }
+    p { margin-bottom: 14px; }
+    ul, ol { padding-left: 22px; margin-bottom: 16px; }
+    li { margin-bottom: 5px; }
+
+    /* ── Career Cards Grid ── */
+    .careers-intro {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 24px 0;
+    }
+    .career-tag {
+      background: var(--blue);
+      color: var(--paper);
+      padding: 7px 15px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Role Cards ── */
+    .role-card {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-top: 3px solid var(--blue);
+      padding: 28px 30px;
+      margin-bottom: 32px;
+    }
+    .role-card h3 {
+      margin-top: 0;
+      margin-bottom: 14px;
+      font-size: 21px;
+      color: var(--blue);
+    }
+    .role-card .role-def {
+      font-style: italic;
+      color: #4a4540;
+      margin-bottom: 18px;
+      font-size: 15.5px;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 580px) { .two-col { grid-template-columns: 1fr; } }
+    .col-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .col-content ul { padding-left: 18px; }
+    .col-content li { font-size: 14.5px; margin-bottom: 4px; }
+
+    /* ── Highlight Box ── */
+    .highlight-box {
+      background: var(--highlight);
+      border: 1px solid #e8d99a;
+      border-left: 4px solid #d4a017;
+      padding: 18px 22px;
+      margin: 20px 0;
+      font-size: 15px;
+    }
+
+    /* ── Institutions Grid ── */
+    .inst-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+      margin: 24px 0;
+    }
+    .inst-card {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .inst-card::after {
+      content: '';
+      position: absolute;
+      bottom: -30px; right: -30px;
+      width: 90px; height: 90px;
+      border: 2px solid rgba(249,199,79,0.2);
+      border-radius: 50%;
+    }
+    .inst-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: #f9c74f;
+      margin-bottom: 12px;
+    }
+    .inst-card ul { padding-left: 18px; }
+    .inst-card li { font-size: 13.5px; color: rgba(245,240,232,0.8); margin-bottom: 4px; }
+
+    /* ── Courses Table ── */
+    .course-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14.5px;
+      margin: 20px 0;
+    }
+    .course-table th {
+      background: var(--blue);
+      color: var(--paper);
+      padding: 10px 14px;
+      text-align: left;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .course-table td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .course-table tr:nth-child(even) td { background: rgba(0,0,0,0.025); }
+
+    /* ── Exam Bodies ── */
+    .exam-bodies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin: 20px 0;
+    }
+    .exam-body {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      border-left: 4px solid var(--accent);
+      padding: 14px 20px;
+      flex: 1;
+      min-width: 200px;
+    }
+    .exam-body-name {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .exam-body-abbr {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── Q&A ── */
+    .qa-block {
+      background: var(--card);
+      border: 1px solid var(--rule);
+      padding: 24px 28px;
+      margin-bottom: 20px;
+    }
+    .qa-q {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 10px;
+      color: var(--blue);
+    }
+    .qa-a { font-size: 15px; }
+    .qa-a ul { padding-left: 20px; margin-top: 6px; }
+    .qa-a li { margin-bottom: 4px; font-size: 14.5px; }
+
+    /* ── Factors ── */
+    .factors {
+      counter-reset: fac;
+      list-style: none;
+      padding-left: 0;
+    }
+    .factors li {
+      counter-increment: fac;
+      display: flex;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--rule);
+      font-size: 15px;
+    }
+    .factors li::before {
+      content: counter(fac);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--accent);
+      min-width: 28px;
+      line-height: 1.4;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--blue);
+      color: rgba(245,240,232,0.45);
+      text-align: center;
+      padding: 32px;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.08em;
+    }
+    footer span { color: #f9c74f; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-label">Computer Studies — Form 4 · Chapter 4</div>
+  <h1>Career Opportunities in <span>ICT</span></h1>
+  <p class="header-sub">Information &amp; Communication Technology · Careers, Education &amp; Institutions</p>
+</header>
+
+<div class="wrapper">
+
+  <!-- TOC -->
+  <nav class="toc">
+    <div class="toc-title">Table of Contents</div>
+    <div class="toc-grid">
+      <a href="#overview" data-n="01">Career Overview</a>
+      <a href="#system-analyst" data-n="02">System Analyst</a>
+      <a href="#chief-programmer" data-n="03">Chief Programmer</a>
+      <a href="#programmer" data-n="04">Computer Programmer</a>
+      <a href="#dba" data-n="05">Database Administrator</a>
+      <a href="#software-eng" data-n="06">Software Engineer</a>
+      <a href="#computer-eng" data-n="07">Computer Engineer</a>
+      <a href="#web" data-n="08">Web Designer / Administrator</a>
+      <a href="#operator" data-n="09">Computer Operator</a>
+      <a href="#technician" data-n="10">Computer Technician</a>
+      <a href="#dp-manager" data-n="11">Data Processing Manager</a>
+      <a href="#is-manager" data-n="12">Information System Manager</a>
+      <a href="#trainer" data-n="13">Computer Trainer</a>
+      <a href="#network-admin" data-n="14">Network Administrator</a>
+      <a href="#graphics" data-n="15">Graphic Designer &amp; Librarian</a>
+      <a href="#education" data-n="16">Educational Opportunities</a>
+      <a href="#review" data-n="17">Review &amp; Revision Q&amp;A</a>
+    </div>
+  </nav>
+
+  <!-- Overview -->
+  <section id="overview">
+    <span class="chapter-label">Introduction</span>
+    <h2>ICT Career Overview</h2>
+    <p>ICT has created an entirely new landscape of job titles and professional roles. Below are the major career opportunities available in the field of Information and Communication Technology.</p>
+    <div class="careers-intro">
+      <span class="career-tag">System Analyst</span>
+      <span class="career-tag">Software Engineer</span>
+      <span class="career-tag">Computer Engineer</span>
+      <span class="career-tag">Web Designer</span>
+      <span class="career-tag">Web Administrator</span>
+      <span class="career-tag">Computer Operator</span>
+      <span class="career-tag">Computer Technician</span>
+      <span class="career-tag">Data Processing Manager</span>
+      <span class="career-tag">IS Manager</span>
+      <span class="career-tag">Computer Trainer</span>
+      <span class="career-tag">Network Administrator</span>
+      <span class="career-tag">Graphics Designer</span>
+      <span class="career-tag">Typesetter</span>
+      <span class="career-tag">Librarian</span>
+      <span class="career-tag">Chief Programmer</span>
+      <span class="career-tag">Database Administrator</span>
+      <span class="career-tag">Computer Programmer</span>
+    </div>
+  </section>
+
+  <!-- System Analyst -->
+  <section id="system-analyst">
+    <span class="chapter-label">Career Role 01</span>
+    <h2>System Analyst</h2>
+    <div class="role-card">
+      <div class="role-def">A person responsible for analysing a company's needs or problems, then designing and developing a computer-based information system.</div>
+      <div class="two-col">
+        <div class="col-content">
+          <div class="col-label">Qualities</div>
+          <ul>
+            <li>Good problem-solving skills and creativity</li>
+            <li>Good communication skills</li>
+            <li>Business knowledge</li>
+            <li>Trained as an analyst</li>
+            <li>General knowledge of the firm's goals and objectives</li>
+            <li>Knowledge of data processing methods and current hardware</li>
+            <li>Familiarity with available programming languages</li>
+          </ul>
+        </div>
+        <div class="col-content">
+          <div class="col-label">Duties</div>
+          <ul>
+            <li>Gather, record and analyse facts of systems</li>
+            <li>Design new systems and recommend changes</li>
+            <li>Prepare instruction manuals</li>
+            <li>Co-ordinate training for users of new systems</li>
+            <li>Work with programmers to construct and test systems</li>
+            <li>Prepare system specifications</li>
+            <li>Co-ordinate implementation of new or modified systems</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chief Programmer -->
+  <section id="chief-programmer">
+    <span class="chapter-label">Career Role 02</span>
+    <h2>Chief Programmer / Programming Manager</h2>
+    <div class="role-card">
+      <div class="role-def">Reports to the Data Processing Manager on activities of the programming group, including junior and senior programmers.</div>
+      <div class="col-content">
+        <div class="col-label">Duties</div>
+        <ul>
+          <li>Managing the programming team</li>
+          <li>Liaising with the Chief System Analyst</li>
+          <li>Reviewing and controlling program documentation</li>
+          <li>Reviewing program performance</li>
+          <li>Ensuring all programs are thoroughly tested before deployment</li>
+          <li>Reviewing all system specifications before handover to programmers</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Programmer -->
+  <section id="programmer">
+    <span class="chapter-label">Career Role 03</span>
+    <h2>Computer Programmer</h2>
+    <div class="role-card">
+      <div class="role-def">People whose work entails coding — formulating instructions for the computer to solve given problems.</div>
+      <div class="two-col">
+        <div class="col-content">
+          <div class="col-label">Qualities</div>
+          <ul>
+            <li>Good command of the programming language in use</li>
+            <li>Knowledge of programming methodology and hardware relationships</li>
+            <li>Creativity for developing new problem-solving methods</li>
+            <li>Patience and persistence</li>
+          </ul>
+        </div>
+        <div class="col-content">
+          <div class="col-label">Duties</div>
+          <ul>
+            <li>Coding programs using appropriate programming languages</li>
+            <li>Testing for logical, syntax and semantic errors</li>
+            <li>Debugging programs</li>
+            <li>Maintaining and reviewing existing programs</li>
+            <li>Developing customised application and system programs</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="highlight-box">
+      <strong>System Analyst vs Programmer:</strong> A system analyst is primarily responsible for analysing weaknesses in the existing system and designing an alternative, while a programmer mainly writes computer programs based on system requirements.
+    </div>
+  </section>
+
+  <!-- DBA -->
+  <section id="dba">
+    <span class="chapter-label">Career Role 04</span>
+    <h2>Database Administrator (DBA)</h2>
+    <div class="role-card">
+      <div class="role-def">A person responsible for the design and implementation of the organisation's database.</div>
+      <div class="col-content">
+        <div class="col-label">Duties</div>
+        <ul>
+          <li>Responsible for the design and control of the organisation's database</li>
+          <li>Enforcing security measures through controls and monitoring database usage via user passwords</li>
+          <li>Keeping the database up to date — adding new records, modifying or deleting unnecessary ones</li>
+          <li>Establishing the appropriate content and format of data records</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Software Engineer -->
+  <section id="software-eng">
+    <span class="chapter-label">Career Role 05</span>
+    <h2>Software Engineer</h2>
+    <div class="role-card">
+      <div class="role-def">A person skilled in software development and the technical operation of computer hardware.</div>
+      <div class="col-content">
+        <div class="col-label">Duties</div>
+        <ul>
+          <li>Developing system and application software</li>
+          <li>Developing user and technical documentation for new software</li>
+          <li>Maintaining and updating software to meet day-to-day requirements</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Computer Engineer -->
+  <section id="computer-eng">
+    <span class="chapter-label">Career Role 06</span>
+    <h2>Computer Engineer</h2>
+    <div class="role-card">
+      <div class="role-def">Specialised personnel responsible for assembling computer systems and developing new technologies in ICT. Must have a strong background in electronic engineering.</div>
+      <div class="col-content">
+        <div class="col-label">Duties</div>
+        <ul>
+          <li>Design and develop computer components (e.g. motherboards, storage devices)</li>
+          <li>Design and develop computer-controlled engineering devices such as robots</li>
+          <li>Re-engineer computer components to enhance functionality and efficiency</li>
+          <li>Determine the electrical power requirements of each computer component</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight-box">
+      <strong>Software Engineer vs Computer Engineer:</strong> A software engineer develops software and programs as per requirements. A computer engineer designs computer hardware and improves on existing components.
+    </div>
+  </section>
+
+  <!-- Web -->
+  <section id="web">
+    <span class="chapter-label">Career Role 07</span>
+    <h2>Web Designer &amp; Web Administrator</h2>
+    <div class="two-col">
+      <div class="role-card" style="margin-bottom:0;">
+        <h3>Web Designer</h3>
+        <div class="role-def" style="font-size:14px;">Designs websites using various software tools. Websites contain pages where individuals and organisations can advertise themselves and promote products.</div>
+        <ul style="padding-left:18px; font-size:14px;">
+          <li>Developing, testing and uploading websites</li>
+          <li>Maintaining, updating and modifying website information</li>
+          <li>Monitoring access and use of internet connections</li>
+          <li>Downloading information needed by an organisation</li>
+        </ul>
+      </div>
+      <div class="role-card" style="margin-bottom:0;">
+        <h3>Web Administrator</h3>
+        <div class="role-def" style="font-size:14px;">Manages websites by ensuring they are updated periodically to provide accurate information.</div>
+        <ul style="padding-left:18px; font-size:14px;">
+          <li>Developing, testing and uploading websites</li>
+          <li>Monitoring access and use of internet connections</li>
+          <li>Downloading information from the internet</li>
+          <li>Maintaining, updating and modifying website information</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Operator -->
+  <section id="operator">
+    <span class="chapter-label">Career Role 08</span>
+    <h2>Computer Operator</h2>
+    <div class="role-card">
+      <div class="role-def">A person who works on a computer on a daily basis to perform data entry, fix minor problems, and provide general support within an organisation.</div>
+      <div class="col-content">
+        <div class="col-label">Duties</div>
+        <ul>
+          <li>Entering data into the computer for processing</li>
+          <li>Keeping up-to-date records of all information processing activities</li>
+          <li>Responsible for the general equipment layout within the computer room</li>
+          <li>Activating the computer to obey programs through use of commands</li>
+          <li>Mounting storage media (e.g. disks) to their drives</li>
+          <li>Fixing computer-related problems such as booting issues, printer jams, and internet connection</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technician -->
+  <section id="technician">
+    <span class="chapter-label">Career Role 09</span>
+    <h2>Computer Technician</h2>
+    <div class="role-card">
+      <div class="role-def">A member of the technical staff whose job is to service and repair computers.</div>
+      <div class="col-content">
+        <div class="col-label">Duties</div>
+        <ul>
+          <li>Troubleshooting computer hardware and software problems</li>
+          <li>Ensuring computer accessories (printers, storage media, etc.) are in good condition</li>
+          <li>Assembling and upgrading computers and components</li>
+          <li>Working with hardware engineers in designing computer components</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight-box">
+      <strong>Hardware Job Opportunities:</strong> Computer Engineer · Computer Repair &amp; Maintenance · Computer Assembling
+    </div>
+  </section>
+
+  <!-- DP Manager -->
+  <section id="dp-manager">
+    <span class="chapter-label">Career Role 10</span>
+    <h2>Data Processing Manager</h2>
+    <div class="role-card">
+      <div class="role-def">The person in charge of the data processing department within the organisation, ensuring that the organisation's needs are met.</div>
+      <div class="col-content">
+        <div class="col-label">Duties &amp; Responsibilities</div>
+        <ul>
+          <li>In charge of data and information flow within the department</li>
+          <li>Responsible for data collection and preparation</li>
+          <li>Purchase of hardware and other facilities, and their management</li>
+          <li>Software development and maintenance</li>
+          <li>Assessment and evaluation of staff performance</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- IS Manager -->
+  <section id="is-manager">
+    <span class="chapter-label">Career Role 11</span>
+    <h2>Information System Manager</h2>
+    <div class="role-card">
+      <div class="role-def">Controls, plans, staffs, schedules and monitors all activities of the ICT department in the organisation.</div>
+      <div class="col-content">
+        <div class="col-label">Responsibilities</div>
+        <ul>
+          <li>Ensuring all tasks in the IT department are completed correctly and on time</li>
+          <li>Preparing budgets for department operations</li>
+          <li>Keeping the department inventory records up to date</li>
+          <li>Managing the human resource within the department</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trainer -->
+  <section id="trainer">
+    <span class="chapter-label">Career Role 12</span>
+    <h2>Computer Teacher / Trainer</h2>
+    <div class="role-card">
+      <div class="role-def">Specialised personnel in computing who are well conversant with various disciplines and computer-related issues, guiding those entering the field.</div>
+      <div class="col-content">
+        <div class="col-label">Duties</div>
+        <ul>
+          <li>Training people on how to use computers and various application programs</li>
+          <li>Developing training reference materials</li>
+          <li>Guiding learners on how to acquire knowledge through research</li>
+          <li>Advising and preparing learners on best career opportunities in ICT</li>
+          <li>Preparing learners for ICT examinations</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Network Admin -->
+  <section id="network-admin">
+    <span class="chapter-label">Career Role 13</span>
+    <h2>Network Administrator</h2>
+    <div class="role-card">
+      <div class="role-def">A specialist who oversees the smooth running of network systems within an organisation.</div>
+      <div class="col-content">
+        <div class="col-label">Responsibilities</div>
+        <ul>
+          <li>Set up a computer network</li>
+          <li>Maintain and enforce security measures on the network</li>
+          <li>Monitor the use of network resources</li>
+          <li>Maintain and troubleshoot network-related problems</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Graphics & Librarian -->
+  <section id="graphics">
+    <span class="chapter-label">Career Role 14 &amp; 15</span>
+    <h2>Graphic Designer &amp; Librarian</h2>
+    <div class="two-col">
+      <div class="role-card" style="margin-bottom:0;">
+        <h3>Computer Graphic Designer</h3>
+        <p style="font-size:14.5px;">Required to design graphical objects, illustrations, and professional publications such as books, newspapers, and magazines. Such professionals are employed in publishing organisations to typeset various printed media.</p>
+      </div>
+      <div class="role-card" style="margin-bottom:0;">
+        <h3>Librarian</h3>
+        <p style="font-size:14px; margin-bottom:10px;">Responsible for keeping files on various storage devices and ensuring the physical security of storage media.</p>
+        <ul style="padding-left:18px; font-size:14px;">
+          <li>Ensures enough physical files are available for use</li>
+          <li>Maintains external file labels</li>
+          <li>Ensures duplicate files are kept</li>
+          <li>Restricts file access to authorised persons only</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Education -->
+  <section id="education">
+    <span class="chapter-label">Section 02 — Education</span>
+    <h2>Further Educational Opportunities in ICT</h2>
+    <p>Most computer-related educational opportunities are offered in tertiary institutions including colleges, universities, polytechnics, and TVETs.</p>
+
+    <div class="inst-grid">
+      <div class="inst-card">
+        <div class="inst-card-title">Universities</div>
+        <ul>
+          <li>Jomo Kenyatta University (JKUAT)</li>
+          <li>Kenyatta University</li>
+          <li>University of Nairobi</li>
+          <li>Maseno University</li>
+          <li>Moi University</li>
+          <li>Egerton University</li>
+          <li>Daystar University</li>
+          <li>Catholic University Nazareth</li>
+          <li>Kabarak University</li>
+          <li>AUSI University</li>
+        </ul>
+      </div>
+      <div class="inst-card">
+        <div class="inst-card-title">Polytechnics</div>
+        <ul>
+          <li>Mombasa Polytechnic</li>
+          <li>Kenya Polytechnic</li>
+          <li>Eldoret Polytechnic</li>
+        </ul>
+        <div class="inst-card-title" style="margin-top:18px;">Colleges (Examples)</div>
+        <ul>
+          <li>Rift Valley Institute of Science &amp; Technology</li>
+          <li>Thika Institute of Science &amp; Technology</li>
+          <li>Nairobi Technical Training Institute</li>
+          <li>Coast Institute of Science &amp; Technology</li>
+          <li>Kiambu Institute of Science &amp; Technology</li>
+        </ul>
+      </div>
+      <div class="inst-card">
+        <div class="inst-card-title">ICT Degree Programmes</div>
+        <ul>
+          <li>BSc. Computer Science</li>
+          <li>BSc. Information Technology</li>
+          <li>BSc. Computer Engineering</li>
+          <li>BSc. Computer Networking</li>
+          <li>BSc. Software Engineering</li>
+          <li>BSc. Business &amp; IT</li>
+          <li>BSc. Computer Programming</li>
+        </ul>
+        <div class="inst-card-title" style="margin-top:18px;">Masters Programmes</div>
+        <ul>
+          <li>Master in Computer Science</li>
+          <li>Masters in Information Technology</li>
+          <li>Masters in Hardware Engineering</li>
+          <li>Masters in Science Computer Engineering</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Courses at Polytechnic / College Level</h3>
+    <table class="course-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Course</th>
+          <th>Qualification</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Computer Repair and Assembly</td><td>Certificate / Diploma</td></tr>
+        <tr><td>2</td><td>Computer Operator</td><td>Certificate / Diploma</td></tr>
+        <tr><td>3</td><td>Management Information System</td><td>Certificate / Diploma</td></tr>
+        <tr><td>4</td><td>Computer Programming</td><td>Certificate / Diploma</td></tr>
+        <tr><td>5</td><td>Computer Networking</td><td>Certificate / Diploma</td></tr>
+        <tr><td>6</td><td>Computer Software Engineering</td><td>Certificate / Diploma</td></tr>
+        <tr><td>7</td><td>Information Technology</td><td>Certificate / Diploma</td></tr>
+        <tr><td>8</td><td>Computer Science</td><td>Certificate / Diploma</td></tr>
+        <tr><td>9</td><td>Computer Hardware Engineering</td><td>Certificate / Diploma</td></tr>
+        <tr><td>10</td><td>Web Administration</td><td>Certificate / Diploma</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Examination Bodies</h3>
+    <div class="exam-bodies">
+      <div class="exam-body">
+        <div class="exam-body-abbr">ITSA</div>
+        <div class="exam-body-name">Information Technology Standards Association</div>
+      </div>
+      <div class="exam-body">
+        <div class="exam-body-abbr">IMIS</div>
+        <div class="exam-body-name">Institute of Management Information Systems</div>
+      </div>
+      <div class="exam-body">
+        <div class="exam-body-abbr">KNEC</div>
+        <div class="exam-body-name">Kenya National Examination Council</div>
+      </div>
+      <div class="exam-body">
+        <div class="exam-body-abbr">PITMAN</div>
+        <div class="exam-body-name">Pitman Qualifications</div>
+      </div>
+    </div>
+
+    <h3>Factors to Consider Before Joining an ICT College</h3>
+    <ol class="factors">
+      <li><strong>Accreditation</strong> — whether the institution offers ICT courses recognised locally and internationally. Accreditation is the process of recognising an institution as being able to offer degrees and diplomas.</li>
+      <li><strong>Cost of training</strong> — fees and associated expenses of studying at the institution.</li>
+      <li><strong>Location</strong> — proximity and accessibility of the institution.</li>
+      <li><strong>Physical management</strong> — the general condition, facilities, and management quality of the institution.</li>
+    </ol>
+  </section>
+
+  <!-- Review Q&A -->
+  <section id="review">
+    <span class="chapter-label">Section 03 — Revision</span>
+    <h2>Review &amp; Revision Questions with Answers</h2>
+
+    <div class="qa-block">
+      <div class="qa-q">Explain the role of the following ICT specialists: Database Administrator, Software Engineer, System Analyst, Computer Technician, Information Systems Manager.</div>
+      <div class="qa-a">
+        <ul>
+          <li><strong>Database Administrator</strong> — Designs, develops, updates and maintains the information system database.</li>
+          <li><strong>Software Engineer</strong> — Develops and updates software.</li>
+          <li><strong>System Analyst</strong> — Analyses, designs and develops information systems.</li>
+          <li><strong>Computer Technician</strong> — Troubleshoots computer hardware and software problems.</li>
+          <li><strong>Information System Manager</strong> — Manages ICT operations within the organisation.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-block">
+      <div class="qa-q">Outline the roles of a Network Administrator.</div>
+      <div class="qa-a">
+        <ul>
+          <li>Setting up a computer network</li>
+          <li>Securing the network against unauthorised access</li>
+          <li>Managing the network to enhance performance and uptime</li>
+          <li>Monitoring use of network resources</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-block">
+      <div class="qa-q">List three types of job opportunities available in the field of computer hardware.</div>
+      <div class="qa-a">
+        <ul>
+          <li>Computer Engineer</li>
+          <li>Computer Repair and Maintenance</li>
+          <li>Computer Assembling</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-block">
+      <div class="qa-q">Give examples of public and accredited private universities that offer computer-related courses in Kenya.</div>
+      <div class="qa-a">
+        <ul>
+          <li><strong>Public:</strong> Moi University, University of Nairobi, Kenyatta University, JKUAT, Maseno University, Egerton University</li>
+          <li><strong>Private:</strong> Catholic University, Daystar University, Baraton University, Kabarak University</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-block">
+      <div class="qa-q">Identify ICT-related courses offered at University, Polytechnic, and College level.</div>
+      <div class="qa-a">
+        <ul>
+          <li><strong>University:</strong> BSc. Computer Science · BSc. Information Technology · MSc. Information Systems</li>
+          <li><strong>Polytechnic:</strong> Diploma in Information Technology · Diploma in Computer Hardware Maintenance · Diploma in Computer Programming</li>
+          <li><strong>College:</strong> Diploma in Information Technology · Certificate in Information Technology · Diploma in Education (Computer Science)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="qa-block">
+      <div class="qa-q">Define the term "accreditation" as used in education.</div>
+      <div class="qa-a">Accreditation is the process of recognising an institution as being able to offer degrees and diplomas.</div>
+    </div>
+
+    <div class="qa-block">
+      <div class="qa-q">State factors to consider before enrolling for an ICT course in a college.</div>
+      <div class="qa-a">
+        <ul>
+          <li>Cost of the course</li>
+          <li>Job opportunities associated with the qualification</li>
+          <li>Whether the examinations offered are recognised locally and internationally</li>
+          <li>The organisation/body offering the course</li>
+        </ul>
+      </div>
+    </div>
+
+  </section>
+
+</div>
+
+<footer>
+  <span>Computer Studies</span> · Form 4 · Chapter 4 — Career Opportunities in ICT
+</footer>
+
+</body>
+</html>
